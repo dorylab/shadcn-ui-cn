@@ -5,8 +5,8 @@ export const siteConfig = {
   description:
     "一组精心设计的组件，你可以自定义、扩展并在此基础上构建。从这里开始，让它成为你的作品。开源，开放代码。",
   links: {
-    twitter: "https://twitter.com/shadcn",
-    github: "https://github.com/shadcn-ui/ui",
+    twitter: "https://twitter.com/dorystudio",
+    github: "https://github.com/dorylab/shadcn-ui-cn",
   },
   navItems: [
     {
