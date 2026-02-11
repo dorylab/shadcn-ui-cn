@@ -1,0 +1,693 @@
+---
+title: TanStack Form
+description: 使用 TanStack Form 与 Zod 在 React 中构建表单。
+links:
+  doc: https://tanstack.com/form
+---
+
+import { InfoIcon } from "lucide-react"
+
+本指南介绍如何使用 TanStack Form 构建表单。你将学会通过 `<Field />` 组件创建表单、结合 Zod 进行模式校验、处理错误并保证可访问性。
+
+## 演示
+
+我们先完成下面这个示例表单。它包含一个文本输入框和一个文本区域。提交后会校验表单数据并展示错误信息。
+
+<Callout icon={<InfoIcon />}>
+  **注意：** 为了说明 TanStack Form 中的模式校验与错误提示，本示例刻意关闭了浏览器原生验证。实际项目中建议保留基础的浏览器校验。
+</Callout>
+
+<ComponentPreview
+  name="form-tanstack-demo"
+  className="sm:[&_.preview]:h-[700px] sm:[&_pre]:!h-[700px]"
+  chromeLessOnMobile
+/>
+
+## 实现思路
+
+该表单依靠 TanStack Form 实现强大的无头表单处理。我们会使用 `<Field />` 组件来构建表单，从而对标记和样式拥有**完全的掌控力**。
+
+- 使用 TanStack Form 的 `useForm` 钩子管理表单状态。
+- 通过 `form.Field` 结合 render prop 模式管理受控输入。
+- 使用 `<Field />` 组件构建可访问的表单。
+- 借助 Zod 完成客户端校验。
+- 实时呈现校验反馈。
+
+## 结构
+
+下面是一个结合 TanStack Form 与 `<Field />` 组件的基础表单示例。
+
+```tsx showLineNumbers {15-31}
+<form
+  onSubmit={(e) => {
+    e.preventDefault()
+    form.handleSubmit()
+  }}
+>
+  <FieldGroup>
+    <form.Field
+      name="title"
+      children={(field) => {
+        const isInvalid =
+          field.state.meta.isTouched && !field.state.meta.isValid
+        return (
+          <Field data-invalid={isInvalid}>
+            <FieldLabel htmlFor={field.name}>Bug Title</FieldLabel>
+            <Input
+              id={field.name}
+              name={field.name}
+              value={field.state.value}
+              onBlur={field.handleBlur}
+              onChange={(e) => field.handleChange(e.target.value)}
+              aria-invalid={isInvalid}
+              placeholder="Login button not working on mobile"
+              autoComplete="off"
+            />
+            <FieldDescription>
+              Provide a concise title for your bug report.
+            </FieldDescription>
+            {isInvalid && <FieldError errors={field.state.meta.errors} />}
+          </Field>
+        )
+      }}
+    />
+  </FieldGroup>
+  <Button type="submit">Submit</Button>
+</form>
+```
+
+## 表单
+
+### 创建模式
+
+首先使用 Zod 定义表单的数据结构。
+
+<Callout icon={<InfoIcon />}>
+  **注意：** 示例使用 `zod v3` 进行模式校验。TanStack Form 通过其验证器 API，可无缝集成 Zod 以及其他遵循 Standard Schema 的校验库。
+</Callout>
+
+```tsx showLineNumbers title="form.tsx"
+import * as z from "zod"
+
+const formSchema = z.object({
+  title: z
+    .string()
+    .min(5, "Bug title must be at least 5 characters.")
+    .max(32, "Bug title must be at most 32 characters."),
+  description: z
+    .string()
+    .min(20, "Description must be at least 20 characters.")
+    .max(100, "Description must be at most 100 characters."),
+})
+```
+
+### 初始化表单
+
+使用 TanStack Form 提供的 `useForm` 钩子创建带有 Zod 校验的表单实例。
+
+```tsx showLineNumbers title="form.tsx" {10-21}
+import { useForm } from "@tanstack/react-form"
+import { toast } from "sonner"
+import * as z from "zod"
+
+const formSchema = z.object({
+  // ...
+})
+
+export function BugReportForm() {
+  const form = useForm({
+    defaultValues: {
+      title: "",
+      description: "",
+    },
+    validators: {
+      onSubmit: formSchema,
+    },
+    onSubmit: async ({ value }) => {
+      toast.success("Form submitted successfully")
+    },
+  })
+
+  return (
+    <form
+      onSubmit={(e) => {
+        e.preventDefault()
+        form.handleSubmit()
+      }}
+    >
+      {/* ... */}
+    </form>
+  )
+}
+```
+
+此处使用 `onSubmit` 校验表单数据。TanStack Form 还支持其他校验模式，详见[官方文档](https://tanstack.com/form/latest/docs/framework/react/guides/dynamic-validation)。
+
+### 构建表单
+
+现在可以结合 TanStack Form 的 `form.Field` 与 `<Field />` 组件构建具体表单。
+
+<ComponentSource
+  src="/registry/new-york-v4/examples/form-tanstack-demo.tsx"
+  title="form.tsx"
+/>
+
+### 完成
+
+完成上述步骤后，就拥有了一个具备客户端校验、可访问的表单。
+
+提交表单会触发 `onSubmit` 函数，并传入已经通过校验的表单数据。如果数据无效，TanStack Form 会在对应字段旁显示错误信息。
+
+## 校验
+
+### 客户端校验
+
+TanStack Form 使用 Zod 模式对表单数据进行校验。随着用户输入，实时提供校验反馈。
+
+```tsx showLineNumbers title="form.tsx" {13-15}
+import { useForm } from "@tanstack/react-form"
+
+const formSchema = z.object({
+  // ...
+})
+
+export function BugReportForm() {
+  const form = useForm({
+    defaultValues: {
+      title: "",
+      description: "",
+    },
+    validators: {
+      onSubmit: formSchema,
+    },
+    onSubmit: async ({ value }) => {
+      console.log(value)
+    },
+  })
+
+  return <form onSubmit={/* ... */}>{/* ... */}</form>
+}
+```
+
+### 校验模式
+
+通过 `validators` 选项可以配置不同的校验策略：
+
+| 模式         | 说明                         |
+| ------------ | ---------------------------- |
+| `"onChange"` | 每次字段变化时进行校验。     |
+| `"onBlur"`   | 字段失焦时进行校验。         |
+| `"onSubmit"` | 提交时进行校验。             |
+
+```tsx showLineNumbers title="form.tsx" {6-9}
+const form = useForm({
+  defaultValues: {
+    title: "",
+    description: "",
+  },
+  validators: {
+    onSubmit: formSchema,
+    onChange: formSchema,
+    onBlur: formSchema,
+  },
+})
+```
+
+## 展示错误
+
+使用 `<FieldError />` 在字段旁展示错误信息。为了兼顾样式与可访问性：
+
+- 在 `<Field />` 组件上添加 `data-invalid` 属性。
+- 在表单控件（如 `<Input />`、`<SelectTrigger />`、`<Checkbox />` 等）上添加 `aria-invalid` 属性。
+
+```tsx showLineNumbers title="form.tsx" {4,18}
+<form.Field
+  name="email"
+  children={(field) => {
+    const isInvalid = field.state.meta.isTouched && !field.state.meta.isValid
+
+    return (
+      <Field data-invalid={isInvalid}>
+        <FieldLabel htmlFor={field.name}>Email</FieldLabel>
+        <Input
+          id={field.name}
+          name={field.name}
+          value={field.state.value}
+          onBlur={field.handleBlur}
+          onChange={(e) => field.handleChange(e.target.value)}
+          type="email"
+          aria-invalid={isInvalid}
+        />
+        {isInvalid && <FieldError errors={field.state.meta.errors} />}
+      </Field>
+    )
+  }}
+/>
+```
+
+## 不同类型的字段
+
+### 输入框（Input）
+
+- 在 `<Input />` 上使用 `field.state.value` 与 `field.handleChange`。
+- 若需展示错误，给 `<Input />` 添加 `aria-invalid`，并在 `<Field />` 上设置 `data-invalid`。
+
+<ComponentPreview
+  name="form-tanstack-input"
+  className="sm:[&_.preview]:h-[700px] sm:[&_pre]:!h-[700px]"
+  chromeLessOnMobile
+/>
+
+```tsx showLineNumbers title="form.tsx" {6,11-14,22}
+<form.Field
+  name="username"
+  children={(field) => {
+    const isInvalid = field.state.meta.isTouched && !field.state.meta.isValid
+    return (
+      <Field data-invalid={isInvalid}>
+        <FieldLabel htmlFor="form-tanstack-input-username">Username</FieldLabel>
+        <Input
+          id="form-tanstack-input-username"
+          name={field.name}
+          value={field.state.value}
+          onBlur={field.handleBlur}
+          onChange={(e) => field.handleChange(e.target.value)}
+          aria-invalid={isInvalid}
+          placeholder="shadcn"
+          autoComplete="username"
+        />
+        <FieldDescription>
+          This is your public display name. Must be between 3 and 10 characters.
+          Must only contain letters, numbers, and underscores.
+        </FieldDescription>
+        {isInvalid && <FieldError errors={field.state.meta.errors} />}
+      </Field>
+    )
+  }}
+/>
+```
+
+### 文本区域（Textarea）
+
+- 在 `<Textarea />` 上使用 `field.state.value` 与 `field.handleChange`。
+- 若需展示错误，给 `<Textarea />` 添加 `aria-invalid`，并在 `<Field />` 上设置 `data-invalid`。
+
+<ComponentPreview
+  name="form-tanstack-textarea"
+  className="sm:[&_.preview]:h-[700px] sm:[&_pre]:!h-[700px]"
+  chromeLessOnMobile
+/>
+
+```tsx showLineNumbers title="form.tsx" {6,13-16,24}
+<form.Field
+  name="about"
+  children={(field) => {
+    const isInvalid = field.state.meta.isTouched && !field.state.meta.isValid
+    return (
+      <Field data-invalid={isInvalid}>
+        <FieldLabel htmlFor="form-tanstack-textarea-about">
+          More about you
+        </FieldLabel>
+        <Textarea
+          id="form-tanstack-textarea-about"
+          name={field.name}
+          value={field.state.value}
+          onBlur={field.handleBlur}
+          onChange={(e) => field.handleChange(e.target.value)}
+          aria-invalid={isInvalid}
+          placeholder="I'm a software engineer..."
+          className="min-h-[120px]"
+        />
+        <FieldDescription>
+          Tell us more about yourself. This will be used to help us personalize
+          your experience.
+        </FieldDescription>
+        {isInvalid && <FieldError errors={field.state.meta.errors} />}
+      </Field>
+    )
+  }}
+/>
+```
+
+### 下拉选择（Select）
+
+- 在 `<Select />` 上使用 `field.state.value` 与 `field.handleChange`。
+- 若需展示错误，请给 `<SelectTrigger />` 添加 `aria-invalid`，并在 `<Field />` 上设置 `data-invalid`。
+
+<ComponentPreview
+  name="form-tanstack-select"
+  className="sm:[&_.preview]:h-[700px] sm:[&_pre]:!h-[700px]"
+  chromeLessOnMobile
+/>
+
+```tsx showLineNumbers title="form.tsx" {6,18-19,23}
+<form.Field
+  name="language"
+  children={(field) => {
+    const isInvalid = field.state.meta.isTouched && !field.state.meta.isValid
+    return (
+      <Field orientation="responsive" data-invalid={isInvalid}>
+        <FieldContent>
+          <FieldLabel htmlFor="form-tanstack-select-language">
+            Spoken Language
+          </FieldLabel>
+          <FieldDescription>
+            For best results, select the language you speak.
+          </FieldDescription>
+          {isInvalid && <FieldError errors={field.state.meta.errors} />}
+        </FieldContent>
+        <Select
+          name={field.name}
+          value={field.state.value}
+          onValueChange={field.handleChange}
+        >
+          <SelectTrigger
+            id="form-tanstack-select-language"
+            aria-invalid={isInvalid}
+            className="min-w-[120px]"
+          >
+            <SelectValue placeholder="Select" />
+          </SelectTrigger>
+          <SelectContent position="item-aligned">
+            <SelectItem value="auto">Auto</SelectItem>
+            <SelectItem value="en">English</SelectItem>
+          </SelectContent>
+        </Select>
+      </Field>
+    )
+  }}
+/>
+```
+
+### 复选框（Checkbox）
+
+- 在 `<Checkbox />` 上使用 `field.state.value` 与 `field.handleChange`。
+- 若需展示错误，请在 `<Checkbox />` 上设置 `aria-invalid`，并在 `<Field />` 上添加 `data-invalid`。
+- 对于复选框数组，在 `<form.Field />` 上使用 `mode="array"`，并配合 TanStack Form 的数组辅助方法。
+- 别忘了在 `<FieldGroup />` 上添加 `data-slot="checkbox-group"`，以获得正确的样式与间距。
+
+<ComponentPreview
+  name="form-tanstack-checkbox"
+  className="sm:[&_.preview]:h-[700px] sm:[&_pre]:!h-[700px]"
+  chromeLessOnMobile
+/>
+
+```tsx showLineNumbers title="form.tsx" {12,17,22-24,44}
+<form.Field
+  name="tasks"
+  mode="array"
+  children={(field) => {
+    const isInvalid = field.state.meta.isTouched && !field.state.meta.isValid
+    return (
+      <FieldSet>
+        <FieldLegend variant="label">Tasks</FieldLegend>
+        <FieldDescription>
+          Get notified when tasks you&apos;ve created have updates.
+        </FieldDescription>
+        <FieldGroup data-slot="checkbox-group">
+          {tasks.map((task) => (
+            <Field
+              key={task.id}
+              orientation="horizontal"
+              data-invalid={isInvalid}
+            >
+              <Checkbox
+                id={`form-tanstack-checkbox-${task.id}`}
+                name={field.name}
+                aria-invalid={isInvalid}
+                checked={field.state.value.includes(task.id)}
+                onCheckedChange={(checked) => {
+                  if (checked) {
+                    field.pushValue(task.id)
+                  } else {
+                    const index = field.state.value.indexOf(task.id)
+                    if (index > -1) {
+                      field.removeValue(index)
+                    }
+                  }
+                }}
+              />
+              <FieldLabel
+                htmlFor={`form-tanstack-checkbox-${task.id}`}
+                className="font-normal"
+              >
+                {task.label}
+              </FieldLabel>
+            </Field>
+          ))}
+        </FieldGroup>
+        {isInvalid && <FieldError errors={field.state.meta.errors} />}
+      </FieldSet>
+    )
+  }}
+/>
+```
+
+### 单选组（Radio Group）
+
+- 在 `<RadioGroup />` 上使用 `field.state.value` 与 `field.handleChange`。
+- 若需展示错误，请在 `<RadioGroupItem />` 上设置 `aria-invalid`，并在 `<Field />` 上添加 `data-invalid`。
+
+<ComponentPreview
+  name="form-tanstack-radiogroup"
+  className="sm:[&_.preview]:h-[700px] sm:[&_pre]:!h-[700px]"
+  chromeLessOnMobile
+/>
+
+```tsx showLineNumbers title="form.tsx" {21,29,35}
+<form.Field
+  name="plan"
+  children={(field) => {
+    const isInvalid = field.state.meta.isTouched && !field.state.meta.isValid
+    return (
+      <FieldSet>
+        <FieldLegend>Plan</FieldLegend>
+        <FieldDescription>
+          You can upgrade or downgrade your plan at any time.
+        </FieldDescription>
+        <RadioGroup
+          name={field.name}
+          value={field.state.value}
+          onValueChange={field.handleChange}
+        >
+          {plans.map((plan) => (
+            <FieldLabel
+              key={plan.id}
+              htmlFor={`form-tanstack-radiogroup-${plan.id}`}
+            >
+              <Field orientation="horizontal" data-invalid={isInvalid}>
+                <FieldContent>
+                  <FieldTitle>{plan.title}</FieldTitle>
+                  <FieldDescription>{plan.description}</FieldDescription>
+                </FieldContent>
+                <RadioGroupItem
+                  value={plan.id}
+                  id={`form-tanstack-radiogroup-${plan.id}`}
+                  aria-invalid={isInvalid}
+                />
+              </Field>
+            </FieldLabel>
+          ))}
+        </RadioGroup>
+        {isInvalid && <FieldError errors={field.state.meta.errors} />}
+      </FieldSet>
+    )
+  }}
+/>
+```
+
+### 开关（Switch）
+
+- 在 `<Switch />` 上使用 `field.state.value` 与 `field.handleChange`。
+- 若需展示错误，请在 `<Switch />` 上设置 `aria-invalid`，并在 `<Field />` 上添加 `data-invalid`。
+
+<ComponentPreview
+  name="form-tanstack-switch"
+  className="sm:[&_.preview]:h-[500px] sm:[&_pre]:!h-[500px]"
+  chromeLessOnMobile
+/>
+
+```tsx showLineNumbers title="form.tsx" {6,14,19-21}
+<form.Field
+  name="twoFactor"
+  children={(field) => {
+    const isInvalid = field.state.meta.isTouched && !field.state.meta.isValid
+    return (
+      <Field orientation="horizontal" data-invalid={isInvalid}>
+        <FieldContent>
+          <FieldLabel htmlFor="form-tanstack-switch-twoFactor">
+            Multi-factor authentication
+          </FieldLabel>
+          <FieldDescription>
+            Enable multi-factor authentication to secure your account.
+          </FieldDescription>
+          {isInvalid && <FieldError errors={field.state.meta.errors} />}
+        </FieldContent>
+        <Switch
+          id="form-tanstack-switch-twoFactor"
+          name={field.name}
+          checked={field.state.value}
+          onCheckedChange={field.handleChange}
+          aria-invalid={isInvalid}
+        />
+      </Field>
+    )
+  }}
+/>
+```
+
+### 复杂表单
+
+下面展示一个字段更多、逻辑更复杂的示例。
+
+<ComponentPreview
+  name="form-tanstack-complex"
+  className="sm:[&_.preview]:h-[1100px] sm:[&_pre]:!h-[1100px]"
+  chromeLessOnMobile
+/>
+
+## 重置表单
+
+使用 `form.reset()` 将表单恢复为默认值。
+
+```tsx showLineNumbers
+<Button type="button" variant="outline" onClick={() => form.reset()}>
+  Reset
+</Button>
+```
+
+## 数组字段
+
+TanStack Form 通过 `mode="array"` 提供强大的数组字段管理能力，可在完整校验支持下动态添加、移除与更新数组项。
+
+<ComponentPreview
+  name="form-tanstack-array"
+  className="sm:[&_.preview]:h-[700px] sm:[&_pre]:!h-[700px]"
+  chromeLessOnMobile
+/>
+
+下面的示例演示如何管理多个邮箱地址。用户可以添加最多 5 个邮箱、删除任意一项，每个邮箱都会独立校验。
+
+### 数组字段结构
+
+在父级字段上使用 `mode="array"` 以启用数组字段管理。
+
+```tsx showLineNumbers title="form.tsx" {3,12-14}
+<form.Field
+  name="emails"
+  mode="array"
+  children={(field) => {
+    return (
+      <FieldSet>
+        <FieldLegend variant="label">Email Addresses</FieldLegend>
+        <FieldDescription>
+          Add up to 5 email addresses where we can contact you.
+        </FieldDescription>
+        <FieldGroup>
+          {field.state.value.map((_, index) => (
+            // Nested field for each array item
+          ))}
+        </FieldGroup>
+      </FieldSet>
+    )
+  }}
+/>
+```
+
+### 嵌套字段
+
+通过下标访问数组元素：`fieldName[index].propertyName`。下面的示例使用 `InputGroup` 把删除按钮与输入框并排展示。
+
+```tsx showLineNumbers title="form.tsx"
+<form.Field
+  name={`emails[${index}].address`}
+  children={(subField) => {
+    const isSubFieldInvalid =
+      subField.state.meta.isTouched && !subField.state.meta.isValid
+    return (
+      <Field orientation="horizontal" data-invalid={isSubFieldInvalid}>
+        <FieldContent>
+          <InputGroup>
+            <InputGroupInput
+              id={`form-tanstack-array-email-${index}`}
+              name={subField.name}
+              value={subField.state.value}
+              onBlur={subField.handleBlur}
+              onChange={(e) => subField.handleChange(e.target.value)}
+              aria-invalid={isSubFieldInvalid}
+              placeholder="name@example.com"
+              type="email"
+            />
+            {field.state.value.length > 1 && (
+              <InputGroupAddon align="inline-end">
+                <InputGroupButton
+                  type="button"
+                  variant="ghost"
+                  size="icon-xs"
+                  onClick={() => field.removeValue(index)}
+                  aria-label={`Remove email ${index + 1}`}
+                >
+                  <XIcon />
+                </InputGroupButton>
+              </InputGroupAddon>
+            )}
+          </InputGroup>
+          {isSubFieldInvalid && (
+            <FieldError errors={subField.state.meta.errors} />
+          )}
+        </FieldContent>
+      </Field>
+    )
+  }}
+/>
+```
+
+### 添加项
+
+使用 `field.pushValue(item)` 向数组字段追加元素。当数组达到最大长度时，可以禁用按钮。
+
+```tsx showLineNumbers title="form.tsx"
+<Button
+  type="button"
+  variant="outline"
+  size="sm"
+  onClick={() => field.pushValue({ address: "" })}
+  disabled={field.state.value.length >= 5}
+>
+  Add Email Address
+</Button>
+```
+
+### 移除项
+
+使用 `field.removeValue(index)` 删除数组中的元素。可以在只有多条记录时再显示删除按钮。
+
+```tsx showLineNumbers title="form.tsx"
+{
+  field.state.value.length > 1 && (
+    <InputGroupButton
+      onClick={() => field.removeValue(index)}
+      aria-label={`Remove email ${index + 1}`}
+    >
+      <XIcon />
+    </InputGroupButton>
+  )
+}
+```
+
+### 数组校验
+
+使用 Zod 的数组方法校验数组字段。
+
+```tsx showLineNumbers title="form.tsx"
+const formSchema = z.object({
+  emails: z
+    .array(
+      z.object({
+        address: z.string().email("Enter a valid email address."),
+      })
+    )
+    .min(1, "Add at least one email address.")
+    .max(5, "You can add up to 5 email addresses."),
+})
+```

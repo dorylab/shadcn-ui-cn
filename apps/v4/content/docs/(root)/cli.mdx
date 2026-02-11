@@ -1,0 +1,213 @@
+---
+title: shadcn
+description: 使用 shadcn CLI 将组件添加到你的项目中。
+---
+
+## init
+
+使用 `init` 命令为新项目初始化配置与依赖。
+
+`init` 会安装依赖、添加 `cn` 工具函数，并为项目配置 CSS 变量。
+
+```bash
+npx shadcn@latest init
+```
+
+**命令选项**
+
+```bash
+Usage: shadcn init [options] [components...]
+
+initialize your project and install dependencies
+
+Arguments:
+  components         name, url or local path to component
+
+Options:
+  -t, --template <template>      the template to use. (next, next-monorepo)
+  -b, --base-color <base-color>  the base color to use. (neutral, gray, zinc, stone, slate)
+  -y, --yes                      skip confirmation prompt. (default: true)
+  -f, --force                    force overwrite of existing configuration. (default: false)
+  -c, --cwd <cwd>                the working directory. defaults to the current directory.
+  -s, --silent                   mute output. (default: false)
+  --src-dir                      use the src directory when creating a new project. (default: false)
+  --no-src-dir                   do not use the src directory when creating a new project.
+  --css-variables                use css variables for theming. (default: true)
+  --no-css-variables             do not use css variables for theming.
+  --no-base-style                do not install the base shadcn style
+  -h, --help                     display help for command
+```
+
+---
+
+## add
+
+使用 `add` 命令将组件及其依赖添加到项目中。
+
+```bash
+npx shadcn@latest add [component]
+```
+
+**命令选项**
+
+```bash
+Usage: shadcn add [options] [components...]
+
+add a component to your project
+
+Arguments:
+  components         name, url or local path to component
+
+Options:
+  -y, --yes           skip confirmation prompt. (default: false)
+  -o, --overwrite     overwrite existing files. (default: false)
+  -c, --cwd <cwd>     the working directory. defaults to the current directory.
+  -a, --all           add all available components (default: false)
+  -p, --path <path>   the path to add the component to.
+  -s, --silent        mute output. (default: false)
+  --src-dir           use the src directory when creating a new project. (default: false)
+  --no-src-dir        do not use the src directory when creating a new project.
+  --css-variables     use css variables for theming. (default: true)
+  --no-css-variables  do not use css variables for theming.
+  -h, --help          display help for command
+```
+
+---
+
+## view
+
+使用 `view` 命令在安装前预览注册表中的条目。
+
+```bash
+npx shadcn@latest view [item]
+```
+
+可以一次查看多个条目：
+
+```bash
+npx shadcn@latest view button card dialog
+```
+
+也可以查看带命名空间的注册表条目：
+
+```bash
+npx shadcn@latest view @acme/auth @v0/dashboard
+```
+
+**命令选项**
+
+```bash
+Usage: shadcn view [options] <items...>
+
+view items from the registry
+
+Arguments:
+  items            the item names or URLs to view
+
+Options:
+  -c, --cwd <cwd>  the working directory. defaults to the current directory.
+  -h, --help       display help for command
+```
+
+---
+
+## search
+
+使用 `search` 命令在注册表中搜索条目。
+
+```bash
+npx shadcn@latest search [registry]
+```
+
+可以配合查询关键字使用：
+
+```bash
+npx shadcn@latest search @shadcn -q "button"
+```
+
+也可以一次搜索多个注册表：
+
+```bash
+npx shadcn@latest search @shadcn @v0 @acme
+```
+
+`list` 命令是 `search` 的别名：
+
+```bash
+npx shadcn@latest list @acme
+```
+
+**命令选项**
+
+```bash
+Usage: shadcn search|list [options] <registries...>
+
+search items from registries
+
+Arguments:
+  registries             the registry names or urls to search items from. Names
+                         must be prefixed with @.
+
+Options:
+  -c, --cwd <cwd>        the working directory. defaults to the current directory.
+  -q, --query <query>    query string
+  -l, --limit <number>   maximum number of items to display per registry (default: "100")
+  -o, --offset <number>  number of items to skip (default: "0")
+  -h, --help             display help for command
+```
+
+---
+
+## list
+
+使用 `list` 命令列出某个注册表中的所有条目。
+
+```bash
+npx shadcn@latest list @acme
+```
+
+**命令选项**
+
+```bash
+Usage: shadcn list [options] <registries...>
+
+list items from registries
+
+Arguments:
+  registries             the registry names or urls to list items from. Names
+    must be prefixed with @.
+```
+
+---
+
+## build
+
+使用 `build` 命令生成注册表 JSON 文件。
+
+```bash
+npx shadcn@latest build
+```
+
+该命令会读取 `registry.json`，并在 `public/r` 目录下生成对应的注册表 JSON 文件。
+
+**命令选项**
+
+```bash
+Usage: shadcn build [options] [registry]
+
+build components for a shadcn registry
+
+Arguments:
+  registry             path to registry.json file (default: "./registry.json")
+
+Options:
+  -o, --output <path>  destination directory for json files (default: "./public/r")
+  -c, --cwd <cwd>      the working directory. defaults to the current directory.
+  -h, --help           display help for command
+```
+
+可以通过 `--output` 参数自定义输出目录：
+
+```bash
+npx shadcn@latest build --output ./public/registry
+```

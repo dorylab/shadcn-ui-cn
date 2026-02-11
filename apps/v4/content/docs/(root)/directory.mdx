@@ -1,0 +1,69 @@
+---
+title: 注册表目录
+description: 发现社区构建的 shadcn/ui 组件与 Blocks 注册表。
+---
+
+这些注册表已经内置在 CLI 中，无需额外配置。要添加组件，请运行：`npx shadcn add @<registry>/<component>`。
+
+<DirectoryList />
+
+没有找到需要的注册表？查看[这里的指南](/docs/registry/registry-index)了解如何提交。
+
+## 文档
+
+你可以使用 `shadcn` CLI 运行自己的代码注册表。这样就能把自定义组件、hooks、页面、配置、规则等分发到任意项目中。
+
+<div className="mt-6 grid gap-4 sm:grid-cols-2">
+  <LinkedCard href="/docs/registry/getting-started" className="items-start text-sm md:p-6">
+    <div className="font-medium">快速入门</div>
+    <div className="text-muted-foreground">
+      从零搭建你的注册表
+    </div>
+  </LinkedCard>
+
+<LinkedCard
+  href="/docs/registry/authentication"
+  className="items-start text-sm md:p-6"
+>
+  <div className="font-medium">鉴权</div>
+  <div className="text-muted-foreground">
+    为注册表配置安全访问
+  </div>
+</LinkedCard>
+<LinkedCard
+  href="/docs/registry/namespace"
+  className="items-start text-sm md:p-6"
+>
+  <div className="font-medium">命名空间</div>
+  <div className="text-muted-foreground">
+    配置带命名空间的注册表
+  </div>
+</LinkedCard>
+<LinkedCard
+  href="/docs/registry/registry-index"
+  className="items-start text-sm md:p-6"
+>
+  <div className="font-medium">添加注册表</div>
+  <div className="text-muted-foreground">
+    了解如何把注册表收录到目录
+  </div>
+</LinkedCard>
+<LinkedCard
+  href="/docs/registry/examples"
+  className="items-start text-sm md:p-6"
+>
+  <div className="font-medium">示例</div>
+  <div className="text-muted-foreground">
+    注册表示例与配置参考
+  </div>
+</LinkedCard>
+  <LinkedCard
+    href="/docs/registry/registry-json"
+    className="items-start text-sm md:p-6"
+  >
+    <div className="font-medium">Schema</div>
+    <div className="text-muted-foreground">
+      registry.json 的结构说明
+    </div>
+  </LinkedCard>
+</div>

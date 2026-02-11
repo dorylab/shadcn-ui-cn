@@ -1,0 +1,101 @@
+---
+title: 常见问题
+description: 关于注册表运行的常见问答。
+---
+
+## 常见问题
+
+### 复杂组件长什么样？
+
+下例展示了一个复杂组件，它会安装页面、两个组件、一个 Hook、一个日期格式化工具以及一个配置文件。
+
+```json showLineNumbers
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "hello-world",
+  "title": "Hello World",
+  "type": "registry:block",
+  "description": "A complex hello world component",
+  "files": [
+    {
+      "path": "registry/new-york/hello-world/page.tsx",
+      "type": "registry:page",
+      "target": "app/hello/page.tsx"
+    },
+    {
+      "path": "registry/new-york/hello-world/components/hello-world.tsx",
+      "type": "registry:component"
+    },
+    {
+      "path": "registry/new-york/hello-world/components/formatted-message.tsx",
+      "type": "registry:component"
+    },
+    {
+      "path": "registry/new-york/hello-world/hooks/use-hello.ts",
+      "type": "registry:hook"
+    },
+    {
+      "path": "registry/new-york/hello-world/lib/format-date.ts",
+      "type": "registry:utils"
+    },
+    {
+      "path": "registry/new-york/hello-world/hello.config.ts",
+      "type": "registry:file",
+      "target": "~/hello.config.ts"
+    }
+  ]
+}
+```
+
+### 如何新增 Tailwind 颜色？
+
+要新增颜色，需要在 `cssVars` 的 `light` 与 `dark` 下添加对应变量。
+
+```json showLineNumbers {10-18}
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "hello-world",
+  "title": "Hello World",
+  "type": "registry:block",
+  "description": "A complex hello world component",
+  "files": [
+    // ...
+  ],
+  "cssVars": {
+    "light": {
+      "brand-background": "20 14.3% 4.1%",
+      "brand-accent": "20 14.3% 4.1%"
+    },
+    "dark": {
+      "brand-background": "20 14.3% 4.1%",
+      "brand-accent": "20 14.3% 4.1%"
+    }
+  }
+}
+```
+
+CLI 会自动更新项目的 CSS 文件。更新后即可通过 `bg-brand`、`text-brand-accent` 等工具类使用新颜色。
+
+### 如何新增或覆写 Tailwind 主题变量？
+
+要添加或覆写主题变量，可在 `cssVars.theme` 中写入对应键值。
+
+```json showLineNumbers {10-15}
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "hello-world",
+  "title": "Hello World",
+  "type": "registry:block",
+  "description": "A complex hello world component",
+  "files": [
+    // ...
+  ],
+  "cssVars": {
+    "theme": {
+      "text-base": "3rem",
+      "ease-in-out": "cubic-bezier(0.4, 0, 0.2, 1)",
+      "font-heading": "Poppins, sans-serif"
+    }
+  }
+}
+```

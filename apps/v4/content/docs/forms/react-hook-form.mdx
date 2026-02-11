@@ -1,0 +1,615 @@
+---
+title: React Hook Form
+description: 使用 React Hook Form 与 Zod 构建表单。
+links:
+  doc: https://react-hook-form.com
+---
+
+import { InfoIcon } from "lucide-react"
+
+本文介绍如何使用 React Hook Form 构建表单。我们会讲解如何配合 `<Field />` 组件构建表单、利用 Zod 做模式校验、处理错误、提升无障碍体验等。
+
+## 演示
+
+下方是我们要实现的表单，包含文本输入与文本域。提交时会验证数据并显示错误。
+
+<Callout icon={<InfoIcon />}>
+  **注意：** 为了演示 React Hook Form 的校验流程，示例中刻意关闭了浏览器原生校验。生产环境建议保留基础浏览器校验。
+</Callout>
+
+<ComponentPreview
+  name="form-rhf-demo"
+  className="sm:[&_.preview]:h-[700px] sm:[&_pre]:!h-[700px]"
+  chromeLessOnMobile
+/>
+
+## 思路
+
+这个表单使用 React Hook Form 进行高性能、灵活的状态管理，并通过 `<Field />` 组件完全掌控标记与样式。
+
+- 使用 `useForm` 管理表单状态。
+- 通过 `<Controller />` 处理受控组件。
+- 利用 `<Field />` 构建无障碍表单。
+- 使用 Zod + `zodResolver` 做客户端校验。
+
+## 结构示例
+
+下面是结合 React Hook Form `<Controller />` 与 `<Field />` 的基本表单示例：
+
+```tsx showLineNumbers {5-18}
+<Controller
+  name="title"
+  control={form.control}
+  render={({ field, fieldState }) => (
+    <Field data-invalid={fieldState.invalid}>
+      <FieldLabel htmlFor={field.name}>Bug Title</FieldLabel>
+      <Input
+        {...field}
+        id={field.name}
+        aria-invalid={fieldState.invalid}
+        placeholder="Login button not working on mobile"
+        autoComplete="off"
+      />
+      <FieldDescription>
+        Provide a concise title for your bug report.
+      </FieldDescription>
+      {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
+    </Field>
+  )}
+/>
+```
+
+## 构建表单
+
+### 定义 schema
+
+先用 Zod 描述表单字段和校验规则。
+
+<Callout icon={<InfoIcon />}>
+  **说明：** 示例使用 `zod v3`，你也可以替换成 React Hook Form 支持的其他 Standard Schema 库。
+</Callout>
+
+```tsx showLineNumbers title="form.tsx"
+import * as z from "zod"
+
+const formSchema = z.object({
+  title: z
+    .string()
+    .min(5, "Bug title must be at least 5 characters.")
+    .max(32, "Bug title must be at most 32 characters."),
+  description: z
+    .string()
+    .min(20, "Description must be at least 20 characters.")
+    .max(100, "Description must be at most 100 characters."),
+})
+```
+
+### 初始化表单
+
+使用 `useForm` 创建表单实例，并结合 Zod resolver 做校验。
+
+```tsx showLineNumbers title="form.tsx" {17-23}
+import { zodResolver } from "@hookform/resolvers/zod"
+import { useForm } from "react-hook-form"
+import * as z from "zod"
+
+const formSchema = z.object({
+  title: z
+    .string()
+    .min(5, "Bug title must be at least 5 characters.")
+    .max(32, "Bug title must be at most 32 characters."),
+  description: z
+    .string()
+    .min(20, "Description must be at least 20 characters.")
+    .max(100, "Description must be at most 100 characters."),
+})
+
+export function BugReportForm() {
+  const form = useForm<z.infer<typeof formSchema>>({
+    resolver: zodResolver(formSchema),
+    defaultValues: {
+      title: "",
+      description: "",
+    },
+  })
+
+  function onSubmit(data: z.infer<typeof formSchema>) {
+    console.log(data)
+  }
+
+  return (
+    <form onSubmit={form.handleSubmit(onSubmit)}>
+      {/* ... */}
+    </form>
+  )
+}
+```
+
+### 组装表单
+
+现在即可结合 `<Controller />` 与 `<Field />` 逐个字段渲染表单。
+
+<ComponentSource
+  src="/registry/new-york-v4/examples/form-rhf-demo.tsx"
+  title="form.tsx"
+/>
+
+### 完成
+
+至此，我们得到了一个可访问、带客户端校验的表单。提交时 `onSubmit` 会收到已验证的数据；若校验失败，React Hook Form 会自动在对应字段展示错误。
+
+## 校验
+
+### 客端校验
+
+React Hook Form 会通过 `resolver` 调用 Zod schema 校验表单数据。
+
+```tsx showLineNumbers title="example-form.tsx" {5-8,12}
+import { zodResolver } from "@hookform/resolvers/zod"
+import { useForm } from "react-hook-form"
+import * as z from "zod"
+
+const formSchema = z.object({
+  title: z.string(),
+  description: z.string().optional(),
+})
+
+export function ExampleForm() {
+  const form = useForm<z.infer<typeof formSchema>>({
+    resolver: zodResolver(formSchema),
+    defaultValues: {
+      title: "",
+      description: "",
+    },
+  })
+}
+```
+
+### 校验模式
+
+React Hook Form 支持多种触发校验的模式：
+
+```tsx showLineNumbers title="form.tsx" {3}
+const form = useForm<z.infer<typeof formSchema>>({
+  resolver: zodResolver(formSchema),
+  mode: "onChange",
+})
+```
+
+| Mode          | 描述                                               |
+| ------------- | -------------------------------------------------- |
+| `"onChange"`  | 每次变更都触发校验。                               |
+| `"onBlur"`    | 在失焦时触发校验。                                 |
+| `"onSubmit"`  | 在提交时触发校验（默认）。                         |
+| `"onTouched"` | 首次失焦触发校验，此后每次变更都会校验。           |
+| `"all"`       | 失焦与变更都会触发校验。                           |
+
+## 展示错误
+
+使用 `<FieldError />` 在字段旁展示错误信息，并注意以下要点：
+
+- 给 `<Field />` 添加 `data-invalid`。
+- 给表单控件（如 `<Input />`、`<SelectTrigger />`、`<Checkbox />` 等）添加 `aria-invalid`。
+
+```tsx showLineNumbers title="form.tsx" {5,11,13}
+<Controller
+  name="email"
+  control={form.control}
+  render={({ field, fieldState }) => (
+    <Field data-invalid={fieldState.invalid}>
+      <FieldLabel htmlFor={field.name}>Email</FieldLabel>
+      <Input
+        {...field}
+        id={field.name}
+        type="email"
+        aria-invalid={fieldState.invalid}
+      />
+      {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
+    </Field>
+  )}
+/>
+```
+
+## 不同类型字段
+
+### Input
+
+- 将 `field` 展开到 `<Input />` 上。
+- 同时把 `aria-invalid` 与 `data-invalid` 设置好，方便高亮错误状态。
+
+<ComponentPreview
+  name="form-rhf-input"
+  className="sm:[&_.preview]:h-[700px] sm:[&_pre]:!h-[700px]"
+  chromeLessOnMobile
+/>
+
+```tsx showLineNumbers title="form.tsx" {5,7,8}
+<Controller
+  name="name"
+  control={form.control}
+  render={({ field, fieldState }) => (
+    <Field data-invalid={fieldState.invalid}>
+      <FieldLabel htmlFor={field.name}>Name</FieldLabel>
+      <Input {...field} id={field.name} aria-invalid={fieldState.invalid} />
+      {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
+    </Field>
+  )}
+/>
+```
+
+### Textarea
+
+- 将 `field` 展开到 `<Textarea />`。
+- 同样配置 `aria-invalid` 与 `data-invalid`。
+
+<ComponentPreview
+  name="form-rhf-textarea"
+  className="sm:[&_.preview]:h-[700px] sm:[&_pre]:!h-[700px]"
+  chromeLessOnMobile
+/>
+
+```tsx showLineNumbers title="form.tsx" {5,10,18}
+<Controller
+  name="about"
+  control={form.control}
+  render={({ field, fieldState }) => (
+    <Field data-invalid={fieldState.invalid}>
+      <FieldLabel htmlFor="form-rhf-textarea-about">More about you</FieldLabel>
+      <Textarea
+        {...field}
+        id="form-rhf-textarea-about"
+        aria-invalid={fieldState.invalid}
+        placeholder="I'm a software engineer..."
+        className="min-h-[120px]"
+      />
+      <FieldDescription>
+        Tell us more about yourself. This will be used to help us personalize
+        your experience.
+      </FieldDescription>
+      {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
+    </Field>
+  )}
+/>
+```
+
+### Select
+
+- 在 `<Select />` 上使用 `field.value` 与 `field.onChange`。
+- 错误状态时，给 `<SelectTrigger />` 添加 `aria-invalid`，`<Field />` 添加 `data-invalid`。
+
+<ComponentPreview
+  name="form-rhf-select"
+  className="sm:[&_.preview]:h-[500px] sm:[&_pre]:!h-[500px]"
+  chromeLessOnMobile
+/>
+
+```tsx showLineNumbers title="form.tsx" {5,13,22}
+<Controller
+  name="language"
+  control={form.control}
+  render={({ field, fieldState }) => (
+    <Field orientation="responsive" data-invalid={fieldState.invalid}>
+      <FieldContent>
+        <FieldLabel htmlFor="form-rhf-select-language">
+          Spoken Language
+        </FieldLabel>
+        <FieldDescription>
+          For best results, select the language you speak.
+        </FieldDescription>
+        {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
+      </FieldContent>
+      <Select
+        name={field.name}
+        value={field.value}
+        onValueChange={field.onChange}
+      >
+        <SelectTrigger
+          id="form-rhf-select-language"
+          aria-invalid={fieldState.invalid}
+          className="min-w-[120px]"
+        >
+          <SelectValue placeholder="Select" />
+        </SelectTrigger>
+        <SelectContent position="item-aligned">
+          <SelectItem value="auto">Auto</SelectItem>
+          <SelectItem value="en">English</SelectItem>
+        </SelectContent>
+      </Select>
+    </Field>
+  )}
+/>
+```
+
+### Checkbox
+
+- 对于复选框数组，结合 `field.value` 与 `field.onChange` 自行维护数组。
+- 同样配置 `aria-invalid`、`data-invalid`。
+- 在 `<FieldGroup />` 上加 `data-slot="checkbox-group"` 以获得正确的样式间距。
+
+<ComponentPreview
+  name="form-rhf-checkbox"
+  className="sm:[&_.preview]:h-[700px] sm:[&_pre]:!h-[700px]"
+  chromeLessOnMobile
+/>
+
+```tsx showLineNumbers title="form.tsx" {10,15,20-22,38}
+<Controller
+  name="tasks"
+  control={form.control}
+  render={({ field, fieldState }) => (
+    <FieldSet>
+      <FieldLegend variant="label">Tasks</FieldLegend>
+      <FieldDescription>
+        Get notified when tasks you&apos;ve created have updates.
+      </FieldDescription>
+      <FieldGroup data-slot="checkbox-group">
+        {tasks.map((task) => (
+          <Field
+            key={task.id}
+            orientation="horizontal"
+            data-invalid={fieldState.invalid}
+          >
+            <Checkbox
+              id={`form-rhf-checkbox-${task.id}`}
+              name={field.name}
+              aria-invalid={fieldState.invalid}
+              checked={field.value.includes(task.id)}
+              onCheckedChange={(checked) => {
+                const newValue = checked
+                  ? [...field.value, task.id]
+                  : field.value.filter((value) => value !== task.id)
+                field.onChange(newValue)
+              }}
+            />
+            <FieldLabel
+              htmlFor={`form-rhf-checkbox-${task.id}`}
+              className="font-normal"
+            >
+              {task.label}
+            </FieldLabel>
+          </Field>
+        ))}
+      </FieldGroup>
+      {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
+    </FieldSet>
+  )}
+/>
+```
+
+### Radio Group
+
+- 在 `<RadioGroup />` 上使用 `field.value` 与 `field.onChange`。
+- 错误态时给 `<RadioGroupItem />` 添加 `aria-invalid`，`<Field />` 添加 `data-invalid`。
+
+<ComponentPreview
+  name="form-rhf-radiogroup"
+  className="sm:[&_.preview]:h-[700px] sm:[&_pre]:!h-[700px]"
+  chromeLessOnMobile
+/>
+
+```tsx showLineNumbers title="form.tsx" {12-13,17,25,31}
+<Controller
+  name="plan"
+  control={form.control}
+  render={({ field, fieldState }) => (
+    <FieldSet>
+      <FieldLegend>Plan</FieldLegend>
+      <FieldDescription>
+        You can upgrade or downgrade your plan at any time.
+      </FieldDescription>
+      <RadioGroup
+        name={field.name}
+        value={field.value}
+        onValueChange={field.onChange}
+      >
+        {plans.map((plan) => (
+          <FieldLabel key={plan.id} htmlFor={`form-rhf-radiogroup-${plan.id}`}>
+            <Field orientation="horizontal" data-invalid={fieldState.invalid}>
+              <FieldContent>
+                <FieldTitle>{plan.title}</FieldTitle>
+                <FieldDescription>{plan.description}</FieldDescription>
+              </FieldContent>
+              <RadioGroupItem
+                value={plan.id}
+                id={`form-rhf-radiogroup-${plan.id}`}
+                aria-invalid={fieldState.invalid}
+              />
+            </Field>
+          </FieldLabel>
+        ))}
+      </RadioGroup>
+      {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
+    </FieldSet>
+  )}
+/>
+```
+
+### Switch
+
+- For switches, use `field.value` and `field.onChange` on the `<Switch />` component.
+- To show errors, add the `aria-invalid` prop to the `<Switch />` component and the `data-invalid` prop to the `<Field />` component.
+
+<ComponentPreview
+  name="form-rhf-switch"
+  className="sm:[&_.preview]:h-[500px] sm:[&_pre]:!h-[500px]"
+  chromeLessOnMobile
+/>
+
+```tsx showLineNumbers title="form.tsx" {5,13,18-19}
+<Controller
+  name="twoFactor"
+  control={form.control}
+  render={({ field, fieldState }) => (
+    <Field orientation="horizontal" data-invalid={fieldState.invalid}>
+      <FieldContent>
+        <FieldLabel htmlFor="form-rhf-switch-twoFactor">
+          Multi-factor authentication
+        </FieldLabel>
+        <FieldDescription>
+          Enable multi-factor authentication to secure your account.
+        </FieldDescription>
+        {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
+      </FieldContent>
+      <Switch
+        id="form-rhf-switch-twoFactor"
+        name={field.name}
+        checked={field.value}
+        onCheckedChange={field.onChange}
+        aria-invalid={fieldState.invalid}
+      />
+    </Field>
+  )}
+/>
+```
+
+### Complex Forms
+
+Here is an example of a more complex form with multiple fields and validation.
+
+<ComponentPreview
+  name="form-rhf-complex"
+  className="sm:[&_.preview]:h-[1300px] sm:[&_pre]:!h-[1300px]"
+  chromeLessOnMobile
+/>
+
+## Resetting the Form
+
+Use `form.reset()` to reset the form to its default values.
+
+```tsx showLineNumbers
+<Button type="button" variant="outline" onClick={() => form.reset()}>
+  Reset
+</Button>
+```
+
+## Array Fields
+
+React Hook Form provides a `useFieldArray` hook for managing dynamic array fields. This is useful when you need to add or remove fields dynamically.
+
+<ComponentPreview
+  name="form-rhf-array"
+  className="sm:[&_.preview]:h-[700px] sm:[&_pre]:!h-[700px]"
+  chromeLessOnMobile
+/>
+
+### Using useFieldArray
+
+Use the `useFieldArray` hook to manage array fields. It provides `fields`, `append`, and `remove` methods.
+
+```tsx showLineNumbers title="form.tsx" {8-11}
+import { useFieldArray, useForm } from "react-hook-form"
+
+export function ExampleForm() {
+  const form = useForm({
+    // ... form config
+  })
+
+  const { fields, append, remove } = useFieldArray({
+    control: form.control,
+    name: "emails",
+  })
+}
+```
+
+### Array Field Structure
+
+Wrap your array fields in a `<FieldSet />` with a `<FieldLegend />` and `<FieldDescription />`.
+
+```tsx showLineNumbers title="form.tsx"
+<FieldSet className="gap-4">
+  <FieldLegend variant="label">Email Addresses</FieldLegend>
+  <FieldDescription>
+    Add up to 5 email addresses where we can contact you.
+  </FieldDescription>
+  <FieldGroup className="gap-4">{/* Array items go here */}</FieldGroup>
+</FieldSet>
+```
+
+### Controller Pattern for Array Items
+
+Map over the `fields` array and use `<Controller />` for each item. **Make sure to use `field.id` as the key**.
+
+```tsx showLineNumbers title="form.tsx"
+{
+  fields.map((field, index) => (
+    <Controller
+      key={field.id}
+      name={`emails.${index}.address`}
+      control={form.control}
+      render={({ field: controllerField, fieldState }) => (
+        <Field orientation="horizontal" data-invalid={fieldState.invalid}>
+          <FieldContent>
+            <InputGroup>
+              <InputGroupInput
+                {...controllerField}
+                id={`form-rhf-array-email-${index}`}
+                aria-invalid={fieldState.invalid}
+                placeholder="name@example.com"
+                type="email"
+                autoComplete="email"
+              />
+              {/* Remove button */}
+            </InputGroup>
+            {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
+          </FieldContent>
+        </Field>
+      )}
+    />
+  ))
+}
+```
+
+### Adding Items
+
+Use the `append` method to add new items to the array.
+
+```tsx showLineNumbers title="form.tsx"
+<Button
+  type="button"
+  variant="outline"
+  size="sm"
+  onClick={() => append({ address: "" })}
+  disabled={fields.length >= 5}
+>
+  Add Email Address
+</Button>
+```
+
+### Removing Items
+
+Use the `remove` method to remove items from the array. Add the remove button conditionally.
+
+```tsx showLineNumbers title="form.tsx"
+{
+  fields.length > 1 && (
+    <InputGroupAddon align="inline-end">
+      <InputGroupButton
+        type="button"
+        variant="ghost"
+        size="icon-xs"
+        onClick={() => remove(index)}
+        aria-label={`Remove email ${index + 1}`}
+      >
+        <XIcon />
+      </InputGroupButton>
+    </InputGroupAddon>
+  )
+}
+```
+
+### Array Validation
+
+Use Zod's `array` method to validate array fields.
+
+```tsx showLineNumbers title="form.tsx"
+const formSchema = z.object({
+  emails: z
+    .array(
+      z.object({
+        address: z.string().email("Enter a valid email address."),
+      })
+    )
+    .min(1, "Add at least one email address.")
+    .max(5, "You can add up to 5 email addresses."),
+})
+```

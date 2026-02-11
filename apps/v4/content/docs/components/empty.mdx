@@ -1,0 +1,197 @@
+---
+title: Empty
+description: 使用 Empty 组件展示空状态。
+component: true
+---
+
+<ComponentPreview name="empty-demo" className="[&_.preview]:p-0" />
+
+## 安装
+
+<CodeTabs>
+
+<TabsList>
+  <TabsTrigger value="cli">CLI</TabsTrigger>
+  <TabsTrigger value="manual">手动</TabsTrigger>
+</TabsList>
+<TabsContent value="cli">
+
+```bash
+npx shadcn@latest add empty
+```
+
+</TabsContent>
+
+<TabsContent value="manual">
+
+<Steps>
+
+<Step>将下面的代码复制到你的项目中。</Step>
+
+<ComponentSource name="empty" title="components/ui/empty.tsx" />
+
+<Step>根据项目结构调整导入路径。</Step>
+
+</Steps>
+
+</TabsContent>
+
+</CodeTabs>
+
+## 用法
+
+```tsx
+import {
+  Empty,
+  EmptyContent,
+  EmptyDescription,
+  EmptyHeader,
+  EmptyMedia,
+  EmptyTitle,
+} from "@/components/ui/empty"
+```
+
+```tsx
+<Empty>
+  <EmptyHeader>
+    <EmptyMedia variant="icon">
+      <Icon />
+    </EmptyMedia>
+    <EmptyTitle>暂无数据</EmptyTitle>
+    <EmptyDescription>未找到相关数据</EmptyDescription>
+  </EmptyHeader>
+  <EmptyContent>
+    <Button>添加数据</Button>
+  </EmptyContent>
+</Empty>
+```
+
+## 示例
+
+### Outline
+
+使用 `border` 工具类即可创建带描边的空状态。
+
+<ComponentPreview
+  name="empty-outline"
+  className="[&_.preview]:p-6 md:[&_.preview]:p-10"
+/>
+
+### Background
+
+通过 `bg-*` 与 `bg-gradient-*` 工具类为空状态添加背景。
+
+<ComponentPreview name="empty-background" className="[&_.preview]:p-0" />
+
+### Avatar
+
+使用 `EmptyMedia` 在空状态中展示头像。
+
+<ComponentPreview name="empty-avatar" className="[&_.preview]:p-0" />
+
+### Avatar Group
+
+使用 `EmptyMedia` 展示头像组。
+
+<ComponentPreview name="empty-avatar-group" className="[&_.preview]:p-0" />
+
+### InputGroup
+
+可以在 `EmptyContent` 中嵌入 `InputGroup` 组件。
+
+<ComponentPreview name="empty-input-group" className="[&_.preview]:p-0" />
+
+## API 参考
+
+### Empty
+
+空状态的主体组件，用于包裹 `EmptyHeader` 与 `EmptyContent`。
+
+| Prop        | Type     | Default |
+| ----------- | -------- | ------- |
+| `className` | `string` |         |
+
+```tsx
+<Empty>
+  <EmptyHeader />
+  <EmptyContent />
+</Empty>
+```
+
+### EmptyHeader
+
+`EmptyHeader` 用于包裹媒体、标题与描述。
+
+| Prop        | Type     | Default |
+| ----------- | -------- | ------- |
+| `className` | `string` |         |
+
+```tsx
+<EmptyHeader>
+  <EmptyMedia />
+  <EmptyTitle />
+  <EmptyDescription />
+</EmptyHeader>
+```
+
+### EmptyMedia
+
+`EmptyMedia` 用于呈现空状态的媒体内容（图标或图片），也可以放置头像等组件。
+
+| Prop        | Type                  | Default   |
+| ----------- | --------------------- | --------- |
+| `variant`   | `"default" \| "icon"` | `default` |
+| `className` | `string`              |           |
+
+```tsx
+<EmptyMedia variant="icon">
+  <Icon />
+</EmptyMedia>
+```
+
+```tsx
+<EmptyMedia>
+  <Avatar>
+    <AvatarImage src="..." />
+    <AvatarFallback>CN</AvatarFallback>
+  </Avatar>
+</EmptyMedia>
+```
+
+### EmptyTitle
+
+`EmptyTitle` 用于展示空状态标题。
+
+| Prop        | Type     | Default |
+| ----------- | -------- | ------- |
+| `className` | `string` |         |
+
+```tsx
+<EmptyTitle>No data</EmptyTitle>
+```
+
+### EmptyDescription
+
+`EmptyDescription` 用于展示空状态描述。
+
+| Prop        | Type     | Default |
+| ----------- | -------- | ------- |
+| `className` | `string` |         |
+
+```tsx
+<EmptyDescription>You do not have any notifications.</EmptyDescription>
+```
+
+### EmptyContent
+
+`EmptyContent` 用于放置按钮、输入框或链接等内容。
+
+| Prop        | Type     | Default |
+| ----------- | -------- | ------- |
+| `className` | `string` |         |
+
+```tsx
+<EmptyContent>
+  <Button>创建项目</Button>
+</EmptyContent>
+```

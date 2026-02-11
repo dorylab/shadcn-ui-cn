@@ -1,0 +1,71 @@
+---
+title: Badge
+description: 用于展示徽章或拥有徽章外观的组件。
+component: true
+---
+
+<ComponentPreview
+  name="badge-demo"
+  title="徽章"
+  description="默认外观的徽章"
+/>
+
+## 安装
+
+<CodeTabs>
+
+<TabsList>
+  <TabsTrigger value="cli">CLI</TabsTrigger>
+  <TabsTrigger value="manual">手动</TabsTrigger>
+</TabsList>
+<TabsContent value="cli">
+
+```bash
+npx shadcn@latest add badge
+```
+
+</TabsContent>
+
+<TabsContent value="manual">
+
+<Steps>
+
+<Step>将下面的代码复制到你的项目中。</Step>
+
+<ComponentSource name="badge" title="components/ui/badge.tsx" />
+
+<Step>根据项目结构调整导入路径。</Step>
+
+</Steps>
+
+</TabsContent>
+
+</CodeTabs>
+
+## 用法
+
+```tsx
+import { Badge } from "@/components/ui/badge"
+```
+
+```tsx
+<Badge variant="default | outline | secondary | destructive">Badge</Badge>
+```
+
+### 链接
+
+可以通过 `asChild` 属性让其他组件呈现徽章样式。下面展示一个看起来像徽章的链接。
+
+```tsx showLineNumbers
+import Link from "next/link"
+
+import { Badge } from "@/components/ui/badge"
+
+export function LinkAsBadge() {
+  return (
+    <Badge asChild>
+      <Link href="/">Badge</Link>
+    </Badge>
+  )
+}
+```

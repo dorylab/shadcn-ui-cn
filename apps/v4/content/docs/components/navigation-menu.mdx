@@ -1,0 +1,100 @@
+---
+title: Navigation Menu
+description: 用于网站导航的链接集合。
+component: true
+links:
+  doc: https://www.radix-ui.com/docs/primitives/components/navigation-menu
+  api: https://www.radix-ui.com/docs/primitives/components/navigation-menu#api-reference
+---
+
+<ComponentPreview
+  name="navigation-menu-demo"
+  className="[&_.preview]:!items-start [&_.preview]:p-4 [&_.preview]:pt-8 md:[&_.preview]:pt-16"
+/>
+
+## 安装
+
+<CodeTabs>
+
+<TabsList>
+  <TabsTrigger value="cli">CLI</TabsTrigger>
+  <TabsTrigger value="manual">手动</TabsTrigger>
+</TabsList>
+<TabsContent value="cli">
+
+```bash
+npx shadcn@latest add navigation-menu
+```
+
+</TabsContent>
+
+<TabsContent value="manual">
+
+<Steps>
+
+<Step>安装下列依赖：</Step>
+
+```bash
+npm install @radix-ui/react-navigation-menu
+```
+
+<Step>将下面的代码复制到你的项目中。</Step>
+
+<ComponentSource
+  name="navigation-menu"
+  title="components/ui/navigation-menu.tsx"
+/>
+
+<Step>根据项目结构调整导入路径。</Step>
+
+</Steps>
+
+</TabsContent>
+
+</CodeTabs>
+
+## 用法
+
+```tsx showLineNumbers
+import {
+  NavigationMenu,
+  NavigationMenuContent,
+  NavigationMenuIndicator,
+  NavigationMenuItem,
+  NavigationMenuLink,
+  NavigationMenuList,
+  NavigationMenuTrigger,
+  NavigationMenuViewport,
+} from "@/components/ui/navigation-menu"
+```
+
+```tsx showLineNumbers
+<NavigationMenu>
+  <NavigationMenuList>
+    <NavigationMenuItem>
+      <NavigationMenuTrigger>菜单项 1</NavigationMenuTrigger>
+      <NavigationMenuContent>
+        <NavigationMenuLink>链接</NavigationMenuLink>
+      </NavigationMenuContent>
+    </NavigationMenuItem>
+  </NavigationMenuList>
+</NavigationMenu>
+```
+
+## Link
+
+可以通过 `asChild` 让其他组件呈现导航菜单触发器的外观。以下示例展示了一个链接触发器。
+
+```tsx showLineNumbers title="components/example-navigation-menu.tsx"
+import Link from "next/link"
+
+export function NavigationMenuDemo() {
+  return (
+    <NavigationMenuItem>
+      <NavigationMenuLink asChild>
+        <Link href="/docs">Documentation</Link>
+      </NavigationMenuLink>
+    </NavigationMenuItem>
+  )
+}
+```

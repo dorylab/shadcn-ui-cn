@@ -1,0 +1,64 @@
+---
+title: Aspect Ratio
+description: 以指定的宽高比展示内容。
+component: true
+links:
+  doc: https://www.radix-ui.com/docs/primitives/components/aspect-ratio
+  api: https://www.radix-ui.com/docs/primitives/components/aspect-ratio#api-reference
+---
+
+<ComponentPreview
+  name="aspect-ratio-demo"
+  title="固定宽高比的容器"
+  description="展示一个按照 16:9 比例呈现图像的组件。"
+/>
+
+## 安装
+
+<CodeTabs>
+
+<TabsList>
+  <TabsTrigger value="cli">CLI</TabsTrigger>
+  <TabsTrigger value="manual">手动</TabsTrigger>
+</TabsList>
+<TabsContent value="cli">
+
+```bash
+npx shadcn@latest add aspect-ratio
+```
+
+</TabsContent>
+
+<TabsContent value="manual">
+
+<Steps>
+
+<Step>安装下列依赖：</Step>
+
+```bash
+npm install @radix-ui/react-aspect-ratio
+```
+
+<Step>将如下代码复制到你的项目中。</Step>
+
+<ComponentSource name="aspect-ratio" title="components/ui/aspect-ratio.tsx" />
+
+<Step>按项目结构调整导入路径。</Step>
+
+</Steps>
+
+</TabsContent>
+
+</CodeTabs>
+
+## 用法
+
+```tsx showLineNumbers
+import { AspectRatio } from "@/components/ui/aspect-ratio"
+```
+
+```tsx showLineNumbers
+<AspectRatio ratio={16 / 9}>
+  <Image src="..." alt="Image" className="rounded-md object-cover" />
+</AspectRatio>
+```

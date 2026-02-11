@@ -1,0 +1,71 @@
+---
+title: Scroll Area
+description: 在原生滚动基础上扩展自定义样式，兼容多浏览器。
+component: true
+links:
+  doc: https://www.radix-ui.com/docs/primitives/components/scroll-area
+  api: https://www.radix-ui.com/docs/primitives/components/scroll-area#api-reference
+---
+
+<ComponentPreview
+  name="scroll-area-demo"
+  description="滚动区域组件示例。"
+/>
+
+## 安装
+
+<CodeTabs>
+
+<TabsList>
+  <TabsTrigger value="cli">CLI</TabsTrigger>
+  <TabsTrigger value="manual">手动</TabsTrigger>
+</TabsList>
+<TabsContent value="cli">
+
+```bash
+npx shadcn@latest add scroll-area
+```
+
+</TabsContent>
+
+<TabsContent value="manual">
+
+<Steps>
+
+<Step>安装下列依赖：</Step>
+
+```bash
+npm install @radix-ui/react-scroll-area
+```
+
+<Step>将下面的代码复制到你的项目中。</Step>
+
+<ComponentSource name="scroll-area" title="components/ui/scroll-area.tsx" />
+
+<Step>根据项目结构调整导入路径。</Step>
+
+</Steps>
+
+</TabsContent>
+
+</CodeTabs>
+
+## 用法
+
+```tsx showLineNumbers
+import { ScrollArea } from "@/components/ui/scroll-area"
+```
+
+```tsx showLineNumbers
+<ScrollArea className="h-[200px] w-[350px] rounded-md border p-4">
+  小丑半夜潜入王宫，在各处留下笑话：国王的枕头下、汤里，甚至皇家厕所。
+  国王勃然大怒，却无计可施。直到有一天，王国的人民发现这些笑话实在太好笑，
+  忍不住大笑，而一旦笑起来，便再也停不下来了。
+</ScrollArea>
+```
+
+## 示例
+
+### Horizontal Scrolling
+
+<ComponentPreview name="scroll-area-horizontal-demo" />

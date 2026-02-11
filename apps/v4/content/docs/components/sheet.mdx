@@ -1,0 +1,99 @@
+---
+title: Sheet
+description: 基于 Dialog 扩展，用于展示与主内容互补的信息。
+component: true
+links:
+  doc: https://www.radix-ui.com/docs/primitives/components/dialog
+  api: https://www.radix-ui.com/docs/primitives/components/dialog#api-reference
+---
+
+<ComponentPreview name="sheet-demo" description="抽屉式弹层组件示例。" />
+
+## 安装
+
+<CodeTabs>
+
+<TabsList>
+  <TabsTrigger value="cli">CLI</TabsTrigger>
+  <TabsTrigger value="manual">手动</TabsTrigger>
+</TabsList>
+<TabsContent value="cli">
+
+```bash
+npx shadcn@latest add sheet
+```
+
+</TabsContent>
+
+<TabsContent value="manual">
+
+<Steps>
+
+<Step>安装下列依赖：</Step>
+
+```bash
+npm install @radix-ui/react-dialog
+```
+
+<Step>将下面的代码复制到你的项目中。</Step>
+
+<ComponentSource name="sheet" title="components/ui/sheet.tsx" />
+
+<Step>根据项目结构调整导入路径。</Step>
+
+</Steps>
+
+</TabsContent>
+
+</CodeTabs>
+
+### 用法
+
+```tsx showLineNumbers
+import {
+  Sheet,
+  SheetContent,
+  SheetDescription,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from "@/components/ui/sheet"
+```
+
+```tsx showLineNumbers
+<Sheet>
+  <SheetTrigger>打开</SheetTrigger>
+  <SheetContent>
+    <SheetHeader>
+      <SheetTitle>确定要继续吗？</SheetTitle>
+      <SheetDescription>
+        此操作无法撤销，将永久删除你的账户并移除服务器上的全部数据。
+      </SheetDescription>
+    </SheetHeader>
+  </SheetContent>
+</Sheet>
+```
+
+## 示例
+
+### Side
+
+在 `<SheetContent />` 上设置 `side` 属性，指定出现的位置，可选 `top`、`right`、`bottom` 或 `left`。
+
+### Size
+
+可通过 CSS 类调整 Sheet 的宽度：
+
+```tsx showLineNumbers {3}
+<Sheet>
+  <SheetTrigger>打开</SheetTrigger>
+  <SheetContent className="w-[400px] sm:w-[540px]">
+    <SheetHeader>
+      <SheetTitle>确定要继续吗？</SheetTitle>
+      <SheetDescription>
+        此操作无法撤销，将永久删除你的账户并移除服务器上的全部数据。
+      </SheetDescription>
+    </SheetHeader>
+  </SheetContent>
+</Sheet>
+```

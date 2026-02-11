@@ -1,0 +1,71 @@
+---
+title: Collapsible
+description: 用于展开或折叠内容面板的交互式组件。
+component: true
+featured: true
+links:
+  doc: https://www.radix-ui.com/docs/primitives/components/collapsible
+  api: https://www.radix-ui.com/docs/primitives/components/collapsible#api-reference
+---
+
+<ComponentPreview
+  name="collapsible-demo"
+  description="可折叠组件示例。"
+/>
+
+## 安装
+
+<CodeTabs>
+
+<TabsList>
+  <TabsTrigger value="cli">CLI</TabsTrigger>
+  <TabsTrigger value="manual">手动</TabsTrigger>
+</TabsList>
+<TabsContent value="cli">
+
+```bash
+npx shadcn@latest add collapsible
+```
+
+</TabsContent>
+
+<TabsContent value="manual">
+
+<Steps>
+
+<Step>安装下列依赖：</Step>
+
+```bash
+npm install @radix-ui/react-collapsible
+```
+
+<Step>将下面的代码复制到你的项目中。</Step>
+
+<ComponentSource name="collapsible" title="components/ui/collapsible.tsx" />
+
+<Step>按项目结构调整导入路径。</Step>
+
+</Steps>
+
+</TabsContent>
+
+</CodeTabs>
+
+## 用法
+
+```tsx showLineNumbers
+import {
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger,
+} from "@/components/ui/collapsible"
+```
+
+```tsx showLineNumbers
+<Collapsible>
+  <CollapsibleTrigger>我的项目可以使用它吗？</CollapsibleTrigger>
+  <CollapsibleContent>
+    可以。个人与商业项目均可免费使用，无需注明来源。
+  </CollapsibleContent>
+</Collapsible>
+```

@@ -1,0 +1,398 @@
+---
+title: 身份验证
+description: 借助认证机制保护注册表，实现私有与个性化组件分发。
+---
+
+身份验证可以帮助你托管私有注册表，控制组件访问权限，并向不同团队或用户提供差异化内容。本指南介绍常见的认证模式及其配置方法。
+
+通过认证可以实现以下场景：
+
+- **私有组件**：保护业务逻辑与内部组件
+- **团队专属资源**：为不同团队提供定制内容
+- **访问控制**：限制敏感或实验性组件的可见性
+- **使用分析**：追踪组织中各组件的使用情况
+- **授权分发**：控制付费或授权组件的使用范围
+
+## 常见认证模式
+
+### 基于 Token 的认证
+
+最常见的方式是使用 Bearer Token 或 API Key：
+
+```json title="components.json"
+{
+  "registries": {
+    "@private": {
+      "url": "https://registry.company.com/{name}.json",
+      "headers": {
+        "Authorization": "Bearer ${REGISTRY_TOKEN}"
+      }
+    }
+  }
+}
+```
+
+在环境变量中设置 Token：
+
+```bash title=".env.local"
+REGISTRY_TOKEN=your_secret_token_here
+```
+
+### API Key 认证
+
+部分注册表通过请求头传递 API Key：
+
+```json title="components.json"
+{
+  "registries": {
+    "@company": {
+      "url": "https://api.company.com/registry/{name}.json",
+      "headers": {
+        "X-API-Key": "${API_KEY}",
+        "X-Workspace-Id": "${WORKSPACE_ID}"
+      }
+    }
+  }
+}
+```
+
+### 查询参数认证
+
+若希望配置简单，可以使用查询参数：
+
+```json title="components.json"
+{
+  "registries": {
+    "@internal": {
+      "url": "https://registry.company.com/{name}.json",
+      "params": {
+        "token": "${ACCESS_TOKEN}"
+      }
+    }
+  }
+}
+```
+
+最终生成的访问地址为：`https://registry.company.com/button.json?token=your_token`
+
+## 服务端实现
+
+以下示例演示如何在注册表服务端加入认证。
+
+### Next.js API 路由示例
+
+```typescript title="app/api/registry/[name]/route.ts"
+import { NextRequest, NextResponse } from "next/server"
+
+export async function GET(
+  request: NextRequest,
+  { params }: { params: { name: string } }
+) {
+  // 从 Authorization 请求头获取 Token。
+  const authHeader = request.headers.get("authorization")
+  const token = authHeader?.replace("Bearer ", "")
+
+  // 或从查询参数获取。
+  const queryToken = request.nextUrl.searchParams.get("token")
+
+  // 校验 Token 是否有效。
+  if (!isValidToken(token || queryToken)) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
+  }
+
+  // 校验 Token 是否具备访问组件的权限。
+  if (!hasAccessToComponent(token, params.name)) {
+    return NextResponse.json({ error: "Forbidden" }, { status: 403 })
+  }
+
+  // 返回组件数据。
+  const component = await getComponent(params.name)
+  return NextResponse.json(component)
+}
+
+function isValidToken(token: string | null) {
+  // 在此处加入自定义校验逻辑，例如查数据库或验证 JWT。
+  return token === process.env.VALID_TOKEN
+}
+
+function hasAccessToComponent(token: string, componentName: string) {
+  // 在此实现基于角色的访问控制。
+  // 判断 Token 是否能访问指定组件。
+  return true // 替换为实际逻辑。
+}
+```
+
+### Express.js 示例
+
+```javascript title="server.js"
+app.get("/registry/:name.json", (req, res) => {
+  const token = req.headers.authorization?.replace("Bearer ", "")
+
+  if (!isValidToken(token)) {
+    return res.status(401).json({ error: "Unauthorized" })
+  }
+
+  const component = getComponent(req.params.name)
+  if (!component) {
+    return res.status(404).json({ error: "Component not found" })
+  }
+
+  res.json(component)
+})
+```
+
+## 进阶认证模式
+
+### 基于团队的访问控制
+
+针对不同团队提供不同组件：
+
+```typescript title="api/registry/route.ts"
+async function GET(request: NextRequest) {
+  const token = extractToken(request)
+  const team = await getTeamFromToken(token)
+
+  // 根据团队获取可用组件。
+  const components = await getComponentsForTeam(team)
+  return NextResponse.json(components)
+}
+```
+
+### 用户个性化注册表
+
+根据用户偏好提供组件：
+
+```typescript
+async function GET(request: NextRequest) {
+  const user = await authenticateUser(request)
+
+  // 获取用户的样式与框架偏好。
+  const preferences = await getUserPreferences(user.id)
+
+  // 返回个性化组件版本。
+  const component = await getPersonalizedComponent(params.name, preferences)
+
+  return NextResponse.json(component)
+}
+```
+
+### 临时访问 Token
+
+使用带过期时间的 Token 提升安全性：
+
+```typescript
+interface TemporaryToken {
+  token: string
+  expiresAt: Date
+  scope: string[]
+}
+
+async function validateTemporaryToken(token: string) {
+  const tokenData = await getTokenData(token)
+
+  if (!tokenData) return false
+  if (new Date() > tokenData.expiresAt) return false
+
+  return true
+}
+```
+
+## 多注册表认证
+
+借助[命名空间注册表](/docs/registry/namespace)，可以为不同注册表配置独立的认证方式：
+
+```json title="components.json"
+{
+  "registries": {
+    "@public": "https://public.company.com/{name}.json",
+    "@internal": {
+      "url": "https://internal.company.com/{name}.json",
+      "headers": {
+        "Authorization": "Bearer ${INTERNAL_TOKEN}"
+      }
+    },
+    "@premium": {
+      "url": "https://premium.company.com/{name}.json",
+      "headers": {
+        "X-License-Key": "${LICENSE_KEY}"
+      }
+    }
+  }
+}
+```
+
+这样可以：
+
+- 混合使用公开与私有注册表
+- 为每个注册表配置不同认证方式
+- 按访问级别组织组件
+
+## 安全实践
+
+### 使用环境变量
+
+切勿在版本库中提交 Token，务必使用环境变量：
+
+```bash title=".env.local"
+REGISTRY_TOKEN=your_secret_token_here
+API_KEY=your_api_key_here
+```
+
+然后在 `components.json` 中引用：
+
+```json
+{
+  "registries": {
+    "@private": {
+      "url": "https://registry.company.com/{name}.json",
+      "headers": {
+        "Authorization": "Bearer ${REGISTRY_TOKEN}"
+      }
+    }
+  }
+}
+```
+
+### 使用 HTTPS
+
+注册表必须使用 HTTPS，以保护传输中的 Token：
+
+```json
+{
+  "@secure": "https://registry.company.com/{name}.json" // ✅
+  "@insecure": "http://registry.company.com/{name}.json" // ❌
+}
+```
+
+### 添加限流
+
+为注册表增加限流以防滥用：
+
+```typescript
+import rateLimit from "express-rate-limit"
+
+const limiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 分钟
+  max: 100, // 相同 IP 在窗口期内最多 100 次请求
+})
+
+app.use("/registry", limiter)
+```
+
+### 定期轮换 Token
+
+定期更新访问 Token：
+
+```typescript
+// Create new token with expiration.
+function generateToken() {
+  const token = crypto.randomBytes(32).toString("hex")
+  const expiresAt = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000) // 30 天后
+
+  return { token, expiresAt }
+}
+```
+
+### 记录访问日志
+
+记录访问日志以便安全追踪与使用统计：
+
+```typescript
+async function logAccess(request: Request, component: string, userId: string) {
+  await db.accessLog.create({
+    timestamp: new Date(),
+    userId,
+    component,
+    ip: request.ip,
+    userAgent: request.headers["user-agent"],
+  })
+}
+```
+
+## 测试认证流程
+
+在本地测试带认证的注册表：
+
+```bash
+# Test with curl.
+curl -H "Authorization: Bearer your_token" \
+  https://registry.company.com/button.json
+
+# 使用 CLI 测试。
+REGISTRY_TOKEN=your_token npx shadcn@latest add @private/button
+```
+
+## 错误处理
+
+shadcn CLI 会友好地处理认证相关错误：
+
+- **401 Unauthorized**：Token 无效或缺失
+- **403 Forbidden**：Token 无权访问目标资源
+- **429 Too Many Requests**：触发限流
+
+### 自定义错误提示
+
+注册表服务端可在响应体中返回自定义错误信息，CLI 会直接展示给用户：
+
+```typescript
+// 注册表服务端返回自定义错误
+return NextResponse.json(
+  {
+    error: "Unauthorized",
+    message:
+      "Your subscription has expired. Please renew at company.com/billing",
+  },
+  { status: 403 }
+)
+```
+
+用户将看到：
+
+```txt
+Your subscription has expired. Please renew at company.com/billing
+```
+
+这样可以针对不同场景提供更加明确的指引：
+
+```typescript
+// Different error messages for different scenarios
+if (!token) {
+  return NextResponse.json(
+    {
+      error: "Unauthorized",
+      message:
+        "Authentication required. Set REGISTRY_TOKEN in your .env.local file",
+    },
+    { status: 401 }
+  )
+}
+
+if (isExpiredToken(token)) {
+  return NextResponse.json(
+    {
+      error: "Unauthorized",
+      message: "Token expired. Request a new token at company.com/tokens",
+    },
+    { status: 401 }
+  )
+}
+
+if (!hasTeamAccess(token, component)) {
+  return NextResponse.json(
+    {
+      error: "Forbidden",
+      message: `Component '${component}' is restricted to the Design team`,
+    },
+    { status: 403 }
+  )
+}
+```
+
+## 后续步骤
+
+想要了解多注册表与更多高级用法，可阅读[命名空间注册表文档](/docs/registry/namespace)，涵盖以下内容：
+
+- 配置多个带认证的注册表
+- 针对不同命名空间使用不同认证方式
+- 跨注册表依赖解析
+- 更多高级认证模式

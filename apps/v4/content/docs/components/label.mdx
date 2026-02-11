@@ -1,0 +1,58 @@
+---
+title: Label
+description: 渲染与控件关联的可访问标签。
+component: true
+links:
+  doc: https://www.radix-ui.com/docs/primitives/components/label
+  api: https://www.radix-ui.com/docs/primitives/components/label#api-reference
+---
+
+<ComponentPreview name="label-demo" description="标签示例" />
+
+## 安装
+
+<CodeTabs>
+
+<TabsList>
+  <TabsTrigger value="cli">CLI</TabsTrigger>
+  <TabsTrigger value="manual">手动</TabsTrigger>
+</TabsList>
+<TabsContent value="cli">
+
+```bash
+npx shadcn@latest add label
+```
+
+</TabsContent>
+
+<TabsContent value="manual">
+
+<Steps>
+
+<Step>安装下列依赖：</Step>
+
+```bash
+npm install @radix-ui/react-label
+```
+
+<Step>将下面的代码复制到你的项目中。</Step>
+
+<ComponentSource name="label" title="components/ui/label.tsx" />
+
+<Step>根据项目结构调整导入路径。</Step>
+
+</Steps>
+
+</TabsContent>
+
+</CodeTabs>
+
+## 用法
+
+```tsx
+import { Label } from "@/components/ui/label"
+```
+
+```tsx
+<Label htmlFor="email">你的邮箱地址</Label>
+```

@@ -1,0 +1,40 @@
+---
+title: Laravel
+description: 在 Laravel 中安装并配置 shadcn/ui。
+---
+
+<Steps>
+
+### 创建项目
+
+先通过 Laravel 安装器创建一个启用 Inertia 与 React 的新项目：
+
+```bash
+laravel new my-app --react
+```
+
+### 添加组件
+
+现在可以向项目中添加组件。
+
+```bash
+npx shadcn@latest add switch
+```
+
+上述命令会把 `Switch` 组件放到 `resources/js/components/ui/switch.tsx`，你可以像下面这样导入：
+
+```tsx title="resources/js/pages/index.tsx" {1,6} showLineNumbers
+import { Switch } from "@/components/ui/switch"
+
+const MyPage = () => {
+  return (
+    <div>
+      <Switch />
+    </div>
+  )
+}
+
+export default MyPage
+```
+
+</Steps>

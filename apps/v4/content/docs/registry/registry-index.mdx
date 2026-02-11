@@ -1,0 +1,60 @@
+---
+title: 添加注册表
+description: 开源注册表索引
+---
+
+开源注册表索引列出了所有可直接使用的开源注册表。
+
+执行 `shadcn add` 或 `shadcn search` 时，CLI 会自动在索引中查找对应注册表，并将其写入 `components.json`。
+
+完整列表可访问 [https://ui.shadcn.com/r/registries.json](https://ui.shadcn.com/r/registries.json)。
+
+## 添加注册表
+
+若要将注册表加入索引，请提交 [registry directory issue](https://github.com/shadcn-ui/ui/issues/new?template=registry_directory.yml)。
+
+提交后，我们会进行验证与审核。
+
+### 提交要求
+
+1. 注册表必须开源且可公开访问。
+2. 注册表需满足 [registry.json Schema](/docs/registry/registry-json) 规范。
+3. 注册表建议为扁平结构，即 `/registry.json` 与 `/component-name.json` 文件位于根目录。
+4. 若包含 `files` 数组，则文件项中不得出现 `content` 字段。
+
+下面是一个合法注册表示例：
+
+```json title="registry.json" showLineNumbers
+{
+  "$schema": "https://ui.shadcn.com/schema/registry.json",
+  "name": "acme",
+  "homepage": "https://acme.com",
+  "items": [
+    {
+      "name": "login-form",
+      "type": "registry:component",
+      "title": "Login Form",
+      "description": "A login form component.",
+      "files": [
+        {
+          "path": "registry/new-york/auth/login-form.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "example-login-form",
+      "type": "registry:component",
+      "title": "Example Login Form",
+      "description": "An example showing how to use the login form component.",
+      "files": [
+        {
+          "path": "registry/new-york/examples/example-login-form.tsx",
+          "type": "registry:component"
+        }
+      ]
+    }
+    }
+  ]
+}
+```

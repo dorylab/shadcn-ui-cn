@@ -1,0 +1,58 @@
+---
+title: Slider
+description: 在指定范围内选择值的输入控件。
+component: true
+links:
+  doc: https://www.radix-ui.com/docs/primitives/components/slider
+  api: https://www.radix-ui.com/docs/primitives/components/slider#api-reference
+---
+
+<ComponentPreview name="slider-demo" description="滑块组件示例。" />
+
+## 安装
+
+<CodeTabs>
+
+<TabsList>
+  <TabsTrigger value="cli">CLI</TabsTrigger>
+  <TabsTrigger value="manual">手动</TabsTrigger>
+</TabsList>
+<TabsContent value="cli">
+
+```bash
+npx shadcn@latest add slider
+```
+
+</TabsContent>
+
+<TabsContent value="manual">
+
+<Steps>
+
+<Step>安装下列依赖：</Step>
+
+```bash
+npm install @radix-ui/react-slider
+```
+
+<Step>将下面的代码复制到你的项目中。</Step>
+
+<ComponentSource name="slider" title="components/ui/slider.tsx" />
+
+<Step>根据项目结构调整导入路径。</Step>
+
+</Steps>
+
+</TabsContent>
+
+</CodeTabs>
+
+## 用法
+
+```tsx
+import { Slider } from "@/components/ui/slider"
+```
+
+```tsx
+<Slider defaultValue={[33]} max={100} step={1} />
+```

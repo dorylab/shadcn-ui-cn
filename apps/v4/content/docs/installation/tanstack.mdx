@@ -1,0 +1,44 @@
+---
+title: TanStack Start
+description: 在 TanStack Start 中安装并配置 shadcn/ui。
+---
+
+<Steps>
+
+### 创建项目
+
+运行以下命令创建集成 shadcn/ui 的 TanStack Start 项目：
+
+```bash
+npm create @tanstack/start@latest --tailwind --add-ons shadcn
+```
+
+### 添加组件
+
+现在可以向项目中添加组件。
+
+```bash
+npx shadcn@latest add button
+```
+
+上述命令会把 `Button` 组件加入项目，你可以像这样导入：
+
+```tsx title="app/routes/index.tsx" showLineNumbers {1,6}
+import { Button } from "@/components/ui/button"
+
+function App() {
+  return (
+    <div>
+      <Button>Click me</Button>
+    </div>
+  )
+}
+```
+
+</Steps>
+
+如果想一次性添加全部 `shadcn/ui` 组件，可以执行：
+
+```bash
+npx shadcn@latest add --all
+```

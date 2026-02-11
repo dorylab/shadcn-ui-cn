@@ -1,0 +1,303 @@
+---
+title: MCP Server
+description: 使用 shadcn MCP 服务浏览、搜索并安装注册表中的组件。
+---
+
+shadcn MCP Server 让 AI 助手能够直接访问注册表中的资源。你可以浏览可用组件、搜索特定条目，并用自然语言把它们安装到项目里。
+
+例如，你可以让 AI 助手：“使用 acme 注册表的组件搭建一个着陆页”，或是“在 shadcn 注册表里找一个登录表单”。
+
+注册表在项目的 `components.json` 中配置：
+
+```json title="components.json" showLineNumbers
+{
+  "registries": {
+    "@acme": "https://acme.com/r/{name}.json"
+  }
+}
+```
+
+---
+
+## 快速上手
+
+选择你的 MCP 客户端，按提示配置 shadcn MCP Server。若想手动配置，请参见 [Configuration](#configuration)。
+
+<Tabs defaultValue="claude">
+  <TabsList>
+    <TabsTrigger value="claude">Claude Code</TabsTrigger>
+    <TabsTrigger value="cursor">Cursor</TabsTrigger>
+    <TabsTrigger value="vscode">VS Code</TabsTrigger>
+    <TabsTrigger value="codex">Codex</TabsTrigger>
+  </TabsList>
+  <TabsContent value="claude" className="mt-4">
+    **在项目中运行：**
+       ```bash
+       npx shadcn@latest mcp init --client claude
+       ```
+
+    **重启 Claude Code**，试试以下提示：
+       - Show me all available components in the shadcn registry
+       - Add the button, dialog and card components to my project
+       - Create a contact form using components from the shadcn registry
+
+    **提示：** 可使用 `/mcp` 命令调试 MCP Server。
+
+  </TabsContent>
+
+  <TabsContent value="cursor" className="mt-4">
+    **在项目中运行：**
+       ```bash
+       npx shadcn@latest mcp init --client cursor
+       ```
+
+    打开 **Cursor Settings**，启用 shadcn 的 MCP Server，然后试试以下提示：
+       - Show me all available components in the shadcn registry
+       - Add the button, dialog and card components to my project
+       - Create a contact form using components from the shadcn registry
+
+  </TabsContent>
+
+  <TabsContent value="vscode" className="mt-4">
+    **在项目中运行：**
+       ```bash
+       npx shadcn@latest mcp init --client vscode
+       ```
+
+    打开 `.vscode/mcp.json`，点击 shadcn server 旁的 **Start**。然后配合 GitHub Copilot 尝试以下提示：
+       - Show me all available components in the shadcn registry
+       - Add the button, dialog and card components to my project
+       - Create a contact form using components from the shadcn registry
+
+  </TabsContent>
+
+  <TabsContent value="codex" className="mt-4">
+    <Callout className="mt-0">
+      **注意：** `shadcn` CLI 无法自动更新 `~/.codex/config.toml`，需要手动添加配置。
+    </Callout>
+
+    **在项目中运行：**
+       ```bash
+       npx shadcn@latest mcp init --client codex
+       ```
+
+    **然后将以下内容添加到 `~/.codex/config.toml`：**
+       ```toml
+       [mcp_servers.shadcn]
+       command = "npx"
+       args = ["shadcn@latest", "mcp"]
+       ```
+
+    **重启 Codex** 并尝试以下提示：
+       - Show me all available components in the shadcn registry
+       - Add the button, dialog and card components to my project
+       - Create a contact form using components from the shadcn registry
+
+  </TabsContent>
+</Tabs>
+
+---
+
+## MCP 是什么？
+
+[Model Context Protocol (MCP)](https://modelcontextprotocol.io) 是一个开放协议，让 AI 助手可以安全地访问外部数据源与工具。借助 shadcn MCP Server，你的助手可以：
+
+- **浏览组件**：列出所有已配置注册表中的组件、Blocks 与模板
+- **跨注册表搜索**：按名称或功能跨源查找组件
+- **自然语言安装**：像“add a login form”一样的常规语句即可安装
+- **多源支持**：同时访问公共、私有以及第三方注册表
+
+---
+
+## 工作原理
+
+MCP Server 充当 AI 助手、注册表与 shadcn CLI 之间的桥梁：
+
+1. **连接注册表**：MCP 会连接 `components.json` 中配置的所有注册表
+2. **自然语言**：你用日常语言描述需求
+3. **AI 解析**：助手把请求转换为注册表指令
+4. **交付组件**：资源被下载并安装到项目中
+
+---
+
+## 支持的注册表
+
+shadcn MCP Server 可以直接访问任何符合 shadcn 规范的注册表：
+
+- **shadcn/ui Registry**：默认注册表，包含所有官方组件
+- **第三方注册表**：符合规范的社区或合作伙伴资源
+- **私有注册表**：公司内部的专有组件库
+- **命名空间注册表**：使用 `@namespace` 语法的多注册表配置
+
+---
+
+## Configuration
+
+你可以使用任意 MCP 客户端与 shadcn Server 交互，以下为常用客户端的配置方式。
+
+### Claude Code
+
+在项目根目录中新建或更新 `.mcp.json`：
+
+```json title=".mcp.json" showLineNumbers
+{
+  "mcpServers": {
+    "shadcn": {
+      "command": "npx",
+      "args": ["shadcn@latest", "mcp"]
+    }
+  }
+}
+```
+
+保存后重启 Claude Code，并运行 `/mcp` 确认 shadcn Server 已连接。
+
+### Cursor
+
+在项目中创建 `.cursor/mcp.json`：
+
+```json title=".cursor/mcp.json" showLineNumbers
+{
+  "mcpServers": {
+    "shadcn": {
+      "command": "npx",
+      "args": ["shadcn@latest", "mcp"]
+    }
+  }
+}
+```
+
+随后在 Cursor 设置中启用该 Server。MCP 面板会显示绿色图标与可用工具列表。
+
+### VS Code
+
+配合 GitHub Copilot，在 `.vscode/mcp.json` 中添加：
+
+```json title=".vscode/mcp.json" showLineNumbers
+{
+  "mcpServers": {
+    "shadcn": {
+      "command": "npx",
+      "args": ["shadcn@latest", "mcp"]
+    }
+  }
+}
+```
+
+保存后在 VS Code 的 MCP 面板中点击 **Start** 启动服务。
+
+### Codex
+
+<Callout>
+  **注意：** 需要手动修改 `~/.codex/config.toml`。
+</Callout>
+
+在配置文件中加入：
+
+```toml title="~/.codex/config.toml" showLineNumbers
+[mcp_servers.shadcn]
+command = "npx"
+args = ["shadcn@latest", "mcp"]
+```
+
+完成后重启 Codex 即可。
+
+---
+
+## 配置注册表
+
+MCP Server 会读取项目中的 `components.json`，从而访问不同的注册表，包括私有源与第三方源。
+
+```json title="components.json" showLineNumbers
+{
+  "registries": {
+    "@acme": "https://registry.acme.com/{name}.json",
+    "@internal": {
+      "url": "https://internal.company.com/{name}.json",
+      "headers": {
+        "Authorization": "Bearer ${REGISTRY_TOKEN}"
+      }
+    }
+  }
+}
+```
+
+<Callout>
+  **提示：** 访问默认的 shadcn/ui 注册表无需额外配置。
+</Callout>
+
+---
+
+## 身份验证
+
+若注册表需要鉴权，请在 `.env.local` 中设置环境变量：
+
+```bash title=".env.local"
+REGISTRY_TOKEN=your_token_here
+API_KEY=your_api_key_here
+```
+
+详细说明请见 [Authentication 文档](/docs/registry/authentication)。
+
+---
+
+## 示例提示
+
+完成配置后，可使用自然语言与注册表交互。例如：
+
+### 浏览与搜索
+
+- Show me all available components in the shadcn registry
+- Find me a login form from the shadcn registry
+
+### 安装条目
+
+- Add the button component to my project
+- Create a login form using shadcn components
+- Install the Cursor rules from the acme registry
+
+### 使用命名空间
+
+- Show me components from acme registry
+- Install @internal/auth-form
+- Build me a landing page using hero, features and testimonials sections from the acme registry
+
+---
+
+## 故障排查
+
+### MCP 无响应
+
+1. **检查配置**：确认 MCP Server 已在客户端启用  
+2. **重启客户端**：修改配置后重启 MCP 客户端  
+3. **确认安装**：确保项目中已安装 `shadcn`  
+4. **网络检查**：确认可以访问注册表
+
+### 注册表访问失败
+
+1. **检查 components.json**：确认 URL 正确  
+2. **验证鉴权**：确保私有注册表的环境变量已设置  
+3. **确认服务状态**：注册表是否在线  
+4. **命名空间格式**：确保使用 `@namespace/component`
+
+### 安装失败
+
+1. **项目配置**：确认存在有效的 `components.json`  
+2. **路径检查**：目标目录是否存在  
+3. **权限问题**：确保有写权限  
+4. **依赖确认**：所需依赖是否已安装
+
+### 出现 “No tools or prompts”
+
+1. **清理 npx 缓存**：运行 `npx clear-npx-cache`  
+2. **重新启用 Server**：在客户端重新启用 MCP  
+3. **查看日志**：例如在 Cursor 中，可在 View -> Output 选择 `MCP: project-*` 查看日志
+
+---
+
+## 进一步了解
+
+- [Registry 文档](/docs/registry)：注册表完整指南  
+- [Namespaces](/docs/registry/namespace)：配置多注册表命名空间  
+- [Authentication](/docs/registry/authentication)：注册表鉴权说明  
+- [MCP Specification](https://modelcontextprotocol.io)：Model Context Protocol 规范

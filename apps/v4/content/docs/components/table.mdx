@@ -1,0 +1,83 @@
+---
+title: Table
+description: 响应式表格组件。
+component: true
+---
+
+<ComponentPreview name="table-demo" description="表格组件示例。" />
+
+## 安装
+
+<CodeTabs>
+
+<TabsList>
+  <TabsTrigger value="cli">CLI</TabsTrigger>
+  <TabsTrigger value="manual">手动</TabsTrigger>
+</TabsList>
+<TabsContent value="cli">
+
+```bash
+npx shadcn@latest add table
+```
+
+</TabsContent>
+
+<TabsContent value="manual">
+
+<Steps>
+
+<Step>将下面的代码复制到你的项目中。</Step>
+
+<ComponentSource name="table" title="components/ui/table.tsx" />
+
+<Step>根据项目结构调整导入路径。</Step>
+
+</Steps>
+
+</TabsContent>
+
+</CodeTabs>
+
+## 用法
+
+```tsx showLineNumbers
+import {
+  Table,
+  TableBody,
+  TableCaption,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table"
+```
+
+```tsx showLineNumbers
+<Table>
+  <TableCaption>最近的账单列表。</TableCaption>
+  <TableHeader>
+    <TableRow>
+      <TableHead className="w-[100px]">Invoice</TableHead>
+      <TableHead>Status</TableHead>
+      <TableHead>Method</TableHead>
+      <TableHead className="text-right">Amount</TableHead>
+    </TableRow>
+  </TableHeader>
+  <TableBody>
+    <TableRow>
+      <TableCell className="font-medium">INV001</TableCell>
+      <TableCell>Paid</TableCell>
+      <TableCell>Credit Card</TableCell>
+      <TableCell className="text-right">$250.00</TableCell>
+    </TableRow>
+  </TableBody>
+</Table>
+```
+
+## 数据表格
+
+你可以使用 `<Table />` 组件构建更复杂的数据表。结合 [@tanstack/react-table](https://tanstack.com/table/v8) 可以实现排序、筛选和分页等功能。
+
+更多信息请参阅 [数据表格](/docs/components/data-table) 文档。
+
+你还可以在 [Tasks](/examples/tasks) 示例中查看一个数据表格的完整实现。

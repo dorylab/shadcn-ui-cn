@@ -1,0 +1,68 @@
+---
+title: Popover
+description: 通过按钮触发，在 Portal 中展示丰富内容的组件。
+component: true
+links:
+  doc: https://www.radix-ui.com/docs/primitives/components/popover
+  api: https://www.radix-ui.com/docs/primitives/components/popover#api-reference
+---
+
+<ComponentPreview
+  name="popover-demo"
+  description="带表单的弹出层组件。"
+/>
+
+## 安装
+
+<CodeTabs>
+
+<TabsList>
+  <TabsTrigger value="cli">CLI</TabsTrigger>
+  <TabsTrigger value="manual">手动</TabsTrigger>
+</TabsList>
+<TabsContent value="cli">
+
+```bash
+npx shadcn@latest add popover
+```
+
+</TabsContent>
+
+<TabsContent value="manual">
+
+<Steps>
+
+<Step>安装下列依赖：</Step>
+
+```bash
+npm install @radix-ui/react-popover
+```
+
+<Step>将下面的代码复制到你的项目中。</Step>
+
+<ComponentSource name="popover" title="components/ui/popover.tsx" />
+
+<Step>根据项目结构调整导入路径。</Step>
+
+</Steps>
+
+</TabsContent>
+
+</CodeTabs>
+
+## 用法
+
+```tsx showLineNumbers
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover"
+```
+
+```tsx showLineNumbers
+<Popover>
+  <PopoverTrigger>打开</PopoverTrigger>
+  <PopoverContent>在此放置弹出内容。</PopoverContent>
+</Popover>
+```

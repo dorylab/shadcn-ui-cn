@@ -1,0 +1,81 @@
+---
+title: Textarea
+description: Displays a form textarea or a component that looks like a textarea.
+component: true
+---
+
+<ComponentPreview name="textarea-demo" description="A textarea" />
+
+## Installation
+
+<CodeTabs>
+
+<TabsList>
+  <TabsTrigger value="cli">CLI</TabsTrigger>
+  <TabsTrigger value="manual">手动</TabsTrigger>
+</TabsList>
+<TabsContent value="cli">
+
+```bash
+npx shadcn@latest add textarea
+```
+
+</TabsContent>
+
+<TabsContent value="manual">
+
+<Steps>
+
+<Step>将下面的代码复制到你的项目中。</Step>
+
+<ComponentSource name="textarea" title="components/ui/textarea.tsx" />
+
+<Step>根据项目结构调整导入路径。</Step>
+
+</Steps>
+
+</TabsContent>
+
+</CodeTabs>
+
+## Usage
+
+```tsx
+import { Textarea } from "@/components/ui/textarea"
+```
+
+```tsx
+<Textarea />
+```
+
+## Examples
+
+### Default
+
+<ComponentPreview name="textarea-demo" description="A textarea" />
+
+### Disabled
+
+<ComponentPreview name="textarea-disabled" description="A disabled textarea" />
+
+### With Label
+
+<ComponentPreview
+  name="textarea-with-label"
+  className="[&_div.grid]:w-full"
+  description="A textarea with a label"
+/>
+
+### With Text
+
+<ComponentPreview
+  name="textarea-with-text"
+  description="A textarea with text"
+/>
+
+### With Button
+
+<ComponentPreview
+  name="textarea-with-button"
+  description="A textarea with a button"
+/>

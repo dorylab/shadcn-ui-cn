@@ -1,0 +1,92 @@
+---
+title: Drawer
+description: React 的抽屉式弹层组件。
+component: true
+links:
+  doc: https://vaul.emilkowal.ski/getting-started
+---
+
+<ComponentPreview name="drawer-demo" description="抽屉组件示例。" />
+
+## 关于
+
+Drawer 基于 [emilkowalski\_](https://twitter.com/emilkowalski_) 开源的 [Vaul](https://github.com/emilkowalski/vaul) 构建。
+
+## 安装
+
+<CodeTabs>
+
+<TabsList>
+  <TabsTrigger value="cli">CLI</TabsTrigger>
+  <TabsTrigger value="manual">手动</TabsTrigger>
+</TabsList>
+<TabsContent value="cli">
+
+```bash
+npx shadcn@latest add drawer
+```
+
+</TabsContent>
+
+<TabsContent value="manual">
+
+<Steps>
+
+<Step>安装下列依赖：</Step>
+
+```bash
+npm install vaul
+```
+
+<Step>将下面的代码复制到你的项目中。</Step>
+
+<ComponentSource name="drawer" title="components/ui/drawer.tsx" />
+
+<Step>根据项目结构调整导入路径。</Step>
+
+</Steps>
+
+</TabsContent>
+
+</CodeTabs>
+
+## 用法
+
+```tsx showLineNumbers
+import {
+  Drawer,
+  DrawerClose,
+  DrawerContent,
+  DrawerDescription,
+  DrawerFooter,
+  DrawerHeader,
+  DrawerTitle,
+  DrawerTrigger,
+} from "@/components/ui/drawer"
+```
+
+```tsx showLineNumbers
+<Drawer>
+  <DrawerTrigger>打开</DrawerTrigger>
+  <DrawerContent>
+    <DrawerHeader>
+      <DrawerTitle>确定要继续吗？</DrawerTitle>
+      <DrawerDescription>该操作无法撤销。</DrawerDescription>
+    </DrawerHeader>
+    <DrawerFooter>
+      <Button>提交</Button>
+      <DrawerClose>
+        <Button variant="outline">取消</Button>
+      </DrawerClose>
+    </DrawerFooter>
+  </DrawerContent>
+</Drawer>
+```
+
+## 示例
+
+### 响应式对话框
+
+可以组合 `Dialog` 与 `Drawer` 实现响应式对话框：桌面端显示 `Dialog`，移动端显示 `Drawer`。
+
+<ComponentPreview name="drawer-dialog" />

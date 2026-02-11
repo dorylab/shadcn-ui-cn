@@ -1,0 +1,86 @@
+---
+title: Select
+description: 通过按钮触发，展示可选择的选项列表。
+component: true
+featured: true
+links:
+  doc: https://www.radix-ui.com/docs/primitives/components/select
+  api: https://www.radix-ui.com/docs/primitives/components/select#api-reference
+---
+
+<ComponentPreview
+  name="select-demo"
+  description="带选项列表的下拉选择器。"
+/>
+
+## 安装
+
+<CodeTabs>
+
+<TabsList>
+  <TabsTrigger value="cli">CLI</TabsTrigger>
+  <TabsTrigger value="manual">手动</TabsTrigger>
+</TabsList>
+<TabsContent value="cli">
+
+```bash
+npx shadcn@latest add select
+```
+
+</TabsContent>
+
+<TabsContent value="manual">
+
+<Steps>
+
+<Step>安装下列依赖：</Step>
+
+```bash
+npm install @radix-ui/react-select
+```
+
+<Step>将下面的代码复制到你的项目中。</Step>
+
+<ComponentSource name="select" title="components/ui/select.tsx" />
+
+<Step>根据项目结构调整导入路径。</Step>
+
+</Steps>
+
+</TabsContent>
+
+</CodeTabs>
+
+## 用法
+
+```tsx showLineNumbers
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select"
+```
+
+```tsx showLineNumbers
+<Select>
+  <SelectTrigger className="w-[180px]">
+    <SelectValue placeholder="主题" />
+  </SelectTrigger>
+  <SelectContent>
+    <SelectItem value="light">浅色</SelectItem>
+    <SelectItem value="dark">深色</SelectItem>
+    <SelectItem value="system">跟随系统</SelectItem>
+  </SelectContent>
+</Select>
+```
+
+## 示例
+
+### Scrollable
+
+<ComponentPreview
+  name="select-scrollable"
+  description="包含可滚动选项列表的选择器。"
+/>

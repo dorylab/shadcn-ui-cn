@@ -1,0 +1,44 @@
+---
+title: TanStack Router
+description: 在 TanStack Router 中安装并配置 shadcn/ui。
+---
+
+<Steps>
+
+### 创建项目
+
+先创建一个新的 TanStack Router 项目：
+
+```bash
+npx create-tsrouter-app@latest my-app --template file-router --tailwind --add-ons shadcn
+```
+
+### 添加组件
+
+现在可以向项目中添加组件。
+
+```bash
+npx shadcn@latest add button
+```
+
+上述命令会把 `Button` 组件加入项目，你可以像这样导入：
+
+```tsx title="src/routes/index.tsx" showLineNumbers {3,12}
+import { createFileRoute } from "@tanstack/react-router"
+
+import { Button } from "@/components/ui/button"
+
+export const Route = createFileRoute("/")({
+  component: App,
+})
+
+function App() {
+  return (
+    <div>
+      <Button>Click me</Button>
+    </div>
+  )
+}
+```
+
+</Steps>

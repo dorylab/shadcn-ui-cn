@@ -1,0 +1,294 @@
+---
+title: components.json
+description: 项目配置文件。
+---
+
+`components.json` 保存了项目所需的配置。
+
+CLI 会根据这个文件了解你的项目结构，从而生成与之匹配的组件。
+
+<Callout className="mt-6" title="注意：`components.json` 并非必需">
+  **只有在使用 CLI 添加组件时才需要该文件。** 如果你采用复制粘贴的方式，就不必创建它。
+</Callout>
+
+运行以下命令即可在项目中生成 `components.json`：
+
+```bash
+npx shadcn@latest init
+```
+
+详见 <Link href="/docs/cli">CLI 章节</Link>。
+
+## $schema
+
+`components.json` 的 JSON Schema 可在[这里](https://ui.shadcn.com/schema.json)查看。
+
+```json title="components.json"
+{
+  "$schema": "https://ui.shadcn.com/schema.json"
+}
+```
+
+## style
+
+组件所使用的样式主题。**初始化后不可修改。**
+
+```json title="components.json"
+{
+  "style": "new-york"
+}
+```
+
+`default` 样式已废弃，请改用 `new-york`。
+
+## tailwind
+
+Tailwind 配置，帮助 CLI 识别项目中的 Tailwind 设置。Tailwind 的安装步骤请参考 <Link href="/docs/installation">安装章节</Link>。
+
+### tailwind.config
+
+`tailwind.config.js` 所在路径。**如果使用 Tailwind CSS v4，请留空。**
+
+```json title="components.json"
+{
+  "tailwind": {
+    "config": "tailwind.config.js" | "tailwind.config.ts"
+  }
+}
+```
+
+### tailwind.css
+
+导入 Tailwind 的 CSS 文件路径。
+
+```json title="components.json"
+{
+  "tailwind": {
+    "css": "styles/global.css"
+  }
+}
+```
+
+### tailwind.baseColor
+
+用于生成默认配色。**初始化后不可修改。**
+
+```json title="components.json"
+{
+  "tailwind": {
+    "baseColor": "gray" | "neutral" | "slate" | "stone" | "zinc"
+  }
+}
+```
+
+### tailwind.cssVariables
+
+可在 CSS 变量与 Tailwind 工具类之间选择主题方案。
+
+- 使用工具类：将 `tailwind.cssVariables` 设为 `false`
+- 使用 CSS 变量：将其设为 `true`
+
+```json title="components.json"
+{
+  "tailwind": {
+    "cssVariables": `true` | `false`
+  }
+}
+```
+
+详情参见 <Link href="/docs/theming">主题文档</Link>。
+
+**该选项初始化后不可修改。** 若需切换主题方案，需要删除并重新安装组件。
+
+### tailwind.prefix
+
+Tailwind 工具类前缀。组件会带着此前缀生成。
+
+```json title="components.json"
+{
+  "tailwind": {
+    "prefix": "tw-"
+  }
+}
+```
+
+## rsc
+
+是否启用 React Server Components 支持。若设为 `true`，CLI 会自动为客户端组件添加 `use client` 指令。
+
+```json title="components.json"
+{
+  "rsc": `true` | `false`
+}
+```
+
+## tsx
+
+选择生成 TypeScript 或 JavaScript 组件。设为 `false` 时将生成 `.jsx` 组件。
+
+```json title="components.json"
+{
+  "tsx": `true` | `false`
+}
+```
+
+## aliases
+
+CLI 会配合 `tsconfig.json` 或 `jsconfig.json` 中的 `paths` 配置，将生成的组件放在正确的路径下。
+
+请务必在 `tsconfig.json`/`jsconfig.json` 中设置好这些别名。
+
+<Callout className="mt-6">
+  **重要：** 如果使用 `src` 目录，请确保它已包含在 `paths` 配置中。
+</Callout>
+
+### aliases.utils
+
+工具函数的导入别名。
+
+```json title="components.json"
+{
+  "aliases": {
+    "utils": "@/lib/utils"
+  }
+}
+```
+
+### aliases.components
+
+组件目录的导入别名。
+
+```json title="components.json"
+{
+  "aliases": {
+    "components": "@/components"
+  }
+}
+```
+
+### aliases.ui
+
+`ui` 组件的导入别名。CLI 会根据 `aliases.ui` 决定 `ui` 组件的安装位置，可借此自定义目录结构。
+
+```json title="components.json"
+{
+  "aliases": {
+    "ui": "@/app/ui"
+  }
+}
+```
+
+### aliases.lib
+
+`lib` 下函数（如 `format-date`、`generate-id`）的导入别名。
+
+```json title="components.json"
+{
+  "aliases": {
+    "lib": "@/lib"
+  }
+}
+```
+
+### aliases.hooks
+
+`hooks`（如 `use-media-query`、`use-toast`）的导入别名。
+
+```json title="components.json"
+{
+  "aliases": {
+    "hooks": "@/hooks"
+  }
+}
+```
+
+## registries
+
+配置多个资源注册表，支持从公共或私有源安装组件、库、工具等。
+
+详见 <Link href="/docs/registry/namespace">命名空间注册表</Link> 文档。
+
+### 基础配置
+
+使用 URL 模板定义注册表：
+
+```json title="components.json"
+{
+  "registries": {
+    "@v0": "https://v0.dev/chat/b/{name}",
+    "@acme": "https://registry.acme.com/{name}.json",
+    "@internal": "https://internal.company.com/{name}.json"
+  }
+}
+```
+
+安装时 `{name}` 会被替换为资源名称。
+
+### 带鉴权的高级配置
+
+私有注册表通常需要鉴权：
+
+```json title="components.json"
+{
+  "registries": {
+    "@private": {
+      "url": "https://api.company.com/registry/{name}.json",
+      "headers": {
+        "Authorization": "Bearer ${REGISTRY_TOKEN}",
+        "X-API-Key": "${API_KEY}"
+      },
+      "params": {
+        "version": "latest"
+      }
+    }
+  }
+}
+```
+
+`${VAR_NAME}` 形式的环境变量会自动从系统环境中展开。
+
+### 使用命名空间注册表
+
+配置完成后，即可使用命名空间语法安装资源：
+
+```bash
+# 安装注册表中的资源
+npx shadcn@latest add @v0/dashboard
+
+# 安装私有注册表资源
+npx shadcn@latest add @private/button
+
+# 一次安装多个资源
+npx shadcn@latest add @acme/header @internal/auth-utils
+```
+
+### 示例：多注册表配置
+
+```json title="components.json"
+{
+  "registries": {
+    "@shadcn": "https://ui.shadcn.com/r/{name}.json",
+    "@company-ui": {
+      "url": "https://registry.company.com/ui/{name}.json",
+      "headers": {
+        "Authorization": "Bearer ${COMPANY_TOKEN}"
+      }
+    },
+    "@team": {
+      "url": "https://team.company.com/{name}.json",
+      "params": {
+        "team": "frontend",
+        "version": "${REGISTRY_VERSION}"
+      }
+    }
+  }
+}
+```
+
+该配置可用于：
+
+- 安装 shadcn/ui 的公共组件
+- 访问公司私有 UI 组件（含鉴权）
+- 使用团队特定且带版本的资源
+
+关于鉴权的更多说明，请参考 <Link href="/docs/registry/authentication">Authentication</Link> 文档。

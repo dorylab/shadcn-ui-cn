@@ -1,0 +1,58 @@
+---
+title: Skeleton
+description: Use to show a placeholder while content is loading.
+component: true
+---
+
+<ComponentPreview name="skeleton-demo" description="A skeleton component." />
+
+## Installation
+
+<CodeTabs>
+
+<TabsList>
+  <TabsTrigger value="cli">CLI</TabsTrigger>
+  <TabsTrigger value="manual">手动</TabsTrigger>
+</TabsList>
+<TabsContent value="cli">
+
+```bash
+npx shadcn@latest add skeleton
+```
+
+</TabsContent>
+
+<TabsContent value="manual">
+
+<Steps>
+
+<Step>将下面的代码复制到你的项目中。</Step>
+
+<ComponentSource name="skeleton" title="components/ui/skeleton.tsx" />
+
+<Step>根据项目结构调整导入路径。</Step>
+
+</Steps>
+
+</TabsContent>
+
+</CodeTabs>
+
+## Usage
+
+```tsx
+import { Skeleton } from "@/components/ui/skeleton"
+```
+
+```tsx
+<Skeleton className="h-[20px] w-[100px] rounded-full" />
+```
+
+## Examples
+
+### Card
+
+<ComponentPreview
+  name="skeleton-card"
+  description="A card with skeleton showing a loading state."
+/>

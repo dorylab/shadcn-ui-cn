@@ -1,0 +1,99 @@
+---
+title: registry.json
+description: 自建组件注册表所需的 Schema。
+---
+
+`registry.json` Schema 用于描述自定义组件注册表。
+
+```json title="registry.json" showLineNumbers
+{
+  "$schema": "https://ui.shadcn.com/schema/registry.json",
+  "name": "shadcn",
+  "homepage": "https://ui.shadcn.com",
+  "items": [
+    {
+      "name": "hello-world",
+      "type": "registry:block",
+      "title": "Hello World",
+      "description": "A simple hello world component.",
+      "registryDependencies": [
+        "button",
+        "@acme/input-form",
+        "https://example.com/r/foo"
+      ],
+      "dependencies": ["is-even@3.0.0", "motion"],
+      "files": [
+        {
+          "path": "registry/new-york/hello-world/hello-world.tsx",
+          "type": "registry:component"
+        }
+      ]
+    }
+  ]
+}
+```
+
+## 字段说明
+
+可在[此处](https://ui.shadcn.com/schema/registry.json)查看完整 JSON Schema。
+
+### $schema
+
+`$schema` 字段用于声明 `registry.json` 所对应的 Schema。
+
+```json title="registry.json" showLineNumbers
+{
+  "$schema": "https://ui.shadcn.com/schema/registry.json"
+}
+```
+
+### name
+
+`name` 表示注册表名称，会用于数据属性及其他元信息。
+
+```json title="registry.json" showLineNumbers
+{
+  "name": "acme"
+}
+```
+
+### homepage
+
+注册表主页地址，同样会用于数据属性及其他元信息。
+
+```json title="registry.json" showLineNumbers
+{
+  "homepage": "https://acme.com"
+}
+```
+
+### items
+
+注册表中的条目列表。每个条目都必须符合 [registry-item Schema](https://ui.shadcn.com/schema/registry-item.json)。
+
+```json title="registry.json" showLineNumbers
+{
+  "items": [
+    {
+      "name": "hello-world",
+      "type": "registry:block",
+      "title": "Hello World",
+      "description": "A simple hello world component.",
+      "registryDependencies": [
+        "button",
+        "@acme/input-form",
+        "https://example.com/r/foo"
+      ],
+      "dependencies": ["is-even@3.0.0", "motion"],
+      "files": [
+        {
+          "path": "registry/new-york/hello-world/hello-world.tsx",
+          "type": "registry:component"
+        }
+      ]
+    }
+  ]
+}
+```
+
+更多细节请参阅 [registry-item Schema 文档](/docs/registry/registry-item-json)。

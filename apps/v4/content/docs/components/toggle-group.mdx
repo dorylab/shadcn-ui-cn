@@ -1,0 +1,138 @@
+---
+title: Toggle Group
+description: 一组可切换开启/关闭状态的按钮集合。
+component: true
+links:
+  doc: https://www.radix-ui.com/docs/primitives/components/toggle-group
+  api: https://www.radix-ui.com/docs/primitives/components/toggle-group#api-reference
+---
+
+<ComponentPreview name="toggle-group-spacing" />
+
+## 安装
+
+<CodeTabs>
+
+<TabsList>
+  <TabsTrigger value="cli">CLI</TabsTrigger>
+  <TabsTrigger value="manual">手动</TabsTrigger>
+</TabsList>
+<TabsContent value="cli">
+
+```bash
+npx shadcn@latest add toggle-group
+```
+
+</TabsContent>
+
+<TabsContent value="manual">
+
+<Steps>
+
+<Step>安装下列依赖：</Step>
+
+```bash
+npm install @radix-ui/react-toggle-group
+```
+
+<Step>将下面的代码复制到你的项目中。</Step>
+
+<ComponentSource name="toggle-group" title="components/ui/toggle-group.tsx" />
+
+<Step>根据项目结构调整导入路径。</Step>
+
+</Steps>
+
+</TabsContent>
+
+</CodeTabs>
+
+## 用法
+
+```tsx
+import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group"
+```
+
+```tsx
+<ToggleGroup type="single">
+  <ToggleGroupItem value="a">A</ToggleGroupItem>
+  <ToggleGroupItem value="b">B</ToggleGroupItem>
+  <ToggleGroupItem value="c">C</ToggleGroupItem>
+</ToggleGroup>
+```
+
+## 示例
+
+### 描边样式
+
+<ComponentPreview
+  name="toggle-group-outline"
+  description="使用描边外观的切换组。"
+/>
+
+### 单选
+
+<ComponentPreview
+  name="toggle-group-single"
+  description="仅支持单选的切换组。"
+/>
+
+### 小号
+
+<ComponentPreview
+  name="toggle-group-sm"
+  description="使用小号尺寸的切换组。"
+/>
+
+### 大号
+
+<ComponentPreview
+  name="toggle-group-lg"
+  description="使用大号尺寸的切换组。"
+/>
+
+### 禁用
+
+<ComponentPreview
+  name="toggle-group-disabled"
+  description="禁用状态的切换组。"
+/>
+
+### 间距
+
+通过 `spacing={2}` 在分组项之间添加间距。
+
+<ComponentPreview
+  name="toggle-group-spacing"
+  description="带有间距的切换组。"
+/>
+
+## API 参考
+
+### ToggleGroup
+
+用于包裹切换组项的核心组件。
+
+| 属性         | 类型                         | 默认值        |
+| ------------ | ---------------------------- | ------------- |
+| `type`      | `"single" \| "multiple"`    | `"single"`  |
+| `variant`   | `"default" \| "outline"`    | `"default"` |
+| `size`      | `"default" \| "sm" \| "lg"` | `"default"` |
+| `spacing`   | `number`                    | `0`         |
+| `className` | `string`                    |             |
+
+```tsx
+<ToggleGroup type="single" variant="outline" size="sm">
+  <ToggleGroupItem value="a">A</ToggleGroupItem>
+  <ToggleGroupItem value="b">B</ToggleGroupItem>
+</ToggleGroup>
+```
+
+### ToggleGroupItem
+
+切换组中的单个按钮。请为每个项添加 `aria-label` 以确保无障碍体验。
+
+| 属性         | 类型      | 默认值 |
+| ------------ | -------- | ------ |
+| `value`     | `string` | 必填   |
+| `className` | `string` |        |

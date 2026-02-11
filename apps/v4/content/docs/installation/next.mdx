@@ -1,0 +1,40 @@
+---
+title: Next.js
+description: 在 Next.js 中安装并配置 shadcn/ui。
+---
+
+<Steps>
+
+### 创建项目
+
+运行 `init` 命令，新建 Next.js 项目或初始化已有项目：
+
+```bash
+npx shadcn@latest init
+```
+
+根据提示选择独立 Next.js 项目或 Monorepo。
+
+### 添加组件
+
+现在可以向项目中添加组件。
+
+```bash
+npx shadcn@latest add button
+```
+
+上述命令会把 `Button` 组件加入项目，你可以像下面这样导入使用：
+
+```tsx {1,6} showLineNumbers title="app/page.tsx"
+import { Button } from "@/components/ui/button"
+
+export default function Home() {
+  return (
+    <div>
+      <Button>Click me</Button>
+    </div>
+  )
+}
+```
+
+</Steps>

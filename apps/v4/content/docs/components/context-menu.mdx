@@ -1,0 +1,74 @@
+---
+title: Context Menu
+description: 向用户展示操作菜单的组件，可由按钮或右键触发。
+component: true
+links:
+  doc: https://www.radix-ui.com/docs/primitives/components/context-menu
+  api: https://www.radix-ui.com/docs/primitives/components/context-menu#api-reference
+---
+
+<ComponentPreview
+  name="context-menu-demo"
+  description="带子菜单项的上下文菜单。"
+/>
+
+## 安装
+
+<CodeTabs>
+
+<TabsList>
+  <TabsTrigger value="cli">CLI</TabsTrigger>
+  <TabsTrigger value="manual">手动</TabsTrigger>
+</TabsList>
+<TabsContent value="cli">
+
+```bash
+npx shadcn@latest add context-menu
+```
+
+</TabsContent>
+
+<TabsContent value="manual">
+
+<Steps>
+
+<Step>安装下列依赖：</Step>
+
+```bash
+npm install @radix-ui/react-context-menu
+```
+
+<Step>将下面的代码复制到你的项目中。</Step>
+
+<ComponentSource name="context-menu" title="components/ui/context-menu.tsx" />
+
+<Step>根据项目结构调整导入路径。</Step>
+
+</Steps>
+
+</TabsContent>
+
+</CodeTabs>
+
+## 用法
+
+```tsx showLineNumbers
+import {
+  ContextMenu,
+  ContextMenuContent,
+  ContextMenuItem,
+  ContextMenuTrigger,
+} from "@/components/ui/context-menu"
+```
+
+```tsx showLineNumbers
+<ContextMenu>
+  <ContextMenuTrigger>右键点击</ContextMenuTrigger>
+  <ContextMenuContent>
+    <ContextMenuItem>个人资料</ContextMenuItem>
+    <ContextMenuItem>账单</ContextMenuItem>
+    <ContextMenuItem>团队</ContextMenuItem>
+    <ContextMenuItem>订阅计划</ContextMenuItem>
+  </ContextMenuContent>
+</ContextMenu>
+```

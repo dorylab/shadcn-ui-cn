@@ -1,0 +1,78 @@
+---
+title: 简介
+description: 搭建属于你的代码注册表。
+---
+
+你可以使用 `shadcn` CLI 搭建自己的代码注册表。自建注册表后，就能将自定义组件、Hook、页面、配置、规则以及其他文件分发到任意项目中。
+
+<Callout>
+  **提示：** 注册表可配合任意项目类型与框架使用，并不限于 React。
+</Callout>
+
+<figure className="flex flex-col gap-4">
+  <Image
+    src="/images/registry-light.png"
+    width="1432"
+    height="960"
+    alt="注册表（浅色）"
+    className="mt-6 w-full overflow-hidden rounded-lg border dark:hidden"
+  />
+  <Image
+    src="/images/registry-dark.png"
+    width="1432"
+    height="960"
+    alt="注册表（深色）"
+    className="mt-6 hidden w-full overflow-hidden rounded-lg border shadow-sm dark:block"
+  />
+  <figcaption className="text-center text-sm text-gray-500">
+    面向代码的分发系统
+  </figcaption>
+</figure>
+
+准备好创建自己的注册表了吗？接下来我们会一步步带你完成自建流程：从编写第一个组件，到发布供他人使用。
+
+<div className="mt-6 grid gap-4 sm:grid-cols-2">
+  <LinkedCard href="/docs/registry/getting-started" className="items-start text-sm md:p-6">
+    <div className="font-medium">快速上手</div>
+    <div className="text-muted-foreground">
+      配置并构建你的注册表
+    </div>
+  </LinkedCard>
+
+<LinkedCard
+  href="/docs/registry/authentication"
+  className="items-start text-sm md:p-6"
+>
+  <div className="font-medium">身份验证</div>
+  <div className="text-muted-foreground">
+    通过认证机制保护注册表
+  </div>
+</LinkedCard>
+<LinkedCard
+  href="/docs/registry/namespace"
+  className="items-start text-sm md:p-6"
+>
+  <div className="font-medium">命名空间</div>
+  <div className="text-muted-foreground">
+    使用命名空间管理多个注册表
+  </div>
+</LinkedCard>
+<LinkedCard
+  href="/docs/registry/examples"
+  className="items-start text-sm md:p-6"
+>
+  <div className="font-medium">示例</div>
+  <div className="text-muted-foreground">
+    注册表条目的示例与配置
+  </div>
+</LinkedCard>
+  <LinkedCard
+    href="/docs/registry/registry-json"
+    className="items-start text-sm md:p-6"
+  >
+    <div className="font-medium">Schema</div>
+    <div className="text-muted-foreground">
+      `registry.json` 的 Schema 规范
+    </div>
+  </LinkedCard>
+</div>

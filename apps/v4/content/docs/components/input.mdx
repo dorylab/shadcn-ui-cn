@@ -1,0 +1,101 @@
+---
+title: Input
+description: 展示表单输入框或具有输入框外观的组件。
+component: true
+---
+
+<ComponentPreview
+  name="input-demo"
+  className="[&_input]:max-w-xs"
+  description="表单输入组件示例。"
+/>
+
+## 安装
+
+<CodeTabs>
+
+<TabsList>
+  <TabsTrigger value="cli">CLI</TabsTrigger>
+  <TabsTrigger value="manual">手动</TabsTrigger>
+</TabsList>
+<TabsContent value="cli">
+
+```bash
+npx shadcn@latest add input
+```
+
+</TabsContent>
+
+<TabsContent value="manual">
+
+<Steps>
+
+<Step>将下面的代码复制到你的项目中。</Step>
+
+<ComponentSource name="input" title="components/ui/input.tsx" />
+
+<Step>根据项目结构调整导入路径。</Step>
+
+</Steps>
+
+</TabsContent>
+
+</CodeTabs>
+
+## 用法
+
+```tsx
+import { Input } from "@/components/ui/input"
+```
+
+```tsx
+<Input />
+```
+
+## 示例
+
+### Default
+
+<ComponentPreview
+  name="input-demo"
+  className="[&_input]:max-w-xs"
+  description="表单输入组件示例。"
+/>
+
+### File
+
+<ComponentPreview
+  name="input-file"
+  className="[&_input]:max-w-xs"
+  description="文件输入组件。"
+/>
+
+### Disabled
+
+<ComponentPreview
+  name="input-disabled"
+  className="[&_input]:max-w-xs"
+  description="禁用状态的输入组件。"
+/>
+
+### With Label
+
+<ComponentPreview
+  name="input-with-label"
+  className="[&_input]:max-w-xs"
+  description="带标签的输入组件。"
+/>
+
+### With Button
+
+<ComponentPreview
+  name="input-with-button"
+  className="[&_input]:max-w-xs"
+  description="带按钮的输入组件。"
+/>
+
+## 更新日志
+
+### 2025-09-18 移除 `flex` 类
+
+在 `input.tsx` 中删除输入组件上的 `flex` 类，该类已不再需要。

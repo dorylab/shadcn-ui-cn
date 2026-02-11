@@ -1,0 +1,145 @@
+---
+title: Combobox
+description: 支持自动补全与命令面板的输入组件，附带建议列表。
+component: true
+---
+
+<ComponentPreview
+  name="combobox-demo"
+  description="列出框架选项的组合框。"
+/>
+
+## 安装
+
+Combobox 由 `<Popover />` 与 `<Command />` 组合而成。
+
+请参考 [Popover](/docs/components/popover#installation) 及 [Command](/docs/components/command#installation) 的安装说明。
+
+## 用法
+
+<CodeCollapsibleWrapper>
+
+```tsx showLineNumbers title="components/example-combobox.tsx"
+"use client"
+
+import * as React from "react"
+import { CheckIcon, ChevronsUpDownIcon } from "lucide-react"
+
+import { cn } from "@/lib/utils"
+import { Button } from "@/components/ui/button"
+import {
+  Command,
+  CommandEmpty,
+  CommandGroup,
+  CommandInput,
+  CommandItem,
+  CommandList,
+} from "@/components/ui/command"
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover"
+
+const frameworks = [
+  {
+    value: "next.js",
+    label: "Next.js",
+  },
+  {
+    value: "sveltekit",
+    label: "SvelteKit",
+  },
+  {
+    value: "nuxt.js",
+    label: "Nuxt.js",
+  },
+  {
+    value: "remix",
+    label: "Remix",
+  },
+  {
+    value: "astro",
+    label: "Astro",
+  },
+]
+
+export function ExampleCombobox() {
+  const [open, setOpen] = React.useState(false)
+  const [value, setValue] = React.useState("")
+
+  return (
+    <Popover open={open} onOpenChange={setOpen}>
+      <PopoverTrigger asChild>
+        <Button
+          variant="outline"
+          role="combobox"
+          aria-expanded={open}
+          className="w-[200px] justify-between"
+        >
+          {value
+            ? frameworks.find((framework) => framework.value === value)?.label
+            : "选择框架..."}
+          <ChevronsUpDownIcon className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+        </Button>
+      </PopoverTrigger>
+      <PopoverContent className="w-[200px] p-0">
+        <Command>
+          <CommandInput placeholder="搜索框架..." />
+          <CommandList>
+            <CommandEmpty>未找到匹配的框架。</CommandEmpty>
+            <CommandGroup>
+              {frameworks.map((framework) => (
+                <CommandItem
+                  key={framework.value}
+                  value={framework.value}
+                  onSelect={(currentValue) => {
+                    setValue(currentValue === value ? "" : currentValue)
+                    setOpen(false)
+                  }}
+                >
+                  <CheckIcon
+                    className={cn(
+                      "mr-2 h-4 w-4",
+                      value === framework.value ? "opacity-100" : "opacity-0"
+                    )}
+                  />
+                  {framework.label}
+                </CommandItem>
+              ))}
+            </CommandGroup>
+          </CommandList>
+        </Command>
+      </PopoverContent>
+    </Popover>
+  )
+}
+```
+
+</CodeCollapsibleWrapper>
+
+## 示例
+
+### Combobox
+
+<ComponentPreview
+  name="combobox-demo"
+  description="列出框架选项的组合框。"
+/>
+
+### Popover
+
+<ComponentPreview name="combobox-popover" />
+
+### 下拉菜单
+
+<ComponentPreview
+  name="combobox-dropdown-menu"
+  description="嵌入下拉菜单中的组合框"
+/>
+
+### 响应式
+
+可以在桌面端使用 `<Popover />`，在移动端使用 `<Drawer />`，从而实现响应式组合框。
+
+<ComponentPreview name="combobox-responsive" />

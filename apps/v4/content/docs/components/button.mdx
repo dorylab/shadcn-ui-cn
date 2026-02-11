@@ -1,0 +1,321 @@
+---
+title: Button
+description: 用于展示按钮或具有按钮外观的组件。
+featured: true
+component: true
+---
+
+import { InfoIcon } from "lucide-react"
+
+<Callout variant="info" icon={<InfoIcon />}>
+**更新：** 我们为按钮组件新增了 `icon-sm` 与 `icon-lg` 两种尺寸，详情参见
+[更新日志](/docs/components/button#changelog)。请按照说明更新你的项目。
+
+</Callout>
+
+<ComponentPreview name="button-demo" description="一个按钮" className="mb-4" />
+
+```tsx showLineNumbers
+<Button variant="outline">Button</Button>
+<Button variant="outline" size="icon" aria-label="Submit">
+  <ArrowUpIcon />
+</Button>
+```
+
+## 安装
+
+<CodeTabs>
+
+<TabsList>
+  <TabsTrigger value="cli">CLI</TabsTrigger>
+  <TabsTrigger value="manual">手动</TabsTrigger>
+</TabsList>
+<TabsContent value="cli">
+
+```bash
+npx shadcn@latest add button
+```
+
+</TabsContent>
+
+<TabsContent value="manual">
+
+<Steps>
+
+<Step>安装下列依赖：</Step>
+
+```bash
+npm install @radix-ui/react-slot
+```
+
+<Step>将如下代码复制到你的项目中。</Step>
+
+<ComponentSource name="button" title="components/ui/button.tsx" />
+
+<Step>根据项目结构调整导入路径。</Step>
+
+</Steps>
+
+</TabsContent>
+
+</CodeTabs>
+
+## 用法
+
+```tsx
+import { Button } from "@/components/ui/button"
+```
+
+```tsx
+<Button variant="outline">Button</Button>
+```
+
+## 光标
+
+Tailwind v4 已将按钮组件的默认光标从 `cursor: pointer` [调整](https://tailwindcss.com/docs/upgrade-guide#buttons-use-the-default-cursor) 为 `cursor: default`。
+
+如果希望保留 `cursor: pointer` 行为，可在 CSS 中加入以下代码：
+
+```css showLineNumbers title="globals.css"
+@layer base {
+  button:not(:disabled),
+  [role="button"]:not(:disabled) {
+    cursor: pointer;
+  }
+}
+```
+
+## 示例
+
+### 尺寸
+
+<ComponentPreview name="button-size" className="mb-4" />
+
+```tsx
+// Small
+<Button size="sm" variant="outline">Small</Button>
+<Button size="icon-sm" aria-label="Submit" variant="outline">
+  <ArrowUpRightIcon />
+</Button>
+
+// Medium
+<Button variant="outline">Default</Button>
+<Button size="icon" aria-label="Submit" variant="outline">
+  <ArrowUpRightIcon />
+</Button>
+
+// Large
+<Button size="lg" variant="outline">Large</Button>
+<Button size="icon-lg" aria-label="Submit" variant="outline">
+  <ArrowUpRightIcon />
+</Button>
+```
+
+### 默认样式
+
+<ComponentPreview
+  name="button-default"
+  description="主按钮"
+  className="mb-4"
+/>
+
+```tsx
+<Button>Button</Button>
+```
+
+### Outline
+
+<ComponentPreview
+  name="button-outline"
+  description="使用 outline 变体的按钮。"
+  className="mb-4"
+/>
+
+```tsx
+<Button variant="outline">Outline</Button>
+```
+
+### Secondary
+
+<ComponentPreview
+  name="button-secondary"
+  description="次级按钮"
+  className="mb-4"
+/>
+
+```tsx
+<Button variant="secondary">Secondary</Button>
+```
+
+### Ghost
+
+<ComponentPreview
+  name="button-ghost"
+  description="使用 ghost 变体的按钮"
+  className="mb-4"
+/>
+
+```tsx
+<Button variant="ghost">Ghost</Button>
+```
+
+### Destructive
+
+<ComponentPreview
+  name="button-destructive"
+  description="危险操作按钮"
+  className="mb-4"
+/>
+
+```tsx
+<Button variant="destructive">Destructive</Button>
+```
+
+### Link
+
+<ComponentPreview
+  name="button-link"
+  description="使用 link 变体的按钮。"
+  className="mb-4"
+/>
+
+```tsx
+<Button variant="link">Link</Button>
+```
+
+### Icon
+
+<ComponentPreview
+  name="button-icon"
+  description="图标按钮"
+  className="mb-4"
+/>
+
+```tsx showLineNumbers
+<Button variant="outline" size="icon" aria-label="Submit">
+  <CircleFadingArrowUpIcon />
+</Button>
+```
+
+### 带图标的文本按钮
+
+图标与文字之间的间距会根据按钮尺寸自动调整，无需为图标单独设置外边距。
+
+<ComponentPreview
+  name="button-with-icon"
+  description="带图标的按钮"
+  className="mb-4"
+/>
+
+```tsx
+<Button variant="outline" size="sm">
+  <IconGitBranch /> New Branch
+</Button>
+```
+
+### 圆形
+
+使用 `rounded-full` 类让按钮成为圆形。
+
+<ComponentPreview name="button-rounded" className="mb-4" />
+
+```tsx
+<Button variant="outline" size="icon" className="rounded-full">
+  <ArrowUpRightIcon />
+</Button>
+```
+
+### 加载态
+
+<ComponentPreview
+  name="button-loading"
+  description="带加载状态的按钮。"
+  className="mb-4"
+/>
+
+```tsx showLineNumbers
+<Button size="sm" variant="outline" disabled>
+  <Spinner />
+  Submit
+</Button>
+```
+
+### 按钮组
+
+若要创建按钮组，可使用 `ButtonGroup` 组件。更多细节请参阅 [Button Group](/docs/components/button-group) 文档。
+
+<ComponentPreview name="button-group-demo" className="mb-4" />
+
+```tsx showLineNumbers
+<ButtonGroup>
+  <ButtonGroup>
+    <Button variant="outline" size="icon" aria-label="返回">
+      <ArrowLeftIcon />
+    </Button>
+  </ButtonGroup>
+  <ButtonGroup>
+    <Button variant="outline">归档</Button>
+    <Button variant="outline">举报</Button>
+  </ButtonGroup>
+  <ButtonGroup>
+    <Button variant="outline">稍后处理</Button>
+    <DropdownMenu>
+      <DropdownMenuTrigger asChild>
+        <Button variant="outline" size="icon" aria-label="更多选项">
+          <MoreHorizontalIcon />
+        </Button>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent />
+    </DropdownMenu>
+  </ButtonGroup>
+</ButtonGroup>
+```
+
+### 链接按钮
+
+可以使用 `asChild` 属性让其他组件呈现按钮样式。下方示例演示了一个看起来像按钮的链接。
+
+```tsx showLineNumbers
+import Link from "next/link"
+
+import { Button } from "@/components/ui/button"
+
+export function LinkAsButton() {
+  return (
+    <Button asChild>
+      <Link href="/login">登录</Link>
+    </Button>
+  )
+}
+```
+
+## API 参考
+
+### Button
+
+`Button` 组件基于原生 `button` 元素封装，提供多种样式与功能。
+
+| Prop      | Type                                                                          | Default     |
+| --------- | ----------------------------------------------------------------------------- | ----------- |
+| `variant` | `"default" \| "outline" \| "ghost" \| "destructive" \| "secondary" \| "link"` | `"default"` |
+| `size`    | `"default" \| "sm" \| "lg" \| "icon" \| "icon-sm" \| "icon-lg"`               | `"default"` |
+| `asChild` | `boolean`                                                                     | `false`     |
+
+## 更新日志
+
+### 2025-09-24 新增尺寸
+
+我们为按钮组件新增了 `icon-sm` 与 `icon-lg` 两种尺寸，用于构建图标按钮。要启用它们，请在 `button.tsx` 中的 `buttonVariants` 配置里为 `size` 添加如下代码：
+
+```tsx showLineNumbers title="components/ui/button.tsx"
+const buttonVariants = cva("...", {
+  variants: {
+    size: {
+      // ...
+      "icon-sm": "size-8",
+      "icon-lg": "size-10",
+      // ...
+    },
+  },
+})
+```

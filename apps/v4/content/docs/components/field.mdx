@@ -1,0 +1,331 @@
+---
+title: Field
+description: 组合标签、控件与帮助文本，构建可访问的表单字段与字段组。
+component: true
+---
+
+<ComponentPreview
+  name="field-demo"
+  className="[&_.preview]:h-[800px] [&_.preview]:p-6 md:[&_.preview]:h-[850px]"
+/>
+
+## 安装
+
+<CodeTabs>
+
+<TabsList>
+  <TabsTrigger value="cli">CLI</TabsTrigger>
+  <TabsTrigger value="manual">手动</TabsTrigger>
+</TabsList>
+<TabsContent value="cli">
+
+```bash
+npx shadcn@latest add field
+```
+
+</TabsContent>
+
+<TabsContent value="manual">
+
+<Steps>
+
+<Step>将下面的代码复制到你的项目中。</Step>
+
+<ComponentSource name="field" title="components/ui/field.tsx" />
+
+<Step>根据项目结构调整导入路径。</Step>
+
+</Steps>
+
+</TabsContent>
+
+</CodeTabs>
+
+## 用法
+
+```tsx showLineNumbers
+import {
+  Field,
+  FieldContent,
+  FieldDescription,
+  FieldError,
+  FieldGroup,
+  FieldLabel,
+  FieldLegend,
+  FieldSeparator,
+  FieldSet,
+  FieldTitle,
+} from "@/components/ui/field"
+```
+
+```tsx showLineNumbers
+<FieldSet>
+  <FieldLegend>个人资料</FieldLegend>
+  <FieldDescription>这些信息会显示在发票与邮件中。</FieldDescription>
+  <FieldGroup>
+    <Field>
+      <FieldLabel htmlFor="name">姓名</FieldLabel>
+      <Input id="name" autoComplete="off" placeholder="Evil Rabbit" />
+      <FieldDescription>这些信息会显示在发票与邮件中。</FieldDescription>
+    </Field>
+    <Field>
+      <FieldLabel htmlFor="username">用户名</FieldLabel>
+      <Input id="username" autoComplete="off" aria-invalid />
+      <FieldError>请使用其他用户名。</FieldError>
+    </Field>
+    <Field orientation="horizontal">
+      <Switch id="newsletter" />
+      <FieldLabel htmlFor="newsletter">订阅新闻邮件</FieldLabel>
+    </Field>
+  </FieldGroup>
+</FieldSet>
+```
+
+## 结构解析
+
+`Field` 系列旨在帮助你构建可访问表单。典型结构如下：
+
+```tsx showLineNumbers
+<Field>
+  <FieldLabel htmlFor="input-id">Label</FieldLabel>
+  {/* Input, Select, Switch, etc. */}
+  <FieldDescription>Optional helper text.</FieldDescription>
+  <FieldError>Validation message.</FieldError>
+</Field>
+```
+
+- `Field`：用于包裹单个字段的核心容器。
+- `FieldContent`：纵向排列标签与描述的容器，如无描述可省略。
+- 相关字段使用 `FieldGroup` 包裹；若要语义化分组，可使用 `FieldSet` 与 `FieldLegend`。
+
+## 表单
+
+结合 `Field` 与 [React Hook Form](/docs/forms/react-hook-form)、[Tanstack Form](/docs/forms/tanstack-form) 构建表单，可参考 [Form](/docs/forms) 文档。
+
+## 示例
+
+### Input
+
+<ComponentPreview name="field-input" className="!mb-4 [&_.preview]:p-6" />
+
+### Textarea
+
+<ComponentPreview name="field-textarea" className="!mb-4 [&_.preview]:p-6" />
+
+### Select
+
+<ComponentPreview name="field-select" className="!mb-4 [&_.preview]:p-6" />
+
+### Slider
+
+<ComponentPreview name="field-slider" className="!mb-4 [&_.preview]:p-6" />
+
+### Fieldset
+
+<ComponentPreview name="field-fieldset" className="!mb-4 [&_.preview]:p-6" />
+
+### Checkbox
+
+<ComponentPreview name="field-checkbox" className="!mb-4 [&_.preview]:p-6" />
+
+### Radio
+
+<ComponentPreview name="field-radio" className="!mb-4 [&_.preview]:p-6" />
+
+### Switch
+
+<ComponentPreview name="field-switch" className="!mb-4 [&_.preview]:p-6" />
+
+### Choice Card
+
+将 `Field` 包裹在 `FieldLabel` 中可创建可选卡片组，适用于 `RadioItem`、`Checkbox`、`Switch` 等组件。
+
+<ComponentPreview name="field-choice-card" className="!mb-4 [&_.preview]:p-6" />
+
+### Field Group
+
+使用 `FieldGroup` 堆叠多个 `Field`，并通过 `FieldSeparator` 分隔。
+
+<ComponentPreview name="field-group" className="!mb-4 [&_.preview]:p-6" />
+
+## 响应式布局
+
+- **垂直布局：** 默认模式会将标签、控件与辅助文本垂直堆叠，适合移动优先布局。
+- **水平布局：** 在 `Field` 上设置 `orientation="horizontal"` 可让标签与控件水平排列，配合 `FieldContent` 保持描述对齐。
+- **响应式布局：** 使用 `orientation="responsive"` 让字段在支持容器查询的父级中自动切换列布局，可在 `FieldGroup` 上添加 `@container/field-group` 类以在断点处切换布局。
+
+<ComponentPreview
+  name="field-responsive"
+  className="!mb-4 [&_.preview]:h-[650px] [&_.preview]:p-6 [&_.preview]:md:h-[500px] [&_.preview]:md:p-10"
+/>
+
+## 校验与错误状态
+
+- 在 `Field` 上添加 `data-invalid` 可将整个字段切换为错误状态。
+- 在输入控件上设置 `aria-invalid` 便于辅助技术识别。
+- 将 `FieldError` 放在控件之后或 `FieldContent` 内部，以保持错误信息对齐。
+
+```tsx showLineNumbers /data-invalid/ /aria-invalid/
+<Field data-invalid>
+  <FieldLabel htmlFor="email">Email</FieldLabel>
+  <Input id="email" type="email" aria-invalid />
+  <FieldError>Enter a valid email address.</FieldError>
+</Field>
+```
+
+## 无障碍
+
+- `FieldSet` 与 `FieldLegend` 帮助键盘与辅助技术用户理解字段分组。
+- `Field` 会输出 `role="group"`，使内部控件可继承 `FieldLabel` 与 `FieldLegend` 的语义。
+- 谨慎使用 `FieldSeparator`，确保屏幕阅读器能清晰感知分段。
+
+## API Reference
+
+### FieldSet
+
+用于渲染语义化 `fieldset` 并提供预设间距的容器。
+
+| Prop        | Type     | Default |
+| ----------- | -------- | ------- |
+| `className` | `string` |         |
+
+```tsx
+<FieldSet>
+  <FieldLegend>Delivery</FieldLegend>
+  <FieldGroup>{/* Fields */}</FieldGroup>
+</FieldSet>
+```
+
+### FieldLegend
+
+Legend element for a `FieldSet`. Switch to the `label` variant to align with label sizing.
+
+| Prop        | Type                  | Default    |
+| ----------- | --------------------- | ---------- |
+| `variant`   | `"legend" \| "label"` | `"legend"` |
+| `className` | `string`              |            |
+
+```tsx
+<FieldLegend variant="label">Notification Preferences</FieldLegend>
+```
+
+`FieldLegend` 提供 `legend` 与 `label` 两种变体，其中 `label` 会应用与标签一致的尺寸和对齐方式，适合嵌套 `FieldSet` 的场景。
+
+### FieldGroup
+
+用于堆叠多个 `Field` 的布局容器，并支持通过容器查询实现响应式布局。
+
+| Prop        | Type     | Default |
+| ----------- | -------- | ------- |
+| `className` | `string` |         |
+
+```tsx
+<FieldGroup className="@container/field-group flex flex-col gap-6">
+  <Field>{/* ... */}</Field>
+  <Field>{/* ... */}</Field>
+</FieldGroup>
+```
+
+### Field
+
+单个字段的核心容器，负责处理布局方向、错误状态样式与间距。
+
+| Prop           | Type                                         | Default      |
+| -------------- | -------------------------------------------- | ------------ |
+| `orientation`  | `"vertical" \| "horizontal" \| "responsive"` | `"vertical"` |
+| `className`    | `string`                                     |              |
+| `data-invalid` | `boolean`                                    |              |
+
+```tsx
+<Field orientation="horizontal">
+  <FieldLabel htmlFor="remember">Remember me</FieldLabel>
+  <Switch id="remember" />
+</Field>
+```
+
+### FieldContent
+
+当标签与控件并排时，用于纵向排列控件与描述；若没有描述可省略。
+
+| Prop        | Type     | Default |
+| ----------- | -------- | ------- |
+| `className` | `string` |         |
+
+```tsx
+<Field>
+  <Checkbox id="notifications" />
+  <FieldContent>
+    <FieldLabel htmlFor="notifications">Notifications</FieldLabel>
+    <FieldDescription>Email, SMS, and push options.</FieldDescription>
+  </FieldContent>
+</Field>
+```
+
+### FieldLabel
+
+为输入控件及嵌套 `Field` 子项统一提供标签样式。
+
+| Prop        | Type      | Default |
+| ----------- | --------- | ------- |
+| `className` | `string`  |         |
+| `asChild`   | `boolean` | `false` |
+
+```tsx
+<FieldLabel htmlFor="email">Email</FieldLabel>
+```
+
+### FieldTitle
+
+在 `FieldContent` 中渲染具备标签风格的标题。
+
+| Prop        | Type     | Default |
+| ----------- | -------- | ------- |
+| `className` | `string` |         |
+
+```tsx
+<FieldContent>
+  <FieldTitle>Enable Touch ID</FieldTitle>
+  <FieldDescription>Unlock your device faster.</FieldDescription>
+</FieldContent>
+```
+
+### FieldDescription
+
+辅助说明文本槽位，在水平布局下会自动处理长行。
+
+| Prop        | Type     | Default |
+| ----------- | -------- | ------- |
+| `className` | `string` |         |
+
+```tsx
+<FieldDescription>We never share your email with anyone.</FieldDescription>
+```
+
+### FieldSeparator
+
+在 `FieldGroup` 内部绘制视觉分隔线，并可选择性展示内容。
+
+| Prop        | Type     | Default |
+| ----------- | -------- | ------- |
+| `className` | `string` |         |
+
+```tsx
+<FieldSeparator>Or continue with</FieldSeparator>
+```
+
+### FieldError
+
+可访问的错误容器，既支持直接传入子节点，也可接收 `errors` 数组（例如 `react-hook-form` 提供的错误信息）。
+
+| Prop        | Type                                       | Default |
+| ----------- | ------------------------------------------ | ------- |
+| `errors`    | `Array<{ message?: string } \| undefined>` |         |
+| `className` | `string`                                   |         |
+
+```tsx
+<FieldError errors={errors.username} />
+```
+
+当 `errors` 数组包含多条消息时，会自动渲染为列表。
+
+`FieldError` 也支持实现了 [Standard Schema](https://standardschema.dev/) 的验证器（如 Zod、Valibot、ArkType）的 `issues` 数组，可直接传入以统一呈现错误列表。

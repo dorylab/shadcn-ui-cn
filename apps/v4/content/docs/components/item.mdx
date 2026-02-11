@@ -1,0 +1,317 @@
+---
+title: Item
+description: 通用的内容展示组件，可灵活组合标题、描述与操作。
+component: true
+---
+
+`Item` 是一个简单的 Flex 容器，可容纳几乎所有类型的内容，用于展示标题、描述与操作。配合 `ItemGroup` 可以构建条目列表。
+
+虽然用 `div` 加类名也能实现类似效果，但**因为实在写过太多次**，因此提炼出了这个组件，现在我已经离不开它。
+
+<ComponentPreview name="item-demo" className="[&_.preview]:p-4" />
+
+## 安装
+
+<CodeTabs>
+
+<TabsList>
+  <TabsTrigger value="cli">CLI</TabsTrigger>
+  <TabsTrigger value="manual">手动</TabsTrigger>
+</TabsList>
+<TabsContent value="cli">
+
+```bash
+npx shadcn@latest add item
+```
+
+</TabsContent>
+
+<TabsContent value="manual">
+
+<Steps>
+
+<Step>将下面的代码复制到你的项目中。</Step>
+
+<ComponentSource name="item" title="components/ui/item.tsx" />
+
+<Step>根据项目结构调整导入路径。</Step>
+
+</Steps>
+
+</TabsContent>
+
+</CodeTabs>
+
+## 用法
+
+```tsx showLineNumbers
+import {
+  Item,
+  ItemActions,
+  ItemContent,
+  ItemDescription,
+  ItemFooter,
+  ItemHeader,
+  ItemMedia,
+  ItemTitle,
+} from "@/components/ui/item"
+```
+
+```tsx showLineNumbers
+<Item>
+  <ItemHeader>条目标题</ItemHeader>
+  <ItemMedia />
+  <ItemContent>
+    <ItemTitle>条目名称</ItemTitle>
+    <ItemDescription>条目描述</ItemDescription>
+  </ItemContent>
+  <ItemActions />
+  <ItemFooter>条目页脚</ItemFooter>
+</Item>
+```
+
+## Item vs Field
+
+若需要展示复选框、输入框、单选框或下拉等表单控件，请使用 `Field`。
+
+若只需展示标题、描述与操作等内容，则使用 `Item` 即可。
+
+## Examples
+
+### 变体
+
+<ComponentPreview name="item-variant" className="[&_.preview]:p-4" />
+
+### 尺寸
+
+`Item` 支持多种尺寸，例如使用 `sm` 获得更紧凑的条目，`default` 则为标准尺寸。
+
+<ComponentPreview name="item-size" className="[&_.preview]:p-4" />
+
+### Icon
+
+<ComponentPreview name="item-icon" className="[&_.preview]:p-4" />
+
+### Avatar
+
+<ComponentPreview name="item-avatar" className="[&_.preview]:p-4" />
+
+### Image
+
+<ComponentPreview name="item-image" className="[&_.preview]:p-4" />
+
+### Group
+
+<ComponentPreview name="item-group" className="[&_.preview]:p-4" />
+
+### Header
+
+<ComponentPreview name="item-header" className="[&_.preview]:p-4" />
+
+### 链接
+
+如果需要将条目渲染为链接，可使用 `asChild`，悬停与聚焦状态将作用于链接元素。
+
+<ComponentPreview name="item-link" className="[&_.preview]:p-4" />
+
+```tsx showLineNumbers
+<Item asChild>
+  <a href="/dashboard">
+    <ItemMedia />
+    <ItemContent>
+      <ItemTitle>Dashboard</ItemTitle>
+      <ItemDescription>Overview of your account and activity.</ItemDescription>
+    </ItemContent>
+    <ItemActions />
+  </a>
+</Item>
+```
+
+### Dropdown
+
+<ComponentPreview name="item-dropdown" className="[&_.preview]:p-4" />
+
+## API 参考
+
+### Item
+
+用于展示媒体、标题、描述与操作的核心组件。
+
+| Prop      | Type                                | Default     |
+| --------- | ----------------------------------- | ----------- |
+| `variant` | `"default" \| "outline" \| "muted"` | `"default"` |
+| `size`    | `"default" \| "sm"`                 | `"default"` |
+| `asChild` | `boolean`                           | `false`     |
+
+```tsx
+<Item size="" variant="">
+  <ItemMedia />
+  <ItemContent>
+    <ItemTitle>Item</ItemTitle>
+    <ItemDescription>Item</ItemDescription>
+  </ItemContent>
+  <ItemActions />
+</Item>
+```
+
+可通过 `asChild` 将自定义组件（如链接）渲染为条目，此时悬停与聚焦状态会应用到自定义组件上。
+
+```tsx showLineNumbers
+import {
+  Item,
+  ItemContent,
+  ItemDescription,
+  ItemMedia,
+  ItemTitle,
+} from "@/components/ui/item"
+
+export function ItemLink() {
+  return (
+    <Item asChild>
+      <a href="/dashboard">
+        <ItemMedia variant="icon">
+          <Home />
+        </ItemMedia>
+        <ItemContent>
+          <ItemTitle>Dashboard</ItemTitle>
+          <ItemDescription>
+            Overview of your account and activity.
+          </ItemDescription>
+        </ItemContent>
+      </a>
+    </Item>
+  )
+}
+```
+
+### ItemGroup
+
+The `ItemGroup` component is a container that groups related items together with consistent styling.
+
+| Prop        | Type     | Default |
+| ----------- | -------- | ------- |
+| `className` | `string` |         |
+
+```tsx
+<ItemGroup>
+  <Item />
+  <Item />
+</ItemGroup>
+```
+
+### ItemSeparator
+
+在条目组中用于分隔条目的组件。
+
+| Prop        | Type     | Default |
+| ----------- | -------- | ------- |
+| `className` | `string` |         |
+
+```tsx
+<ItemGroup>
+  <Item />
+  <ItemSeparator />
+  <Item />
+</ItemGroup>
+```
+
+### ItemMedia
+
+用于展示图标、图片或头像等媒体内容。
+
+| Prop        | Type                             | Default     |
+| ----------- | -------------------------------- | ----------- |
+| `variant`   | `"default" \| "icon" \| "image"` | `"default"` |
+| `className` | `string`                         |             |
+
+```tsx
+<ItemMedia variant="icon">
+  <Icon />
+</ItemMedia>
+```
+
+```tsx
+<ItemMedia variant="image">
+  <img src="..." alt="..." />
+</ItemMedia>
+```
+
+### ItemContent
+
+用于包裹条目的标题与描述。
+
+若仅需要标题可省略 `ItemContent`。
+
+| Prop        | Type     | Default |
+| ----------- | -------- | ------- |
+| `className` | `string` |         |
+
+```tsx
+<ItemContent>
+  <ItemTitle>Item</ItemTitle>
+  <ItemDescription>Item</ItemDescription>
+</ItemContent>
+```
+
+### ItemTitle
+
+显示条目标题。
+
+| Prop        | Type     | Default |
+| ----------- | -------- | ------- |
+| `className` | `string` |         |
+
+```tsx
+<ItemTitle>Item Title</ItemTitle>
+```
+
+### ItemDescription
+
+展示条目描述。
+
+| Prop        | Type     | Default |
+| ----------- | -------- | ------- |
+| `className` | `string` |         |
+
+```tsx
+<ItemDescription>Item description</ItemDescription>
+```
+
+### ItemActions
+
+用于展示操作按钮或其他交互元素。
+
+| Prop        | Type     | Default |
+| ----------- | -------- | ------- |
+| `className` | `string` |         |
+
+```tsx
+<ItemActions>
+  <Button>Action</Button>
+  <Button>Action</Button>
+</ItemActions>
+```
+
+### ItemHeader
+
+用于在条目中展示页眉信息。
+
+| Prop        | Type     | Default |
+| ----------- | -------- | ------- |
+| `className` | `string` |         |
+
+```tsx
+<ItemHeader>Item Header</ItemHeader>
+```
+
+### ItemFooter
+
+用于在条目中展示页脚内容。
+
+| Prop        | Type     | Default |
+| ----------- | -------- | ------- |
+| `className` | `string` |         |
+
+```tsx
+<ItemFooter>Item Footer</ItemFooter>
+```

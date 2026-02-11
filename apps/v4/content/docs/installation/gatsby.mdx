@@ -1,0 +1,124 @@
+---
+title: Gatsby
+description: 安装并配置 Gatsby 集成。
+---
+
+<Callout className="mb-6 border-blue-600 bg-blue-50 dark:border-blue-900 dark:bg-blue-950 [&_code]:bg-blue-100 dark:[&_code]:bg-blue-900">
+  **更新：** `canary` 版本已经完整支持 React 19 与 Tailwind v4。详情请参阅 [Tailwind v4](/docs/tailwind-v4) 文档。
+</Callout>
+
+<Steps>
+
+### 创建项目
+
+先使用 `create-gatsby` 创建一个新的 Gatsby 项目：
+
+```bash
+npm init gatsby
+```
+
+### 配置 TypeScript 与 Tailwind CSS
+
+按照提示回答问题完成项目配置：
+
+```txt showLineNumbers
+✔ What would you like to call your site?
+· your-app-name
+✔ What would you like to name the folder where your site will be created?
+· your-app-name
+✔ Will you be using JavaScript or TypeScript?
+· TypeScript
+✔ Will you be using a CMS?
+· Choose whatever you want
+✔ Would you like to install a styling system?
+· Tailwind CSS
+✔ Would you like to install additional features with other plugins?
+· Choose whatever you want
+✔ Shall we do this? (Y/n) · Yes
+```
+
+### 编辑 tsconfig.json
+
+在 `tsconfig.json` 中加入以下配置以解析路径别名：
+
+```ts {4-9} showLineNumbers
+{
+  "compilerOptions": {
+    // ...
+    "baseUrl": ".",
+    "paths": {
+      "@/*": [
+        "./src/*"
+      ]
+    }
+    // ...
+  }
+}
+```
+
+### 新建 gatsby-node.ts
+
+如果项目根目录尚未存在 `gatsby-node.ts`，请创建该文件，并加入以下代码以启用路径别名：
+
+```ts
+import * as path from "path"
+
+export const onCreateWebpackConfig = ({ actions }) => {
+  actions.setWebpackConfig({
+    resolve: {
+      alias: {
+        "@/components": path.resolve(__dirname, "src/components"),
+        "@/lib/utils": path.resolve(__dirname, "src/lib/utils"),
+      },
+    },
+  })
+}
+```
+
+### 运行 CLI
+
+执行 `shadcn` 的 `init` 命令完成初始化：
+
+```bash
+npx shadcn@latest init
+```
+
+### 配置 components.json
+
+根据提示回答以下问题以生成 `components.json`：
+
+```txt showLineNumbers
+Would you like to use TypeScript (recommended)? no / yes
+Which style would you like to use? › Default
+Which color would you like to use as base color? › Slate
+Where is your global CSS file? › › ./src/styles/globals.css
+Do you want to use CSS variables for colors? › no / yes
+Where is your tailwind.config.js located? › tailwind.config.js
+Configure the import alias for components: › @/components
+Configure the import alias for utils: › @/lib/utils
+Are you using React Server Components? › no
+```
+
+### 完成
+
+现在可以向项目中添加组件。
+
+```bash
+npx shadcn@latest add button
+```
+
+上述命令会加入 `Button` 组件，你可以按如下方式导入：
+
+```tsx {1,6} showLineNumbers
+import { Button } from "@/components/ui/button"
+
+export default function Home() {
+  return (
+    <div>
+      <Button>Click me</Button>
+    </div>
+  )
+}
+```
+
+</Steps>

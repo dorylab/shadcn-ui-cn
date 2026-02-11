@@ -1,0 +1,204 @@
+---
+title: Native Select
+description: 样式统一的原生 HTML 下拉选择组件。
+component: true
+---
+
+import { InfoIcon } from "lucide-react"
+
+<Callout variant="info" icon={<InfoIcon className="!translate-y-[3px]" />}>
+  如需完全自定义样式的选择器，请参考 [Select](/docs/components/select) 组件。
+</Callout>
+
+<ComponentPreview name="native-select-demo" />
+
+## 安装
+
+<CodeTabs>
+
+<TabsList>
+  <TabsTrigger value="cli">CLI</TabsTrigger>
+  <TabsTrigger value="manual">手动</TabsTrigger>
+</TabsList>
+<TabsContent value="cli">
+
+```bash
+npx shadcn@latest add native-select
+```
+
+</TabsContent>
+
+<TabsContent value="manual">
+
+<Steps>
+
+<Step>将下面的代码复制到你的项目中。</Step>
+
+<ComponentSource name="native-select" title="components/ui/native-select.tsx" />
+
+<Step>根据项目结构调整导入路径。</Step>
+
+</Steps>
+
+</TabsContent>
+
+</CodeTabs>
+
+## 用法
+
+```tsx showLineNumbers
+import {
+  NativeSelect,
+  NativeSelectOptGroup,
+  NativeSelectOption,
+} from "@/components/ui/native-select"
+```
+
+```tsx showLineNumbers
+<NativeSelect>
+  <NativeSelectOption value="">选择水果</NativeSelectOption>
+  <NativeSelectOption value="apple">苹果</NativeSelectOption>
+  <NativeSelectOption value="banana">香蕉</NativeSelectOption>
+  <NativeSelectOption value="blueberry">蓝莓</NativeSelectOption>
+  <NativeSelectOption value="grapes" disabled>
+    葡萄
+  </NativeSelectOption>
+  <NativeSelectOption value="pineapple">菠萝</NativeSelectOption>
+</NativeSelect>
+```
+
+## 示例
+
+### With Groups
+
+使用 `NativeSelectOptGroup` 对选项进行分组。
+
+<ComponentPreview name="native-select-groups" />
+
+```tsx showLineNumbers
+<NativeSelect>
+  <NativeSelectOption value="">选择食物</NativeSelectOption>
+  <NativeSelectOptGroup label="水果">
+    <NativeSelectOption value="apple">苹果</NativeSelectOption>
+    <NativeSelectOption value="banana">香蕉</NativeSelectOption>
+    <NativeSelectOption value="blueberry">蓝莓</NativeSelectOption>
+  </NativeSelectOptGroup>
+  <NativeSelectOptGroup label="蔬菜">
+    <NativeSelectOption value="carrot">胡萝卜</NativeSelectOption>
+    <NativeSelectOption value="broccoli">西兰花</NativeSelectOption>
+    <NativeSelectOption value="spinach">菠菜</NativeSelectOption>
+  </NativeSelectOptGroup>
+</NativeSelect>
+```
+
+### Disabled State
+
+可以禁用单个选项或整个选择器。
+
+<ComponentPreview name="native-select-disabled" />
+
+### Invalid State
+
+通过 `aria-invalid` 属性及错误样式展示校验结果。
+
+<ComponentPreview name="native-select-invalid" />
+
+```tsx showLineNumbers
+<NativeSelect aria-invalid="true">
+  <NativeSelectOption value="">选择国家</NativeSelectOption>
+  <NativeSelectOption value="us">美国</NativeSelectOption>
+  <NativeSelectOption value="uk">英国</NativeSelectOption>
+  <NativeSelectOption value="ca">加拿大</NativeSelectOption>
+</NativeSelect>
+```
+
+### Form Integration
+
+Use with form libraries like React Hook Form for controlled components.
+
+<ComponentPreview name="native-select-form" />
+
+### Input Group Integration
+
+Combine with `InputGroup` for complex input layouts.
+
+<ComponentPreview name="native-select-input-group" />
+
+## Native Select vs Select
+
+- 需要原生交互、性能更佳或移动端优化时，使用 `NativeSelect`。
+- 需要自定义样式、动效或复杂交互时，使用 `Select`。
+
+`NativeSelect` 在保持原生 `<select>` 功能的同时，提供统一的设计风格。
+
+## 无障碍
+
+- 保留原生 `<select>` 的所有可访问特性。
+- 屏幕阅读器可通过方向键浏览选项。
+- 下拉箭头设置为 `aria-hidden="true"`，避免重复朗读。
+- 如有需要可设置 `aria-label` 或 `aria-labelledby` 提供额外上下文。
+
+```tsx showLineNumbers
+<NativeSelect aria-label="Choose your preferred language">
+  <NativeSelectOption value="en">English</NativeSelectOption>
+  <NativeSelectOption value="es">Spanish</NativeSelectOption>
+  <NativeSelectOption value="fr">French</NativeSelectOption>
+</NativeSelect>
+```
+
+## API 参考
+
+### NativeSelect
+
+包装原生 `<select>` 的主组件。
+
+| Prop        | Type     | Default |
+| ----------- | -------- | ------- |
+| `className` | `string` |         |
+
+其余属性会透传给底层 `<select>`。
+
+```tsx
+<NativeSelect>
+  <NativeSelectOption value="option1">Option 1</NativeSelectOption>
+  <NativeSelectOption value="option2">Option 2</NativeSelectOption>
+</NativeSelect>
+```
+
+### NativeSelectOption
+
+用于表示单个选项。
+
+| Prop        | Type      | Default |
+| ----------- | --------- | ------- |
+| `value`     | `string`  |         |
+| `disabled`  | `boolean` | `false` |
+| `className` | `string`  |         |
+
+其余属性会透传给 `<option>`。
+
+```tsx
+<NativeSelectOption value="apple">Apple</NativeSelectOption>
+<NativeSelectOption value="banana" disabled>
+  Banana
+</NativeSelectOption>
+```
+
+### NativeSelectOptGroup
+
+用于将相关选项分组管理。
+
+| Prop        | Type      | Default |
+| ----------- | --------- | ------- |
+| `label`     | `string`  |         |
+| `disabled`  | `boolean` | `false` |
+| `className` | `string`  |         |
+
+其余属性会透传给 `<optgroup>`。
+
+```tsx
+<NativeSelectOptGroup label="Fruits">
+  <NativeSelectOption value="apple">Apple</NativeSelectOption>
+  <NativeSelectOption value="banana">Banana</NativeSelectOption>
+</NativeSelectOptGroup>
+```

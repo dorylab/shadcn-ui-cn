@@ -1,0 +1,80 @@
+---
+title: Menubar
+description: 桌面应用常见的持久菜单，便于快速访问常用命令。
+component: true
+links:
+  doc: https://www.radix-ui.com/docs/primitives/components/menubar
+  api: https://www.radix-ui.com/docs/primitives/components/menubar#api-reference
+---
+
+<ComponentPreview name="menubar-demo" description="菜单栏组件示例。" />
+
+## 安装
+
+<CodeTabs>
+
+<TabsList>
+  <TabsTrigger value="cli">CLI</TabsTrigger>
+  <TabsTrigger value="manual">手动</TabsTrigger>
+</TabsList>
+<TabsContent value="cli">
+
+```bash
+npx shadcn@latest add menubar
+```
+
+</TabsContent>
+
+<TabsContent value="manual">
+
+<Steps>
+
+<Step>安装下列依赖：</Step>
+
+```bash
+npm install @radix-ui/react-menubar
+```
+
+<Step>将下面的代码复制到你的项目中。</Step>
+
+<ComponentSource name="menubar" title="components/ui/menubar.tsx" />
+
+<Step>根据项目结构调整导入路径。</Step>
+
+</Steps>
+
+</TabsContent>
+
+</CodeTabs>
+
+## 用法
+
+```tsx showLineNumbers
+import {
+  Menubar,
+  MenubarContent,
+  MenubarItem,
+  MenubarMenu,
+  MenubarSeparator,
+  MenubarShortcut,
+  MenubarTrigger,
+} from "@/components/ui/menubar"
+```
+
+```tsx showLineNumbers
+<Menubar>
+  <MenubarMenu>
+    <MenubarTrigger>文件</MenubarTrigger>
+    <MenubarContent>
+      <MenubarItem>
+        新建标签页 <MenubarShortcut>⌘T</MenubarShortcut>
+      </MenubarItem>
+      <MenubarItem>新建窗口</MenubarItem>
+      <MenubarSeparator />
+      <MenubarItem>共享</MenubarItem>
+      <MenubarSeparator />
+      <MenubarItem>打印</MenubarItem>
+    </MenubarContent>
+  </MenubarMenu>
+</Menubar>
+```

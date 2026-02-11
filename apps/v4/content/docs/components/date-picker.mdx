@@ -1,0 +1,96 @@
+---
+title: Date Picker
+description: 支持范围与预设选项的日期选择器组件。
+component: true
+---
+
+<ComponentPreview
+  name="calendar-22"
+  title="出生日期选择器"
+  description="用于选择生日的日历。"
+/>
+
+## 安装
+
+Date Picker 由 `<Popover />` 与 `<Calendar />` 组合实现。
+
+安装步骤请参考 [Popover](/docs/components/popover#installation) 与 [Calendar](/docs/components/calendar#installation)。
+
+## 用法
+
+```tsx showLineNumbers title="components/example-date-picker.tsx"
+"use client"
+
+import * as React from "react"
+import { format } from "date-fns"
+import { Calendar as CalendarIcon } from "lucide-react"
+
+import { cn } from "@/lib/utils"
+import { Button } from "@/components/ui/button"
+import { Calendar } from "@/components/ui/calendar"
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover"
+
+export function DatePickerDemo() {
+  const [date, setDate] = React.useState<Date>()
+
+  return (
+    <Popover>
+      <PopoverTrigger asChild>
+        <Button
+          variant="outline"
+          data-empty={!date}
+          className="data-[empty=true]:text-muted-foreground w-[280px] justify-start text-left font-normal"
+        >
+          <CalendarIcon />
+          {date ? format(date, "PPP") : <span>选择日期</span>}
+        </Button>
+      </PopoverTrigger>
+      <PopoverContent className="w-auto p-0">
+        <Calendar mode="single" selected={date} onSelect={setDate} />
+      </PopoverContent>
+    </Popover>
+  )
+}
+```
+
+更多说明可查阅 [React DayPicker](https://react-day-picker.js.org) 文档。
+
+## 示例
+
+### 出生日期选择器
+
+<ComponentPreview
+  name="calendar-22"
+  title="出生日期选择器"
+  description="用于选择生日的日历。"
+/>
+
+### 搭配输入框
+
+<ComponentPreview
+  name="calendar-28"
+  title="带输入框的选择器"
+  description="包含输入框与日期选择的组合。"
+/>
+
+### 日期与时间选择器
+
+<ComponentPreview
+  name="calendar-24"
+  title="日期与时间选择器"
+  description="同时选择日期与时间。"
+/>
+
+### 自然语言解析
+
+该示例通过 `chrono-node` 解析自然语言日期。
+
+<ComponentPreview
+  name="calendar-29"
+  title="自然语言日期选择"
+  description="支持自然语言输入的日历。"
+/>

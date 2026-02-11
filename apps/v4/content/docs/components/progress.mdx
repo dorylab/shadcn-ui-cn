@@ -1,0 +1,61 @@
+---
+title: Progress
+description: 以进度条的形式展示任务完成度。
+component: true
+links:
+  doc: https://www.radix-ui.com/docs/primitives/components/progress
+  api: https://www.radix-ui.com/docs/primitives/components/progress#api-reference
+---
+
+<ComponentPreview
+  name="progress-demo"
+  description="进度条组件示例。"
+/>
+
+## 安装
+
+<CodeTabs>
+
+<TabsList>
+  <TabsTrigger value="cli">CLI</TabsTrigger>
+  <TabsTrigger value="manual">手动</TabsTrigger>
+</TabsList>
+<TabsContent value="cli">
+
+```bash
+npx shadcn@latest add progress
+```
+
+</TabsContent>
+
+<TabsContent value="manual">
+
+<Steps>
+
+<Step>安装下列依赖：</Step>
+
+```bash
+npm install @radix-ui/react-progress
+```
+
+<Step>将下面的代码复制到你的项目中。</Step>
+
+<ComponentSource name="progress" title="components/ui/progress.tsx" />
+
+<Step>根据项目结构调整导入路径。</Step>
+
+</Steps>
+
+</TabsContent>
+
+</CodeTabs>
+
+## 用法
+
+```tsx showLineNumbers
+import { Progress } from "@/components/ui/progress"
+```
+
+```tsx showLineNumbers
+<Progress value={33} />
+```

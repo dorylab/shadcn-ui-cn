@@ -1,0 +1,115 @@
+---
+title: Remix
+description: 在 Remix 中安装并配置 shadcn/ui。
+---
+
+<Callout>
+
+**注意：** 本指南面向 Remix。如需 React Router 版本，请参见 [React Router](/docs/installation/react-router) 指南。
+
+</Callout>
+
+<Steps>
+
+### 创建项目
+
+先使用 `create-remix` 创建新的 Remix 项目：
+
+```bash
+npx create-remix@latest my-app
+```
+
+### 运行 CLI
+
+执行 `shadcn` 的 `init` 命令完成初始化：
+
+```bash
+npx shadcn@latest init
+```
+
+### 配置 components.json
+
+根据提示回答以下问题以生成 `components.json`：
+
+```bash
+Which color would you like to use as base color? › Neutral
+```
+
+### 项目结构
+
+<Callout>
+
+**注意：** 以下结构仅供参考，你可以按需调整文件位置。
+
+</Callout>
+
+- 将 UI 组件放在 `app/components/ui` 目录。
+- 业务组件可放在 `app/components` 目录。
+- `app/lib` 存放工具函数。例如 `utils.ts` 中定义了 `cn` 辅助函数。
+- 全局样式位于 `app/tailwind.css`。
+
+### 安装 Tailwind CSS
+
+```bash
+npm install -D tailwindcss@latest autoprefixer@latest
+```
+
+随后创建 `postcss.config.js` 文件：
+
+```js title="postcss.config.js" showLineNumbers
+export default {
+  plugins: {
+    tailwindcss: {},
+    autoprefixer: {},
+  },
+}
+```
+
+最后在 `remix.config.js` 中加入以下配置：
+
+```js title="remix.config.js" {4-5} showLineNumbers
+/** @type {import('@remix-run/dev').AppConfig} */
+export default {
+  ...
+  tailwind: true,
+  postcss: true,
+  ...
+};
+```
+
+### 在应用中引入 `tailwind.css`
+
+在 `app/root.tsx` 中导入 `tailwind.css` 文件：
+
+```js {1, 4} showLineNumbers title="app/root.tsx"
+import styles from "./tailwind.css?url"
+
+export const links: LinksFunction = () => [
+  { rel: "stylesheet", href: styles },
+  ...(cssBundleHref ? [{ rel: "stylesheet", href: cssBundleHref }] : []),
+]
+```
+
+### 完成
+
+现在可以开始向项目中添加组件。
+
+```bash
+npx shadcn@latest add button
+```
+
+上述命令会把 `Button` 组件加入项目，你可以像下面这样导入：
+
+```tsx {1,6} showLineNumbers title="app/routes/index.tsx"
+import { Button } from "~/components/ui/button"
+
+export default function Home() {
+  return (
+    <div>
+      <Button>Click me</Button>
+    </div>
+  )
+}
+```
+
+</Steps>

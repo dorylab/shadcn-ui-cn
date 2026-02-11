@@ -1,0 +1,105 @@
+---
+title: Pagination
+description: 带有页码、上一页与下一页链接的分页组件。
+component: true
+---
+
+<ComponentPreview
+  name="pagination-demo"
+  description="包含上一页、下一页链接的分页。"
+/>
+
+## 安装
+
+<CodeTabs>
+
+<TabsList>
+  <TabsTrigger value="cli">CLI</TabsTrigger>
+  <TabsTrigger value="manual">手动</TabsTrigger>
+</TabsList>
+<TabsContent value="cli">
+
+```bash
+npx shadcn@latest add pagination
+```
+
+</TabsContent>
+
+<TabsContent value="manual">
+
+<Steps>
+
+<Step>将下面的代码复制到你的项目中。</Step>
+
+<ComponentSource name="pagination" title="components/ui/pagination.tsx" />
+
+<Step>根据项目结构调整导入路径。</Step>
+
+</Steps>
+
+</TabsContent>
+
+</CodeTabs>
+
+## 用法
+
+```tsx showLineNumbers
+import {
+  Pagination,
+  PaginationContent,
+  PaginationEllipsis,
+  PaginationItem,
+  PaginationLink,
+  PaginationNext,
+  PaginationPrevious,
+} from "@/components/ui/pagination"
+```
+
+```tsx showLineNumbers
+<Pagination>
+  <PaginationContent>
+    <PaginationItem>
+      <PaginationPrevious href="#" />
+    </PaginationItem>
+    <PaginationItem>
+      <PaginationLink href="#">1</PaginationLink>
+    </PaginationItem>
+    <PaginationItem>
+      <PaginationEllipsis />
+    </PaginationItem>
+    <PaginationItem>
+      <PaginationNext href="#" />
+    </PaginationItem>
+  </PaginationContent>
+</Pagination>
+```
+
+### Next.js
+
+默认情况下 `<PaginationLink />` 会渲染 `<a />` 标签。
+
+如果想使用 Next.js 的 `<Link />`，请按以下方式修改 `pagination.tsx`。
+
+```diff showLineNumbers /typeof Link/ {1}
++ import Link from "next/link"
+
+- type PaginationLinkProps = ... & React.ComponentProps<"a">
++ type PaginationLinkProps = ... & React.ComponentProps<typeof Link>
+
+const PaginationLink = ({...props }: ) => (
+  <PaginationItem>
+-   <a>
++   <Link>
+      // ...
+-   </a>
++   </Link>
+  </PaginationItem>
+)
+
+```
+
+<Callout className="mt-6">
+
+**注意：** CLI 会在后续更新中自动完成此修改。
+
+</Callout>

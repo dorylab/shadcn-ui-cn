@@ -1,0 +1,111 @@
+---
+title: Dropdown Menu
+description: 由按钮触发，向用户展示操作项或功能的菜单。
+featured: true
+component: true
+links:
+  doc: https://www.radix-ui.com/docs/primitives/components/dropdown-menu
+  api: https://www.radix-ui.com/docs/primitives/components/dropdown-menu#api-reference
+---
+
+<ComponentPreview
+  name="dropdown-menu-demo"
+  description="包含图标、快捷键与子菜单的下拉菜单。"
+/>
+
+## 安装
+
+<CodeTabs>
+
+<TabsList>
+  <TabsTrigger value="cli">CLI</TabsTrigger>
+  <TabsTrigger value="manual">手动</TabsTrigger>
+</TabsList>
+<TabsContent value="cli">
+
+```bash
+npx shadcn@latest add dropdown-menu
+```
+
+</TabsContent>
+
+<TabsContent value="manual">
+
+<Steps>
+
+<Step>安装下列依赖：</Step>
+
+```bash
+npm install @radix-ui/react-dropdown-menu
+```
+
+<Step>将下面的代码复制到你的项目中。</Step>
+
+<ComponentSource name="dropdown-menu" title="components/ui/dropdown-menu.tsx" />
+
+<Step>根据项目结构调整导入路径。</Step>
+
+</Steps>
+
+</TabsContent>
+
+</CodeTabs>
+
+## 用法
+
+```tsx showLineNumbers
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu"
+```
+
+```tsx showLineNumbers
+<DropdownMenu>
+  <DropdownMenuTrigger>打开</DropdownMenuTrigger>
+  <DropdownMenuContent>
+    <DropdownMenuLabel>我的账户</DropdownMenuLabel>
+    <DropdownMenuSeparator />
+    <DropdownMenuItem>个人资料</DropdownMenuItem>
+    <DropdownMenuItem>账单</DropdownMenuItem>
+    <DropdownMenuItem>团队</DropdownMenuItem>
+    <DropdownMenuItem>订阅计划</DropdownMenuItem>
+  </DropdownMenuContent>
+</DropdownMenu>
+```
+
+## 示例
+
+### 复选框
+
+<ComponentPreview
+  name="dropdown-menu-checkboxes"
+  description="包含复选框的下拉菜单。"
+/>
+
+### 单选项
+
+<ComponentPreview
+  name="dropdown-menu-radio-group"
+  description="包含单选项的下拉菜单。"
+/>
+
+### Dialog
+
+该示例展示如何在下拉菜单中打开对话框。
+
+在 `DropdownMenu` 上设置 `modal={false}`。
+
+```tsx showLineNumbers
+<DropdownMenu modal={false}>
+  <DropdownMenuTrigger asChild>
+    <Button variant="outline">操作</Button>
+  </DropdownMenuTrigger>
+</DropdownMenu>
+```
+
+<ComponentPreview name="dropdown-menu-dialog" />

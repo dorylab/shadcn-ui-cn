@@ -1,0 +1,67 @@
+---
+title: Hover Card
+description: 让可视用户预览链接背后内容的组件。
+component: true
+links:
+  doc: https://www.radix-ui.com/docs/primitives/components/hover-card
+  api: https://www.radix-ui.com/docs/primitives/components/hover-card#api-reference
+---
+
+<ComponentPreview name="hover-card-demo" description="悬浮卡片组件示例" />
+
+## 安装
+
+<CodeTabs>
+
+<TabsList>
+  <TabsTrigger value="cli">CLI</TabsTrigger>
+  <TabsTrigger value="manual">手动</TabsTrigger>
+</TabsList>
+<TabsContent value="cli">
+
+```bash
+npx shadcn@latest add hover-card
+```
+
+</TabsContent>
+
+<TabsContent value="manual">
+
+<Step>安装下列依赖：</Step>
+
+```bash
+npm install @radix-ui/react-hover-card
+```
+
+<Steps>
+
+<Step>将下面的代码复制到你的项目中。</Step>
+
+<ComponentSource name="hover-card" title="components/ui/hover-card.tsx" />
+
+<Step>根据项目结构调整导入路径。</Step>
+
+</Steps>
+
+</TabsContent>
+
+</CodeTabs>
+
+## 用法
+
+```tsx showLineNumbers
+import {
+  HoverCard,
+  HoverCardContent,
+  HoverCardTrigger,
+} from "@/components/ui/hover-card"
+```
+
+```tsx showLineNumbers
+<HoverCard>
+  <HoverCardTrigger>悬停查看</HoverCardTrigger>
+  <HoverCardContent>
+    React 框架 —— 由 @vercel 创建并维护。
+  </HoverCardContent>
+</HoverCard>
+```

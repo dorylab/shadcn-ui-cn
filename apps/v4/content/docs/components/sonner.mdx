@@ -1,0 +1,154 @@
+---
+title: Sonner
+description: 一个带有主观设计风格的 React Toast 组件。
+component: true
+links:
+  doc: https://sonner.emilkowal.ski
+---
+
+<ComponentPreview name="sonner-demo" />
+
+## 关于
+
+Sonner 由 [emilkowalski\_](https://twitter.com/emilkowalski_) 构建并维护。
+
+## 安装
+
+<CodeTabs>
+
+<TabsList>
+  <TabsTrigger value="cli">CLI</TabsTrigger>
+  <TabsTrigger value="manual">手动</TabsTrigger>
+</TabsList>
+<TabsContent value="cli">
+
+<Steps>
+
+<Step>执行以下命令：</Step>
+
+```bash
+npx shadcn@latest add sonner
+```
+
+<Step>添加 Toaster 组件</Step>
+
+```tsx title="app/layout.tsx" {1,9}
+import { Toaster } from "@/components/ui/sonner"
+
+export default function RootLayout({ children }) {
+  return (
+    <html lang="en">
+      <head />
+      <body>
+        <main>{children}</main>
+        <Toaster />
+      </body>
+    </html>
+  )
+}
+```
+
+</Steps>
+
+</TabsContent>
+
+<TabsContent value="manual">
+
+<Steps>
+
+<Step>安装下列依赖：</Step>
+
+```bash
+npm install sonner next-themes
+```
+
+<Step>将下面的代码复制到你的项目中。</Step>
+
+<ComponentSource name="sonner" title="components/ui/sonner.tsx" />
+
+<Step>添加 Toaster 组件</Step>
+
+```tsx showLineNumbers title="app/layout.tsx" {1,8}
+import { Toaster } from "@/components/ui/sonner"
+
+export default function RootLayout({ children }) {
+  return (
+    <html lang="en">
+      <head />
+      <body>
+        <Toaster />
+        <main>{children}</main>
+      </body>
+    </html>
+  )
+}
+```
+
+</Steps>
+
+</TabsContent>
+
+</CodeTabs>
+
+## 用法
+
+```tsx
+import { toast } from "sonner"
+```
+
+```tsx
+toast("事件已创建。")
+```
+
+## 示例
+
+<ComponentPreview name="sonner-types" />
+
+## 更新日志
+
+### 2025-10-13 图标
+
+我们已将 Sonner 组件更新为使用 `lucide` 图标。请同步更新你的 `sonner.tsx` 文件以使用这些新图标。
+
+```tsx showLineNumbers title="components/ui/sonner.tsx" {3-9,20-26}
+"use client"
+
+import {
+  CircleCheckIcon,
+  InfoIcon,
+  Loader2Icon,
+  OctagonXIcon,
+  TriangleAlertIcon,
+} from "lucide-react"
+import { useTheme } from "next-themes"
+import { Toaster as Sonner, ToasterProps } from "sonner"
+
+const Toaster = ({ ...props }: ToasterProps) => {
+  const { theme = "system" } = useTheme()
+
+  return (
+    <Sonner
+      theme={theme as ToasterProps["theme"]}
+      className="toaster group"
+      icons={{
+        success: <CircleCheckIcon className="size-4" />,
+        info: <InfoIcon className="size-4" />,
+        warning: <TriangleAlertIcon className="size-4" />,
+        error: <OctagonXIcon className="size-4" />,
+        loading: <Loader2Icon className="size-4 animate-spin" />,
+      }}
+      style={
+        {
+          "--normal-bg": "var(--popover)",
+          "--normal-text": "var(--popover-foreground)",
+          "--normal-border": "var(--border)",
+          "--border-radius": "var(--radius)",
+        } as React.CSSProperties
+      }
+      {...props}
+    />
+  )
+}
+
+export { Toaster }
+```

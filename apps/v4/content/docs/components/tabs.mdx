@@ -1,0 +1,68 @@
+---
+title: Tabs
+description: 一组分层内容面板，一次展示一个标签页。
+component: true
+links:
+  doc: https://www.radix-ui.com/docs/primitives/components/tabs
+  api: https://www.radix-ui.com/docs/primitives/components/tabs#api-reference
+---
+
+<ComponentPreview
+  name="tabs-demo"
+  description="一个包含两个表单的标签组件。"
+/>
+
+## 安装
+
+<CodeTabs>
+
+<TabsList>
+  <TabsTrigger value="cli">CLI</TabsTrigger>
+  <TabsTrigger value="manual">手动</TabsTrigger>
+</TabsList>
+<TabsContent value="cli">
+
+```bash
+npx shadcn@latest add tabs
+```
+
+</TabsContent>
+
+<TabsContent value="manual">
+
+<Steps>
+
+<Step>安装下列依赖：</Step>
+
+```bash
+npm install @radix-ui/react-tabs
+```
+
+<Step>将下面的代码复制到你的项目中。</Step>
+
+<ComponentSource name="tabs" title="components/ui/tabs.tsx" />
+
+<Step>根据项目结构调整导入路径。</Step>
+
+</Steps>
+
+</TabsContent>
+
+</CodeTabs>
+
+## 用法
+
+```tsx showLineNumbers
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+```
+
+```tsx showLineNumbers
+<Tabs defaultValue="account" className="w-[400px]">
+  <TabsList>
+    <TabsTrigger value="account">Account</TabsTrigger>
+    <TabsTrigger value="password">Password</TabsTrigger>
+  </TabsList>
+  <TabsContent value="account">在此更新你的账户信息。</TabsContent>
+  <TabsContent value="password">在此修改你的密码。</TabsContent>
+</Tabs>
+```

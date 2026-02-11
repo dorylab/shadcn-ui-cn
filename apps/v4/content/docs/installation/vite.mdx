@@ -1,0 +1,135 @@
+---
+title: Vite
+description: 在 Vite 中安装并配置 shadcn/ui。
+---
+
+<Steps>
+
+### 创建项目
+
+先使用 `vite` 创建新的 React 项目，并选择 **React + TypeScript** 模板：
+
+```bash
+npm create vite@latest
+```
+
+### 安装 Tailwind CSS
+
+```bash
+npm install tailwindcss @tailwindcss/vite
+```
+
+将 `src/index.css` 的内容替换为以下代码：
+
+```css title="src/index.css"
+@import "tailwindcss";
+```
+
+### 编辑 tsconfig.json
+
+当前版本的 Vite 会把 TypeScript 配置拆分为三个文件，其中有两个需要修改。
+在 `tsconfig.json` 与 `tsconfig.app.json` 的 `compilerOptions` 中添加 `baseUrl` 与 `paths`：
+
+```ts title="tsconfig.json" {11-16} showLineNumbers
+{
+  "files": [],
+  "references": [
+    {
+      "path": "./tsconfig.app.json"
+    },
+    {
+      "path": "./tsconfig.node.json"
+    }
+  ],
+  "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["./src/*"]
+    }
+  }
+}
+```
+
+### 编辑 tsconfig.app.json
+
+在 `tsconfig.app.json` 中加入以下配置，便于 IDE 解析路径别名：
+
+```ts title="tsconfig.app.json" {4-9} showLineNumbers
+{
+  "compilerOptions": {
+    // ...
+    "baseUrl": ".",
+    "paths": {
+      "@/*": [
+        "./src/*"
+      ]
+    }
+    // ...
+  }
+}
+```
+
+### 更新 vite.config.ts
+
+在 `vite.config.ts` 中加入以下配置，确保路径解析正常：
+
+```bash
+npm install -D @types/node
+```
+
+```typescript title="vite.config.ts" showLineNumbers {1,2,8-13}
+import path from "path"
+import tailwindcss from "@tailwindcss/vite"
+import react from "@vitejs/plugin-react"
+import { defineConfig } from "vite"
+
+// https://vite.dev/config/
+export default defineConfig({
+  plugins: [react(), tailwindcss()],
+  resolve: {
+    alias: {
+      "@": path.resolve(__dirname, "./src"),
+    },
+  },
+})
+```
+
+### 运行 CLI
+
+执行 `shadcn` 的 `init` 命令完成初始化：
+
+```bash
+npx shadcn@latest init
+```
+
+你会根据提示回答几个问题来生成 `components.json`。
+
+```txt
+Which color would you like to use as base color? › Neutral
+```
+
+### 添加组件
+
+现在可以向项目中添加组件。
+
+```bash
+npx shadcn@latest add button
+```
+
+上述命令会把 `Button` 组件加入项目，你可以像这样导入：
+
+```tsx showLineNumbers title="src/App.tsx"
+import { Button } from "@/components/ui/button"
+
+function App() {
+  return (
+    <div className="flex min-h-svh flex-col items-center justify-center">
+      <Button>Click me</Button>
+    </div>
+  )
+}
+
+export default App
+```
+
+</Steps>

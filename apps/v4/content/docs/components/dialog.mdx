@@ -1,0 +1,117 @@
+---
+title: Dialog
+description: 在主窗口或其他对话框之上弹出的窗口，会使下层内容不可交互。
+featured: true
+component: true
+links:
+  doc: https://www.radix-ui.com/docs/primitives/components/dialog
+  api: https://www.radix-ui.com/docs/primitives/components/dialog#api-reference
+---
+
+<ComponentPreview
+  name="dialog-demo"
+  description="用于编辑个人资料的对话框。"
+/>
+
+## 安装
+
+<CodeTabs>
+
+<TabsList>
+  <TabsTrigger value="cli">CLI</TabsTrigger>
+  <TabsTrigger value="manual">手动</TabsTrigger>
+</TabsList>
+<TabsContent value="cli">
+
+```bash
+npx shadcn@latest add dialog
+```
+
+</TabsContent>
+
+<TabsContent value="manual">
+
+<Steps>
+
+<Step>安装下列依赖：</Step>
+
+```bash
+npm install @radix-ui/react-dialog
+```
+
+<Step>将下面的代码复制到你的项目中。</Step>
+
+<ComponentSource name="dialog" title="components/ui/dialog.tsx" />
+
+<Step>根据项目结构调整导入路径。</Step>
+
+</Steps>
+
+</TabsContent>
+
+</CodeTabs>
+
+## 用法
+
+```tsx showLineNumbers
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog"
+```
+
+```tsx showLineNumbers
+<Dialog>
+  <DialogTrigger>打开</DialogTrigger>
+  <DialogContent>
+    <DialogHeader>
+      <DialogTitle>确定要继续吗？</DialogTitle>
+      <DialogDescription>
+        此操作无法撤销，将永久删除你的账户并移除服务器上的全部数据。
+      </DialogDescription>
+    </DialogHeader>
+  </DialogContent>
+</Dialog>
+```
+
+## 示例
+
+### 自定义关闭按钮
+
+<ComponentPreview name="dialog-close-button" />
+
+## 注意事项
+
+若要在 `Context Menu` 或 `Dropdown Menu` 中使用 `Dialog`，需要将菜单组件包裹在 `Dialog` 内部。
+
+```tsx showLineNumbers title="components/example-dialog-context-menu.tsx" {1, 26}
+<Dialog>
+  <ContextMenu>
+    <ContextMenuTrigger>Right click</ContextMenuTrigger>
+    <ContextMenuContent>
+      <ContextMenuItem>打开</ContextMenuItem>
+      <ContextMenuItem>下载</ContextMenuItem>
+      <DialogTrigger asChild>
+        <ContextMenuItem>
+          <span>删除</span>
+        </ContextMenuItem>
+      </DialogTrigger>
+    </ContextMenuContent>
+  </ContextMenu>
+  <DialogContent>
+    <DialogHeader>
+      <DialogTitle>确定要继续吗？</DialogTitle>
+      <DialogDescription>
+        此操作无法撤销。确认要永久删除服务器上的该文件吗？
+      </DialogDescription>
+    </DialogHeader>
+    <DialogFooter>
+      <Button type="submit">确认</Button>
+    </DialogFooter>
+  </DialogContent>
+</Dialog>
+```

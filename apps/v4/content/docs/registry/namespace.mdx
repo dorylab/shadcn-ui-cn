@@ -1,0 +1,913 @@
+---
+title: 命名空间
+description: 使用命名空间配置并管理多个资源注册表。
+---
+
+借助命名空间，你可以在同一个项目中配置多个资源来源。这样一来，无论是公共、第三方还是自建私有库，都能从不同注册表安装组件、类库、工具、AI Prompt、配置文件等资源。
+
+## 目录
+
+- [概览](#overview)
+- [去中心化的命名空间系统](#decentralized-namespace-system)
+- [快速上手](#getting-started)
+- [命名规则](#registry-naming-convention)
+- [配置](#configuration)
+- [认证与安全](#authentication--security)
+- [版本管理](#versioning)
+- [依赖解析](#dependency-resolution)
+- [内置注册表](#built-in-registries)
+- [CLI 命令](#cli-commands)
+- [错误处理](#error-handling)
+- [自建注册表](#creating-your-own-registry)
+- [配置示例](#example-configurations)
+- [技术细节](#technical-details)
+- [最佳实践](#best-practices)
+- [故障排查](#troubleshooting)
+
+---
+
+## 概览
+
+命名空间以 `@` 前缀开头，用于组织并引用来自不同来源的资源。资源类型可以是组件、类库、工具、Hook、AI Prompt、配置文件、主题等。例如：
+
+- `@shadcn/button` - 来自 shadcn 注册表的 UI 组件
+- `@v0/dashboard` - 来自 v0 注册表的仪表盘组件
+- `@ai-elements/input` - 来自 AI 元素注册表的 Prompt 输入
+- `@acme/auth-utils` - 公司私有注册表中的认证工具
+- `@ai/chatbot-rules` - AI 资源注册表中的聊天机器人规则
+- `@themes/dark-mode` - 主题注册表中的暗色主题配置
+
+---
+
+## 去中心化的命名空间系统
+
+我们有意将命名空间设计为去中心化。虽然提供了一个[开源命名空间索引](/docs/registry/registry-index)，但你可以自由创建并使用任何命名空间。
+
+这种设计提供了极高的灵活性，可根据组织需求随意组合资源。
+
+你可以为不同用途创建多个注册表：
+
+```json title="components.json" showLineNumbers
+{
+  "registries": {
+    "@acme-ui": "https://registry.acme.com/ui/{name}.json",
+    "@acme-docs": "https://registry.acme.com/docs/{name}.json",
+    "@acme-ai": "https://registry.acme.com/ai/{name}.json",
+    "@acme-themes": "https://registry.acme.com/themes/{name}.json",
+    "@acme-internal": {
+      "url": "https://internal.acme.com/registry/{name}.json",
+      "headers": {
+        "Authorization": "Bearer ${INTERNAL_TOKEN}"
+      }
+    }
+  }
+}
+```
+
+这样可以：
+
+- **按类型管理**：区分 UI 组件、文档、AI 资源等
+- **按团队管理**：不同团队维护各自的注册表
+- **按可见性管理**：区分公开与私有资源
+- **按版本管理**：区分稳定版与实验版注册表
+- **避免命名冲突**：无需中央机构即可自定义命名空间
+
+### 多注册表示例
+
+#### 按资源类型划分
+
+```json title="components.json" showLineNumbers
+{
+  "@components": "https://cdn.company.com/components/{name}.json",
+  "@hooks": "https://cdn.company.com/hooks/{name}.json",
+  "@utils": "https://cdn.company.com/utils/{name}.json",
+  "@prompts": "https://cdn.company.com/ai-prompts/{name}.json"
+}
+```
+
+#### 按团队或部门划分
+
+```json title="components.json" showLineNumbers
+{
+  "@design": "https://design.company.com/registry/{name}.json",
+  "@engineering": "https://eng.company.com/registry/{name}.json",
+  "@marketing": "https://marketing.company.com/registry/{name}.json"
+}
+```
+
+#### 按稳定性划分
+
+```json title="components.json" showLineNumbers
+{
+  "@stable": "https://registry.company.com/stable/{name}.json",
+  "@latest": "https://registry.company.com/beta/{name}.json",
+  "@experimental": "https://registry.company.com/experimental/{name}.json"
+}
+```
+
+---
+
+## 快速上手
+
+### 安装资源
+
+完成配置后，即可通过命名空间语法安装资源：
+
+```bash
+npx shadcn@latest add @v0/dashboard
+```
+
+或一次安装多个资源：
+
+```bash
+npx shadcn@latest add @acme/header @lib/auth-utils @ai/chatbot-rules
+```
+
+### 快速配置
+
+在 `components.json` 中添加注册表：
+
+```json title="components.json"
+{
+  "registries": {
+    "@v0": "https://v0.dev/chat/b/{name}",
+    "@acme": "https://registry.acme.com/resources/{name}.json"
+  }
+}
+```
+
+随后即可安装资源：
+
+```bash
+npx shadcn@latest add @acme/button
+```
+
+---
+
+## 命名规则
+
+注册表命名需遵循以下规则：
+
+- 以 `@` 开头
+- 仅可包含字母、数字、连字符与下划线
+- 合法示例：`@v0`、`@acme-ui`、`@my_company`
+
+引用资源的格式为：`@namespace/resource-name`
+
+---
+
+## Configuration
+
+命名空间注册表通过 `components.json` 文件的 `registries` 字段进行配置。
+
+### 基础配置
+
+最简单的方式是直接使用 URL 模板字符串：
+
+```json title="components.json"
+{
+  "registries": {
+    "@v0": "https://v0.dev/chat/b/{name}",
+    "@acme": "https://registry.acme.com/resources/{name}.json",
+    "@lib": "https://lib.company.com/utilities/{name}",
+    "@ai": "https://ai-resources.com/r/{name}.json"
+  }
+}
+```
+
+> **提示：** URL 中的 `{name}` 占位符会在执行 `npx shadcn@latest add @namespace/resource-name` 时自动替换为资源名。例如 `@acme/button` 将解析为 `https://registry.acme.com/resources/button.json`。更多说明见 [URL 模板系统](#url-pattern-system)。
+
+### 高级配置
+
+如果需要认证或额外参数，可使用对象格式：
+
+```json title="components.json"
+{
+  "registries": {
+    "@private": {
+      "url": "https://api.company.com/registry/{name}.json",
+      "headers": {
+        "Authorization": "Bearer ${REGISTRY_TOKEN}",
+        "X-API-Key": "${API_KEY}"
+      },
+      "params": {
+        "version": "latest",
+        "format": "json"
+      }
+    }
+  }
+}
+```
+
+> **提示：** `${VAR_NAME}` 会从运行环境（`process.env`）中自动展开，可用于 URL、headers、params 等位置。例如 `${REGISTRY_TOKEN}` 会替换为 `process.env.REGISTRY_TOKEN`。更多示例见[认证与安全](#authentication--security)。
+
+---
+
+### URL 模板系统
+
+注册表 URL 支持以下占位符：
+
+### `{name}` 占位符（必填）
+
+`{name}` 会被替换为资源名称：
+
+```json title="components.json" showLineNumbers
+{
+  "@acme": "https://registry.acme.com/{name}.json"
+}
+```
+
+安装 `@acme/button` 时 URL 会变为 `https://registry.acme.com/button.json`
+安装 `@acme/auth-utils` 时 URL 会变为 `https://registry.acme.com/auth-utils.json`
+
+### `{style}` 占位符（可选）
+
+`{style}` 会替换为当前的样式配置：
+
+```json
+{
+  "@themes": "https://registry.example.com/{style}/{name}.json"
+}
+```
+
+当样式设为 `new-york` 时，安装 `@themes/card` 会解析为 `https://registry.example.com/new-york/card.json`。
+
+`{style}` 不是必需的，占位符适用于需要按样式区分不同版本时，例如同一组件针对不同主题提供不同实现。
+
+---
+
+## Authentication & Security
+
+### 环境变量
+
+使用环境变量安全地存储凭据：
+
+```json title="components.json"
+{
+  "registries": {
+    "@private": {
+      "url": "https://api.company.com/registry/{name}.json",
+      "headers": {
+        "Authorization": "Bearer ${REGISTRY_TOKEN}"
+      }
+    }
+  }
+}
+```
+
+随后在环境变量中设置值：
+
+```bash title=".env.local"
+REGISTRY_TOKEN=your_secret_token_here
+```
+
+### 认证方式
+
+#### Bearer Token（OAuth 2.0）
+
+```json
+{
+  "@github": {
+    "url": "https://api.github.com/repos/org/registry/contents/{name}.json",
+    "headers": {
+      "Authorization": "Bearer ${GITHUB_TOKEN}"
+    }
+  }
+}
+```
+
+#### Header 中传递 API Key
+
+```json title="components.json" showLineNumbers
+{
+  "@private": {
+    "url": "https://api.company.com/registry/{name}",
+    "headers": {
+      "X-API-Key": "${API_KEY}"
+    }
+  }
+}
+```
+
+#### 基本认证（Basic Auth）
+
+```json title="components.json" showLineNumbers
+{
+  "@internal": {
+    "url": "https://registry.company.com/{name}.json",
+    "headers": {
+      "Authorization": "Basic ${BASE64_CREDENTIALS}"
+    }
+  }
+}
+```
+
+#### 查询参数认证
+
+```json title="components.json" showLineNumbers
+{
+  "@secure": {
+    "url": "https://registry.example.com/{name}.json",
+    "params": {
+      "api_key": "${API_KEY}",
+      "client_id": "${CLIENT_ID}",
+      "signature": "${REQUEST_SIGNATURE}"
+    }
+  }
+}
+```
+
+#### 组合认证
+
+部分注册表需要同时使用多种认证手段：
+
+```json title="components.json" showLineNumbers
+{
+  "@enterprise": {
+    "url": "https://api.enterprise.com/v2/registry/{name}",
+    "headers": {
+      "Authorization": "Bearer ${ACCESS_TOKEN}",
+      "X-API-Key": "${API_KEY}",
+      "X-Workspace-Id": "${WORKSPACE_ID}"
+    },
+    "params": {
+      "version": "latest"
+    }
+  }
+}
+```
+
+### 安全注意事项
+
+在使用命名空间注册表时，尤其是第三方或公共来源，安全性至关重要。我们通过以下方式保障安全：
+
+### 资源校验
+
+安装前，所有来自注册表的资源都会根据注册表条目 Schema 进行校验，以确保：
+
+- **结构合法**：资源必须符合预期的 JSON Schema
+- **类型安全**：会验证资源类型（如 `registry:ui`、`registry:lib` 等）
+- **不执行任意代码**：资源作为数据文件处理，而非可执行脚本
+
+### 环境变量安全
+
+用于认证的环境变量具备以下保障：
+
+- **绝不打印**：CLI 不会记录或输出环境变量值
+- **按需展开**：仅在使用时展开，不会持久存储
+- **各自隔离**：每个注册表维护独立的认证上下文
+
+以下是安全配置示例：
+
+```json title="components.json" showLineNumbers
+{
+  "registries": {
+    "@private": {
+      "url": "https://api.company.com/registry/{name}.json",
+      "headers": {
+        "Authorization": "Bearer ${PRIVATE_REGISTRY_TOKEN}"
+      }
+    }
+  }
+}
+```
+
+请勿将真实 Token 提交到版本库。请放在 `.env.local` 中：
+
+```bash title=".env.local"
+PRIVATE_REGISTRY_TOKEN=actual_token_here
+```
+
+### 强制使用 HTTPS
+
+我们强烈建议所有注册表 URL 都使用 HTTPS：
+
+- **加密传输**：防止中间人攻击
+- **证书校验**：确保连接的是可信注册表
+- **凭据保护**：请求头与 Token 会在传输过程中被加密
+
+```json title="components.json" showLineNumbers
+{
+  "registries": {
+    "@secure": "https://registry.example.com/{name}.json", // ✅ Good
+    "@insecure": "http://registry.example.com/{name}.json" // ❌ Avoid
+  }
+}
+```
+
+### 内容安全
+
+注册表资源被视为数据而非代码：
+
+1. **仅解析 JSON**：资源必须是合法 JSON
+2. **Schema 校验**：必须符合注册表条目 Schema
+3. **路径限制**：文件只能写入已配置的目录
+4. **不执行脚本**：CLI 不会执行注册表资源中的代码
+
+### 注册表信任模型
+
+命名空间体系基于信任模型运作：
+
+- **先信任再安装**：仅添加你信任的注册表
+- **显式配置**：注册表必须在 `components.json` 中显式声明
+- **无自动发现**：CLI 不会自动添加注册表
+- **依赖透明**：所有依赖都会在条目中清晰列出
+
+### 注册表运营者最佳实践
+
+如果你运营自己的注册表：
+
+1. **始终使用 HTTPS**：避免通过 HTTP 提供内容
+2. **启用认证**：私有注册表需使用 API Key 或 Token
+3. **配置限流**：防止滥用
+4. **校验内容**：在对外提供前验证资源
+
+安全配置示例：
+
+```json title="components.json" showLineNumbers
+{
+  "@company": {
+    "url": "https://registry.company.com/v1/{name}.json",
+    "headers": {
+      "Authorization": "Bearer ${COMPANY_TOKEN}",
+      "X-Registry-Version": "1.0"
+    }
+  }
+}
+```
+
+### 安装前查看资源
+
+CLI 支持在安装前查看资源内容，可使用以下命令：
+
+```bash
+npx shadcn@latest view @acme/button
+```
+
+命令会在控制台输出注册表条目的原始内容。
+
+---
+
+## 依赖解析
+
+### 基础依赖解析
+
+资源可以依赖不同注册表中的条目：
+
+```json title="registry-item.json" showLineNumbers
+{
+  "name": "dashboard",
+  "type": "registry:block",
+  "registryDependencies": [
+    "@shadcn/card", // 来自默认注册表
+    "@v0/chart", // 来自 v0 注册表
+    "@acme/data-table", // 来自 acme 注册表
+    "@lib/data-fetcher", // 工具类库
+    "@ai/analytics-prompt" // AI Prompt 资源
+  ]
+}
+```
+
+CLI 会自动解析并安装所有依赖。
+
+### 进阶依赖解析
+
+了解依赖解析过程有助于开发注册表或定制第三方资源。
+
+### 解析流程
+
+执行 `npx shadcn@latest add @namespace/resource` 时，CLI 会执行以下步骤：
+
+1. **清理上下文**：重置注册表上下文
+2. **获取主资源**：从指定注册表拉取目标
+3. **递归解析依赖**：从各自注册表获取依赖
+4. **拓扑排序**：确保安装顺序正确
+5. **按目标路径去重**：若冲突，后解析的覆盖前者
+6. **深度合并配置**：包括 tailwind、cssVars、css、envVars
+
+举例来说，如果执行：
+
+```bash
+npx shadcn@latest add @acme/auth @custom/login-form
+```
+
+由于 `@custom/login-form` 最后解析，其 `login-form.ts` 会覆盖 `@acme/auth` 中同名文件。
+
+### 覆写第三方资源
+
+利用依赖解析流程，可以通过 `registryDependencies` 引入第三方资源，再按需覆写。
+
+#### 示例：自定义第三方 Button
+
+假设要自定义第三方注册表中的按钮：
+
+**1. 原厂按钮**（`@vendor/button`）：
+
+```json title="button.json" showLineNumbers
+{
+  "name": "button",
+  "type": "registry:ui",
+  "files": [
+    {
+      "path": "components/ui/button.tsx",
+      "type": "registry:ui",
+      "content": "// 厂商提供的按钮实现\nexport function Button() { ... }"
+    }
+  ],
+  "cssVars": {
+    "light": {
+      "--button-bg": "blue"
+    }
+  }
+}
+```
+
+**2. 创建自定义覆写版本**（`@my-company/custom-button`）：
+
+```json title="custom-button.json" showLineNumbers
+{
+  "name": "custom-button",
+  "type": "registry:ui",
+  "registryDependencies": [
+    "@vendor/button" // Import original first
+  ],
+  "cssVars": {
+    "light": {
+      "--button-bg": "purple" // 覆盖按钮颜色
+    }
+  }
+}
+```
+
+**3. 安装自定义版本**：
+
+```bash
+npx shadcn@latest add @my-company/custom-button
+```
+
+安装时会先引入 `@vendor/button` 的实现，再使用自定义 `cssVars` 覆盖。
+
+### 高级覆写模式
+
+#### 扩展而非替换
+
+保留原始实现并新增扩展：
+
+```json title="extended-table.json" showLineNumbers
+{
+  "name": "extended-table",
+  "registryDependencies": ["@vendor/table"],
+  "files": [
+    {
+      "path": "components/ui/table-extended.tsx",
+      "content": "import { Table } from '@vendor/table'\n// 添加自定义扩展\nexport function ExtendedTable() { ... }"
+    }
+  ]
+}
+```
+
+这样会先安装 `@vendor/table`，再在 `components/ui/table-extended.tsx` 中加入扩展。
+
+#### 局部覆写（多文件资源）
+
+只覆写复杂组件中的部分文件：
+
+```json title="custom-auth.json" showLineNumbers
+{
+  "name": "custom-auth",
+  "registryDependencies": [
+    "@vendor/auth" // Has multiple files
+  ],
+  "files": [
+    {
+      "path": "lib/auth-server.ts",
+      "type": "registry:lib",
+      "content": "// 自定义的认证服务实现"
+    }
+  ]
+}
+```
+
+### 解析顺序示例
+
+假设安装的 `@custom/dashboard` 依赖多个资源：
+
+```json title="dashboard.json" showLineNumbers
+{
+  "name": "dashboard",
+  "registryDependencies": [
+    "@shadcn/card", // 1. Resolved first
+    "@vendor/chart", // 2. Resolved second
+    "@custom/card" // 3. Resolved last (overrides @shadcn/card)
+  ]
+}
+```
+
+解析顺序如下：
+
+1. `@shadcn/card` → 安装到 `components/ui/card.tsx`
+2. `@vendor/chart` → 安装到 `components/ui/chart.tsx`
+3. `@custom/card` → 如果目标路径相同，将覆盖 `components/ui/card.tsx`
+
+### 依赖解析特点
+
+1. **来源追踪**：每个资源都会记录来源注册表，避免命名冲突
+2. **循环依赖检测**：自动识别并阻止循环依赖
+3. **智能安装顺序**：先安装依赖，再安装使用这些依赖的资源
+
+---
+
+## 版本管理
+
+可以通过查询参数为资源实现版本控制，让用户锁定特定版本或选择不同发布通道。
+
+### 基础版号参数
+
+```json title="components.json" showLineNumbers
+{
+  "@versioned": {
+    "url": "https://registry.example.com/{name}",
+    "params": {
+      "version": "v2"
+    }
+  }
+}
+```
+
+此配置会将 `@versioned/button` 解析为 `https://registry.example.com/button?version=v2`。
+
+### 动态选择版本
+
+可使用环境变量在不同环境统一控制版本：
+
+```json title="components.json" showLineNumbers
+{
+  "@stable": {
+    "url": "https://registry.company.com/{name}",
+    "params": {
+      "version": "${REGISTRY_VERSION}"
+    }
+  }
+}
+```
+
+这样即可：
+
+- 在生产环境设置 `REGISTRY_VERSION=v1.2.3`
+- 分别为开发、预发、生产设置不同版本
+
+### 语义化版本
+
+通过语义化版本与范围语法提供更多控制：
+
+```json title="components.json" showLineNumbers
+{
+  "@npm-style": {
+    "url": "https://registry.example.com/{name}",
+    "params": {
+      "semver": "^2.0.0",
+      "prerelease": "${ALLOW_PRERELEASE}"
+    }
+  }
+}
+```
+
+### 版本管理最佳实践
+
+1. **使用环境变量** 跨环境控制版本
+2. **提供合理默认值**，可使用 `${VAR:-default}` 语法
+3. **清晰记录版本方案**，方便注册表使用者理解
+4. **支持版本锁定**，保证构建可复现
+5. **实现版本查询接口**（如 `/versions/{name}`）
+6. **合理缓存**，为版本化资源设置合适的缓存头
+
+---
+
+## CLI 命令
+
+shadcn CLI 提供了多种命令来操作命名空间注册表：
+
+### 添加资源
+
+从任意已配置的注册表安装资源：
+
+```bash
+# 指定注册表安装
+npx shadcn@latest add @v0/dashboard
+
+# 同时安装多个资源
+npx shadcn@latest add @acme/button @lib/utils @ai/prompt
+
+# 直接通过 URL 安装
+npx shadcn@latest add https://registry.example.com/button.json
+
+# 从本地文件安装
+npx shadcn@latest add ./local-registry/button.json
+```
+
+### 查看资源
+
+安装前可预览注册表条目：
+
+```bash
+# 查看单个资源
+npx shadcn@latest view @acme/button
+
+# 查看多个资源
+npx shadcn@latest view @v0/dashboard @shadcn/card
+
+# 通过 URL 查看
+npx shadcn@latest view https://registry.example.com/button.json
+```
+
+`view` 命令会显示：
+
+- 资源元数据（名称、类型、描述）
+- 依赖与注册表依赖
+- 将要安装的文件内容
+- CSS 变量与 Tailwind 配置
+- 所需环境变量
+
+### 搜索注册表
+
+在注册表中搜索可用资源：
+
+```bash
+# 搜索某个注册表
+npx shadcn@latest search @v0
+
+# 带关键字搜索
+npx shadcn@latest search @acme --query "auth"
+
+# 同时搜索多个注册表
+npx shadcn@latest search @v0 @acme @lib
+
+# 限制返回结果
+npx shadcn@latest search @v0 --limit 10 --offset 20
+
+# 列出所有条目（search 的别名）
+npx shadcn@latest list @acme
+```
+
+搜索结果包括：
+
+- 资源名称与类型
+- 描述信息
+- 所属注册表
+
+---
+
+## 错误处理
+
+### 未配置的注册表
+
+如果引用了尚未配置的注册表：
+
+```bash
+npx shadcn@latest add @non-existent/component
+```
+
+错误：
+
+```txt
+Unknown registry "@non-existent". 请确认在 components.json 中按以下格式声明：
+{
+  "registries": {
+    "@non-existent": "[URL_TO_REGISTRY]"
+  }
+}
+```
+
+### 缺少环境变量
+
+若未设置必需的环境变量：
+
+```txt
+Registry "@private" requires the following environment variables:
+
+  • REGISTRY_TOKEN
+
+请将所需变量写入 `.env` 或 `.env.local` 文件。
+```
+
+### 找不到资源
+
+返回 404 时：
+
+```txt
+The item at https://registry.company.com/button.json was not found. It may not exist at the registry.
+```
+
+通常意味着：
+
+- 资源名称拼写有误
+- 资源在注册表中不存在
+- 注册表 URL 模板配置不正确
+
+### 认证失败
+
+401 Unauthorized：
+
+```txt
+You are not authorized to access the item at https://api.company.com/button.json
+请检查认证凭据与环境变量配置。
+```
+
+403 Forbidden：
+
+```txt
+Access forbidden for https://api.company.com/button.json
+请确认 API Key 拥有相应的访问权限。
+```
+
+---
+
+## 自建注册表
+
+若要让注册表兼容命名空间系统，可按以下步骤提供任意类型的资源（组件、类库、工具、AI Prompt、主题、配置等）：
+
+1. **实现注册表条目 Schema**：返回符合[注册表条目 Schema](/docs/registry/registry-item-json) 的 JSON。
+
+2. **支持 URL 模板**：在 URL 模板中包含 `{name}` 占位符用于插入资源名。
+
+3. **定义资源类型**：通过 `type` 字段标识资源类型（如 `registry:ui`、`registry:lib`、`registry:ai`、`registry:theme` 等）。
+
+4. **处理认证**（如有需要）：支持通过请求头或查询参数进行认证。
+
+5. **编写使用文档**：为使用者提供清晰的配置指南：
+
+```json title="components.json" showLineNumbers
+{
+  "registries": {
+    "@your-registry": "https://your-domain.com/r/{name}.json"
+  }
+}
+```
+
+---
+
+## 技术细节
+
+### 解析器规则
+
+命名空间解析器使用以下正则表达式：
+
+```regex title="namespace-parser.js"
+/^(@[a-zA-Z0-9](?:[a-zA-Z0-9-_]*[a-zA-Z0-9])?)\/(.+)$/
+```
+
+这样可确保命名空间格式合法，并正确提取组件名称。
+
+### 解析流程
+
+1. **Parse**：从 `@namespace/component` 中解析命名空间与组件名
+2. **Lookup**：查找 `@namespace` 对应的注册表配置
+3. **Build URL**：将占位符替换为实际值
+4. **Set Headers**：如需认证，则追加请求头
+5. **Fetch**：从解析后的 URL 拉取资源
+6. **Validate**：校验响应是否符合注册表条目 Schema
+7. **Resolve Dependencies**：递归拉取注册表依赖
+
+### 跨注册表依赖
+
+当资源依赖不同注册表时，解析器会：
+
+1. 为每个注册表维护独立的认证上下文
+2. 从对应来源解析依赖
+3. 按目标路径对文件去重
+4. 合并 tailwind、cssVars 等配置
+
+---
+
+## 最佳实践
+
+1. **使用环境变量** 存储敏感信息（API Key、Token 等）
+2. **为注册表命名空间命名**，采用独特且具描述性的名称
+3. **明确认证需求**，为使用者提供清晰说明
+4. **返回易懂的错误信息**，方便定位问题
+5. **缓存注册表响应**，在可能的情况下提升性能
+6. **支持样式变体**，若组件存在多主题版本
+
+---
+
+## 故障排查
+
+### 找不到资源
+
+- 检查注册表 URL 是否正确且可访问
+- 确认 URL 中包含 `{name}` 占位符
+- 确认资源已在注册表中发布
+- 确保资源类型符合注册表规范
+
+### 认证问题
+
+- 检查环境变量是否设置正确
+- 确认 API Key / Token 有效且未过期
+- 检查请求头格式是否正确
+
+### 依赖冲突
+
+- 检查不同注册表中是否存在同名资源
+- 使用完整路径 `@namespace/resource` 避免歧义
+- 查找是否存在跨注册表的循环依赖
+- 混合使用资源时，确保类型兼容

@@ -1,0 +1,145 @@
+---
+title: Monorepo
+description: 在 monorepo 中使用 shadcn/ui 组件与 CLI。
+---
+
+过去在 monorepo 中使用 shadcn/ui 并不轻松。虽然可以用 CLI 添加组件，但需要手动处理安装路径和导入。
+
+新的 CLI monorepo 支持大大简化了这个流程。CLI 能识别 monorepo 结构，自动把组件、依赖以及注册表依赖安装到合适的位置，并帮你处理导入路径。
+
+## 快速开始
+
+<Steps>
+
+### 创建 monorepo 项目
+
+运行 `init` 命令，选择要创建的项目类型：
+
+```bash
+npx shadcn@latest init
+```
+
+请选择 `Next.js (Monorepo)`：
+
+```bash
+? Would you like to start a new project?
+    Next.js
+❯   Next.js (Monorepo)
+```
+
+CLI 会生成包含 `web` 与 `ui` 两个 workspace 的 monorepo，并预置 [Turborepo](https://turbo.build/repo/docs) 作为构建系统。
+
+项目结构开箱即用，你可以直接往里添加组件。注意：该模板使用 React 19 与 Tailwind CSS v4。
+
+### 添加组件
+
+在应用目录中运行 `add` 命令：
+
+```bash
+cd apps/web
+npx shadcn@latest add [COMPONENT]
+```
+
+CLI 会自动判断组件类型并放到正确位置：
+
+- `npx shadcn@latest add button` 会把 button 组件安装到 `packages/ui`，并更新 `apps/web` 中的导入路径。
+- `npx shadcn@latest add login-01` 会把 `button`、`label`、`input`、`card` 等组件装到 `packages/ui`，同时把 `login-form` 放在 `apps/web/components`。
+
+### 导入组件
+
+在 `@workspace/ui` 包中导入组件、hook、工具函数：
+
+```tsx
+import { Button } from "@workspace/ui/components/button"
+import { useTheme } from "@workspace/ui/hooks/use-theme"
+import { cn } from "@workspace/ui/lib/utils"
+```
+
+</Steps>
+
+## 文件结构
+
+新建 monorepo 项目后，CLI 默认生成如下结构：
+
+```txt
+apps
+└── web
+    ├── app
+    │   └── page.tsx
+    ├── components
+    │   └── login-form.tsx
+    ├── components.json
+    └── package.json
+packages
+└── ui
+    ├── src
+    │   ├── components
+    │   │   └── button.tsx
+    │   ├── hooks
+    │   ├── lib
+    │   │   └── utils.ts
+    │   └── styles
+    │       └── globals.css
+    ├── components.json
+    └── package.json
+package.json
+turbo.json
+```
+
+## 必要条件
+
+1. 每个 workspace 都需要 `components.json`。`package.json` 告诉包管理器如何安装依赖，而 `components.json` 告诉 CLI 如何/在哪里安装组件。
+
+2. `components.json` 必须正确配置别名，CLI 才能知道要从哪里导入组件、hooks、工具函数等。
+
+```json showLineNumbers title="apps/web/components.json"
+{
+  "$schema": "https://ui.shadcn.com/schema.json",
+  "style": "new-york",
+  "rsc": true,
+  "tsx": true,
+  "tailwind": {
+    "config": "",
+    "css": "../../packages/ui/src/styles/globals.css",
+    "baseColor": "zinc",
+    "cssVariables": true
+  },
+  "iconLibrary": "lucide",
+  "aliases": {
+    "components": "@/components",
+    "hooks": "@/hooks",
+    "lib": "@/lib",
+    "utils": "@workspace/ui/lib/utils",
+    "ui": "@workspace/ui/components"
+  }
+}
+```
+
+```json showLineNumbers title="packages/ui/components.json"
+{
+  "$schema": "https://ui.shadcn.com/schema.json",
+  "style": "new-york",
+  "rsc": true,
+  "tsx": true,
+  "tailwind": {
+    "config": "",
+    "css": "src/styles/globals.css",
+    "baseColor": "zinc",
+    "cssVariables": true
+  },
+  "iconLibrary": "lucide",
+  "aliases": {
+    "components": "@workspace/ui/components",
+    "utils": "@workspace/ui/lib/utils",
+    "hooks": "@workspace/ui/hooks",
+    "lib": "@workspace/ui/lib",
+    "ui": "@workspace/ui/components"
+  }
+}
+```
+
+3. 确保两个 `components.json` 的 `style`、`iconLibrary` 与 `baseColor` 保持一致。
+
+4. **Tailwind CSS v4 时，请将 `tailwind.config` 留空。**
+
+满足以上条件后，CLI 会把 UI 组件、Blocks、库和 hooks 安装到正确路径，并自动处理导入。

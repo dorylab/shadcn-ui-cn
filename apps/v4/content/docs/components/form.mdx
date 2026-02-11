@@ -1,0 +1,241 @@
+---
+title: Form
+description: 使用 React Hook Form 与 Zod 构建表单。
+links:
+  doc: https://react-hook-form.com
+---
+
+import { InfoIcon } from "lucide-react"
+
+<Callout icon={<InfoIcon />} title="该组件不再持续迭代">
+
+`Form` 组件是对 `react-hook-form` 的封装。后续推荐使用 [`<Field />`](/docs/components/field) 来构建表单。详情可见 [Form](/docs/forms) 文档。
+
+</Callout>
+
+表单非常常见，也十分复杂。
+
+良好的 HTML 表单应当：
+
+- 结构合理、语义正确。
+- 便于使用与键盘导航。
+- 具备合适的 ARIA 属性与标签。
+- 支持客户端与服务端校验。
+- 样式统一，与应用整体保持一致。
+
+本指南将演示如何使用 [`react-hook-form`](https://react-hook-form.com/) 与 [`zod`](https://zod.dev) 构建表单，并通过 `<FormField>` 与 Radix UI 组件组合出可访问表单。
+
+## 功能特性
+
+`<Form />` 对 `react-hook-form` 做了封装，提供以下能力：
+
+- 可组合的表单组件。
+- `<FormField />` 用于构建受控字段。
+- 结合 `zod` 的表单校验。
+- 内置无障碍与错误消息处理。
+- 使用 `React.useId()` 生成唯一 ID。
+- 根据状态自动设置合适的 `aria` 属性。
+- 与所有 Radix UI 组件兼容。
+- 可自选 schema 库（示例使用 `zod`，也可替换）。
+- **完全掌控标记与样式。**
+
+## 结构解析
+
+```tsx showLineNumbers
+<Form>
+  <FormField
+    control={...}
+    name="..."
+    render={() => (
+      <FormItem>
+        <FormLabel />
+        <FormControl>
+          { /* Your form field */}
+        </FormControl>
+        <FormDescription />
+        <FormMessage />
+      </FormItem>
+    )}
+  />
+</Form>
+```
+
+## 示例
+
+```tsx showLineNumbers
+const form = useForm()
+
+<FormField
+  control={form.control}
+  name="username"
+  render={({ field }) => (
+    <FormItem>
+      <FormLabel>Username</FormLabel>
+      <FormControl>
+        <Input placeholder="shadcn" {...field} />
+      </FormControl>
+      <FormDescription>This is your public display name.</FormDescription>
+      <FormMessage />
+    </FormItem>
+  )}
+/>
+```
+
+## 安装
+
+<CodeTabs>
+
+<TabsList>
+  <TabsTrigger value="cli">CLI</TabsTrigger>
+  <TabsTrigger value="manual">手动</TabsTrigger>
+</TabsList>
+<TabsContent value="cli">
+
+<Steps>
+
+### 命令行
+
+```bash
+npx shadcn@latest add form
+```
+
+</Steps>
+
+</TabsContent>
+
+<TabsContent value="manual">
+
+<Steps>
+
+<Step>安装下列依赖：</Step>
+
+```bash
+npm install @radix-ui/react-label @radix-ui/react-slot react-hook-form @hookform/resolvers zod
+```
+
+<Step>将下面的代码复制到你的项目中。</Step>
+
+<ComponentSource name="form" title="components/ui/form.tsx" />
+
+<Step>根据项目结构调整导入路径。</Step>
+
+</Steps>
+
+</TabsContent>
+
+</CodeTabs>
+
+## 用法
+
+### 创建表单模式
+
+使用 Zod 定义表单结构，更多用法请参考 [Zod 文档](https://zod.dev)。
+
+```tsx showLineNumbers title="components/example-form.tsx" {3,5-7}
+"use client"
+
+import { z } from "zod"
+
+const formSchema = z.object({
+  username: z.string().min(2).max(50),
+})
+```
+
+### 定义表单
+
+通过 `react-hook-form` 的 `useForm` 钩子创建表单。
+
+```tsx showLineNumbers title="components/example-form.tsx" {3-4,14-20,22-27}
+"use client"
+
+import { zodResolver } from "@hookform/resolvers/zod"
+import { useForm } from "react-hook-form"
+import { z } from "zod"
+
+const formSchema = z.object({
+  username: z.string().min(2, {
+    message: "Username must be at least 2 characters.",
+  }),
+})
+
+export function ProfileForm() {
+  // 1. 定义表单。
+  const form = useForm<z.infer<typeof formSchema>>({
+    resolver: zodResolver(formSchema),
+    defaultValues: {
+      username: "",
+    },
+  })
+
+  // 2. 定义提交处理函数。
+  function onSubmit(values: z.infer<typeof formSchema>) {
+    // 在这里处理表单数据。
+    // ✅ 经过类型与校验保障。
+    console.log(values)
+  }
+}
+```
+
+由于 `FormField` 基于受控组件，需要为字段提供默认值。更多说明可查阅 [React Hook Form 文档](https://react-hook-form.com/docs/usecontroller)。
+
+### 构建表单
+
+现在即可使用 `<Form />` 组件搭建表单。
+
+```tsx showLineNumbers title="components/example-form.tsx" {7-17,28-50}
+"use client"
+
+import { zodResolver } from "@hookform/resolvers/zod"
+import { useForm } from "react-hook-form"
+import { z } from "zod"
+
+import { Button } from "@/components/ui/button"
+import {
+  Form,
+  FormControl,
+  FormDescription,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form"
+import { Input } from "@/components/ui/input"
+
+const formSchema = z.object({
+  username: z.string().min(2, {
+    message: "Username must be at least 2 characters.",
+  }),
+})
+
+export function ProfileForm() {
+  // ...
+
+  return (
+    <Form {...form}>
+      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+        <FormField
+          control={form.control}
+          name="username"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>用户名</FormLabel>
+              <FormControl>
+                <Input placeholder="shadcn" {...field} />
+              </FormControl>
+              <FormDescription>
+                这是你的公开显示名称。
+              </FormDescription>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <Button type="submit">提交</Button>
+      </form>
+    </Form>
+  )
+}
+```
+
+### 完成
+
+这样就得到了一个具备可访问性、类型安全并包含客户端校验的表单。

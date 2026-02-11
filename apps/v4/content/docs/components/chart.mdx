@@ -1,0 +1,599 @@
+---
+title: Chart
+description: 漂亮易用的图表组件，基于 Recharts 构建，可直接复制到你的应用中。
+component: true
+---
+
+<Callout>
+
+**注意：** 我们正在升级到 Recharts v3。如果你想抢先体验，可参阅 [这里的评论](https://github.com/shadcn-ui/ui/issues/7669#issuecomment-2998299159) 中的代码。正式版本即将发布。
+
+</Callout>
+
+<ComponentPreview
+  name="chart-bar-interactive"
+  className="theme-blue [&_.preview]:h-auto [&_.preview]:p-0 [&_.preview]:lg:min-h-[404px] [&_.preview>div]:w-full [&_.preview>div]:border-none [&_.preview>div]:shadow-none"
+  hideCode
+/>
+
+欢迎使用 **Charts**，这是一组可以直接复制粘贴到项目中的图表组件。
+
+Charts 默认具有良好的视觉效果，与其他组件协同工作良好，并可完全自定义以适配你的项目。
+
+[浏览 Charts 组件库](/charts)。
+
+## 组件
+
+该组件底层使用 [Recharts](https://recharts.org/)。
+
+`chart` 组件遵循组合式设计。**你可以使用 Recharts 原生组件搭建图表，仅在需要时引入 `ChartTooltip` 等自定义组件。**
+
+```tsx showLineNumbers /ChartContainer/ /ChartTooltipContent/
+import { Bar, BarChart } from "recharts"
+
+import { ChartContainer, ChartTooltipContent } from "@/components/ui/charts"
+
+export function MyChart() {
+  return (
+    <ChartContainer>
+      <BarChart data={data}>
+        <Bar dataKey="value" />
+        <ChartTooltip content={<ChartTooltipContent />} />
+      </BarChart>
+    </ChartContainer>
+  )
+}
+```
+
+我们并未额外封装 Recharts，因此不存在抽象层的约束。Recharts 发布新版时，你可以遵循官方升级步骤进行更新。
+
+**组件完全归你掌控。**
+
+## 安装
+
+<Callout className="mt-4">
+
+**注意：** 如果你在 **React 19** 或 **Next.js 15** 中使用图表，请参阅[这里](/docs/react-19#recharts)的说明。
+
+</Callout>
+
+<CodeTabs>
+
+<TabsList>
+  <TabsTrigger value="cli">CLI</TabsTrigger>
+  <TabsTrigger value="manual">手动</TabsTrigger>
+</TabsList>
+<TabsContent value="cli">
+
+<Steps>
+
+<Step>运行以下命令安装 `chart.tsx`。</Step>
+
+```bash
+npx shadcn@latest add chart
+```
+
+<Step>在 CSS 文件中添加以下颜色变量。</Step>
+
+```css title="app/globals.css" showLineNumbers
+@layer base {
+  :root {
+    --chart-1: oklch(0.646 0.222 41.116);
+    --chart-2: oklch(0.6 0.118 184.704);
+    --chart-3: oklch(0.398 0.07 227.392);
+    --chart-4: oklch(0.828 0.189 84.429);
+    --chart-5: oklch(0.769 0.188 70.08);
+  }
+
+  .dark {
+    --chart-1: oklch(0.488 0.243 264.376);
+    --chart-2: oklch(0.696 0.17 162.48);
+    --chart-3: oklch(0.769 0.188 70.08);
+    --chart-4: oklch(0.627 0.265 303.9);
+    --chart-5: oklch(0.645 0.246 16.439);
+  }
+}
+```
+
+</Steps>
+
+</TabsContent>
+
+<TabsContent value="manual">
+
+<Steps>
+
+<Step>安装下列依赖：</Step>
+
+```bash
+npm install recharts
+```
+
+<Step>将以下代码复制到 `components/ui/chart.tsx`。</Step>
+
+<ComponentSource name="chart" title="components/ui/chart.tsx" />
+
+<Step>在 CSS 文件中添加下列颜色变量。</Step>
+
+```css title="app/globals.css" showLineNumbers
+@layer base {
+  :root {
+    --chart-1: oklch(0.646 0.222 41.116);
+    --chart-2: oklch(0.6 0.118 184.704);
+    --chart-3: oklch(0.398 0.07 227.392);
+    --chart-4: oklch(0.828 0.189 84.429);
+    --chart-5: oklch(0.769 0.188 70.08);
+  }
+
+  .dark {
+    --chart-1: oklch(0.488 0.243 264.376);
+    --chart-2: oklch(0.696 0.17 162.48);
+    --chart-3: oklch(0.769 0.188 70.08);
+    --chart-4: oklch(0.627 0.265 303.9);
+    --chart-5: oklch(0.645 0.246 16.439);
+  }
+}
+```
+
+</Steps>
+
+</TabsContent>
+
+</CodeTabs>
+
+## 第一个图表
+
+接下来构建你的第一个图表，我们将制作一个柱状图，并添加网格、坐标轴、提示信息与图例。
+
+<Steps>
+
+<Step>首先定义数据。</Step>
+
+下方数据表示每个月的桌面端与移动端用户数量。
+
+<Callout className="mt-4">
+
+**注意：** 数据结构可以随意，不必与示例一致。通过 `dataKey` 属性即可将数据映射到图表。
+
+</Callout>
+
+```tsx title="components/example-chart.tsx" showLineNumbers
+const chartData = [
+  { month: "January", desktop: 186, mobile: 80 },
+  { month: "February", desktop: 305, mobile: 200 },
+  { month: "March", desktop: 237, mobile: 120 },
+  { month: "April", desktop: 73, mobile: 190 },
+  { month: "May", desktop: 209, mobile: 130 },
+  { month: "June", desktop: 214, mobile: 140 },
+]
+```
+
+<Step>定义图表配置。</Step>
+
+图表配置用于存放图表所需的配置，比如标签、图标以及主题色等。
+
+```tsx title="components/example-chart.tsx" showLineNumbers
+import { type ChartConfig } from "@/components/ui/chart"
+
+const chartConfig = {
+  desktop: {
+    label: "Desktop",
+    color: "#2563eb",
+  },
+  mobile: {
+    label: "Mobile",
+    color: "#60a5fa",
+  },
+} satisfies ChartConfig
+```
+
+<Step>构建图表。</Step>
+
+现在即可使用 Recharts 组件组装图表。
+
+<Callout className="mt-4 bg-amber-50 border-amber-200 dark:bg-amber-950/50 dark:border-amber-950">
+
+**重要：** 请务必在 `ChartContainer` 上设置 `min-h-[VALUE]`，以保证图表具有响应式高度。
+
+</Callout>
+
+<ComponentSource name="chart-bar-demo" title="components/example-chart.tsx" />
+
+<ComponentPreview
+  name="chart-bar-demo"
+  className="[&_.preview]:min-h-[250px] [&_.preview]:p-4"
+/>
+
+</Steps>
+
+### 添加网格
+
+为图表添加网格。
+
+<Steps>
+
+<Step>导入 `CartesianGrid` 组件。</Step>
+
+```tsx /CartesianGrid/
+import { Bar, BarChart, CartesianGrid } from "recharts"
+```
+
+<Step>将 `CartesianGrid` 添加到图表中。</Step>
+
+```tsx showLineNumbers {3}
+<ChartContainer config={chartConfig} className="min-h-[200px] w-full">
+  <BarChart accessibilityLayer data={chartData}>
+    <CartesianGrid vertical={false} />
+    <Bar dataKey="desktop" fill="var(--color-desktop)" radius={4} />
+    <Bar dataKey="mobile" fill="var(--color-mobile)" radius={4} />
+  </BarChart>
+</ChartContainer>
+```
+
+<ComponentPreview
+  name="chart-bar-demo-grid"
+  className="[&_.preview]:min-h-[250px] [&_.preview]:p-4"
+/>
+
+</Steps>
+
+### 添加坐标轴
+
+使用 `XAxis` 组件往图表中添加横轴。
+
+<Steps>
+
+<Step>导入 `XAxis` 组件。</Step>
+
+```tsx /XAxis/
+import { Bar, BarChart, CartesianGrid, XAxis } from "recharts"
+```
+
+<Step>将 `XAxis` 添加到图表中。</Step>
+
+```tsx showLineNumbers {4-10}
+<ChartContainer config={chartConfig} className="h-[200px] w-full">
+  <BarChart accessibilityLayer data={chartData}>
+    <CartesianGrid vertical={false} />
+    <XAxis
+      dataKey="month"
+      tickLine={false}
+      tickMargin={10}
+      axisLine={false}
+      tickFormatter={(value) => value.slice(0, 3)}
+    />
+    <Bar dataKey="desktop" fill="var(--color-desktop)" radius={4} />
+    <Bar dataKey="mobile" fill="var(--color-mobile)" radius={4} />
+  </BarChart>
+</ChartContainer>
+```
+
+<ComponentPreview
+  name="chart-bar-demo-axis"
+  className="[&_.preview]:min-h-[250px] [&_.preview]:p-4"
+/>
+
+</Steps>
+
+### 添加 Tooltip
+
+目前我们只使用了 Recharts 的原生组件，借助 `chart` 组件的定制，它们已经拥有不错的默认样式。
+
+要添加提示信息，可使用 `chart` 中的自定义 `ChartTooltip` 与 `ChartTooltipContent` 组件。
+
+<Steps>
+
+<Step>导入 `ChartTooltip` 与 `ChartTooltipContent`。</Step>
+
+```tsx
+import { ChartTooltip, ChartTooltipContent } from "@/components/ui/chart"
+```
+
+<Step>在图表中使用这些组件。</Step>
+
+```tsx showLineNumbers {11}
+<ChartContainer config={chartConfig} className="h-[200px] w-full">
+  <BarChart accessibilityLayer data={chartData}>
+    <CartesianGrid vertical={false} />
+    <XAxis
+      dataKey="month"
+      tickLine={false}
+      tickMargin={10}
+      axisLine={false}
+      tickFormatter={(value) => value.slice(0, 3)}
+    />
+    <ChartTooltip content={<ChartTooltipContent />} />
+    <Bar dataKey="desktop" fill="var(--color-desktop)" radius={4} />
+    <Bar dataKey="mobile" fill="var(--color-mobile)" radius={4} />
+  </BarChart>
+</ChartContainer>
+```
+
+<ComponentPreview
+  name="chart-bar-demo-tooltip"
+  className="[&_.preview]:min-h-[250px] [&_.preview]:p-4"
+/>
+
+鼠标悬停即可看到提示信息。仅需两个组件，就能得到漂亮的 tooltip。
+
+</Steps>
+
+### 添加图例
+
+图例同样如此。使用 `chart` 提供的 `ChartLegend` 与 `ChartLegendContent` 组件即可。
+
+<Steps>
+
+<Step>导入 `ChartLegend` 与 `ChartLegendContent`。</Step>
+
+```tsx
+import { ChartLegend, ChartLegendContent } from "@/components/ui/chart"
+```
+
+<Step>在图表中添加这些组件。</Step>
+
+```tsx showLineNumbers {12}
+<ChartContainer config={chartConfig} className="h-[200px] w-full">
+  <BarChart accessibilityLayer data={chartData}>
+    <CartesianGrid vertical={false} />
+    <XAxis
+      dataKey="month"
+      tickLine={false}
+      tickMargin={10}
+      axisLine={false}
+      tickFormatter={(value) => value.slice(0, 3)}
+    />
+    <ChartTooltip content={<ChartTooltipContent />} />
+    <ChartLegend content={<ChartLegendContent />} />
+    <Bar dataKey="desktop" fill="var(--color-desktop)" radius={4} />
+    <Bar dataKey="mobile" fill="var(--color-mobile)" radius={4} />
+  </BarChart>
+</ChartContainer>
+```
+
+<ComponentPreview
+  name="chart-bar-demo-legend"
+  className="[&_.preview]:min-h-[250px] [&_.preview]:p-4"
+/>
+
+</Steps>
+
+完成！你的第一个图表已经构建成功，下一步可以看看：
+
+- [Themes and Colors](/docs/components/chart#theming)
+- [Tooltip](/docs/components/chart#tooltip)
+- [Legend](/docs/components/chart#legend)
+
+## 图表配置
+
+图表配置用于定义图表所需的标签、图标与颜色。
+
+我们刻意将其与数据解耦。
+
+这样可以在多个图表间共享配置与颜色 Token，也方便在数据或颜色来源于远端或其他格式时独立使用。
+
+```tsx showLineNumbers /ChartConfig/
+import { Monitor } from "lucide-react"
+
+import { type ChartConfig } from "@/components/ui/chart"
+
+const chartConfig = {
+  desktop: {
+    label: "Desktop",
+    icon: Monitor,
+    // A color like 'hsl(220, 98%, 61%)' or 'var(--color-name)'
+    color: "#2563eb",
+    // OR a theme object with 'light' and 'dark' keys
+    theme: {
+      light: "#2563eb",
+      dark: "#dc2626",
+    },
+  },
+} satisfies ChartConfig
+```
+
+## 主题
+
+Charts 内置主题支持。可以使用 CSS 变量（推荐）或任何颜色格式（如 hex、hsl、oklch）定义颜色。
+
+### CSS Variables
+
+<Steps>
+
+<Step>在 CSS 文件中声明颜色。</Step>
+
+```css {6-7,14-15} title="app/globals.css" showLineNumbers
+@layer base {
+  :root {
+    --chart-1: oklch(0.646 0.222 41.116);
+    --chart-2: oklch(0.6 0.118 184.704);
+  }
+
+  .dark: {
+    --chart-1: oklch(0.488 0.243 264.376);
+    --chart-2: oklch(0.696 0.17 162.48);
+  }
+}
+```
+
+<Step>将颜色配置到 `chartConfig` 中。</Step>
+
+```tsx {4,8} showLineNumbers
+const chartConfig = {
+  desktop: {
+    label: "Desktop",
+    color: "var(--chart-1)",
+  },
+  mobile: {
+    label: "Mobile",
+    color: "var(--chart-2)",
+  },
+} satisfies ChartConfig
+```
+
+</Steps>
+
+### 使用 hex、hsl 或 oklch
+
+也可以直接在图表配置中定义颜色，随意选择你喜欢的格式。
+
+```tsx showLineNumbers
+const chartConfig = {
+  desktop: {
+    label: "Desktop",
+    color: "#2563eb",
+  },
+} satisfies ChartConfig
+```
+
+### 使用颜色
+
+若要在图表中使用主题色，可通过 `var(--color-KEY)` 的形式引用。
+
+#### Components
+
+```tsx
+<Bar dataKey="desktop" fill="var(--color-desktop)" />
+```
+
+#### Chart Data
+
+```tsx showLineNumbers
+const chartData = [
+  { browser: "chrome", visitors: 275, fill: "var(--color-chrome)" },
+  { browser: "safari", visitors: 200, fill: "var(--color-safari)" },
+]
+```
+
+#### Tailwind
+
+```tsx
+<LabelList className="fill-[--color-desktop]" />
+```
+
+## Tooltip
+
+图表的 tooltip 包含标签、名称、指示符与数值，可按需组合自定义。
+
+<ComponentPreview
+  name="chart-tooltip-demo"
+  className="[&_.preview]:py-0"
+  hideCode
+/>
+
+可通过 `hideLabel`、`hideIndicator` 控制是否显示相应元素，并使用 `indicator` 设置指示符样式。
+
+使用 `labelKey` 与 `nameKey` 来指定 tooltip 标签与名称所使用的字段。
+
+Chart 提供了 `<ChartTooltip>` 与 `<ChartTooltipContent>`，可用它们为图表添加自定义 tooltip。
+
+```tsx
+import { ChartTooltip, ChartTooltipContent } from "@/components/ui/chart"
+```
+
+```tsx
+<ChartTooltip content={<ChartTooltipContent />} />
+```
+
+### Props
+
+以下属性可用于自定义 tooltip：
+
+| Prop            | Type                     | Description                                  |
+| :-------------- | :----------------------- | :------------------------------------------- |
+| `labelKey`      | string                   | The config or data key to use for the label. |
+| `nameKey`       | string                   | The config or data key to use for the name.  |
+| `indicator`     | `dot` `line` or `dashed` | The indicator style for the tooltip.         |
+| `hideLabel`     | boolean                  | Whether to hide the label.                   |
+| `hideIndicator` | boolean                  | Whether to hide the indicator.               |
+
+### Colors
+
+颜色会自动从图表配置中读取。
+
+### Custom
+
+如需为 tooltip 标签和名称使用自定义字段，可通过 `labelKey` 与 `nameKey` 指定。
+
+```tsx showLineNumbers /browser/
+const chartData = [
+  { browser: "chrome", visitors: 187, fill: "var(--color-chrome)" },
+  { browser: "safari", visitors: 200, fill: "var(--color-safari)" },
+]
+
+const chartConfig = {
+  visitors: {
+    label: "Total Visitors",
+  },
+  chrome: {
+    label: "Chrome",
+    color: "hsl(var(--chart-1))",
+  },
+  safari: {
+    label: "Safari",
+    color: "hsl(var(--chart-2))",
+  },
+} satisfies ChartConfig
+```
+
+```tsx
+<ChartTooltip
+  content={<ChartTooltipContent labelKey="visitors" nameKey="browser" />}
+/>
+```
+
+这样会将标签显示为 `Total Visitors`，名称分别显示为 `Chrome` 与 `Safari`。
+
+## Legend
+
+可使用 `<ChartLegend>` 和 `<ChartLegendContent>` 为图表添加图例。
+
+```tsx
+import { ChartLegend, ChartLegendContent } from "@/components/ui/chart"
+```
+
+```tsx
+<ChartLegend content={<ChartLegendContent />} />
+```
+
+### Colors
+
+颜色同样会自动从图表配置中引用。
+
+### Custom
+
+若要自定义图例名称字段，可使用 `nameKey` 属性。
+
+```tsx showLineNumbers /browser/
+const chartData = [
+  { browser: "chrome", visitors: 187, fill: "var(--color-chrome)" },
+  { browser: "safari", visitors: 200, fill: "var(--color-safari)" },
+]
+
+const chartConfig = {
+  chrome: {
+    label: "Chrome",
+    color: "hsl(var(--chart-1))",
+  },
+  safari: {
+    label: "Safari",
+    color: "hsl(var(--chart-2))",
+  },
+} satisfies ChartConfig
+```
+
+```tsx
+<ChartLegend content={<ChartLegendContent nameKey="browser" />} />
+```
+
+这样图例名称就会显示为 `Chrome` 与 `Safari`。
+
+## 无障碍
+
+通过开启 `accessibilityLayer` 属性，可为图表添加无障碍层。
+
+启用后将自动获得键盘导航与屏幕阅读器支持。
+
+```tsx
+<LineChart accessibilityLayer />
+```

@@ -1,0 +1,104 @@
+---
+title: Kbd
+description: 用于展示键盘输入提示的组件。
+component: true
+---
+
+<ComponentPreview name="kbd-demo" />
+
+## 安装
+
+<CodeTabs>
+
+<TabsList>
+  <TabsTrigger value="cli">CLI</TabsTrigger>
+  <TabsTrigger value="manual">手动</TabsTrigger>
+</TabsList>
+<TabsContent value="cli">
+
+```bash
+npx shadcn@latest add kbd
+```
+
+</TabsContent>
+
+<TabsContent value="manual">
+
+<Steps>
+
+<Step>将下面的代码复制到你的项目中。</Step>
+
+<ComponentSource name="kbd" title="components/ui/kbd.tsx" />
+
+<Step>根据项目结构调整导入路径。</Step>
+
+</Steps>
+
+</TabsContent>
+
+</CodeTabs>
+
+## 用法
+
+```tsx
+import { Kbd } from "@/components/ui/kbd"
+```
+
+```tsx
+<Kbd>Ctrl</Kbd>
+```
+
+## 示例
+
+### Group
+
+使用 `KbdGroup` 将多个键组合展示。
+
+<ComponentPreview name="kbd-group" />
+
+### Button
+
+在 `Button` 中嵌入 `Kbd` 展示快捷键提示。
+
+<ComponentPreview name="kbd-button" />
+
+### Tooltip
+
+在 `Tooltip` 中使用 `Kbd` 显示键盘提示信息。
+
+<ComponentPreview name="kbd-tooltip" />
+
+### Input Group
+
+在 `InputGroupAddon` 中使用 `Kbd` 提示快捷键。
+
+<ComponentPreview name="kbd-input-group" />
+
+## API 参考
+
+### Kbd
+
+用于显示单个键。
+
+| Prop        | Type     | Default |
+| ----------- | -------- | ------- |
+| `className` | `string` | ``      |
+
+```tsx
+<Kbd>Ctrl</Kbd>
+```
+
+### KbdGroup
+
+用于将多个 `Kbd` 组合在一起。
+
+| Prop        | Type     | Default |
+| ----------- | -------- | ------- |
+| `className` | `string` | ``      |
+
+```tsx
+<KbdGroup>
+  <Kbd>Ctrl</Kbd>
+  <Kbd>B</Kbd>
+</KbdGroup>
+```

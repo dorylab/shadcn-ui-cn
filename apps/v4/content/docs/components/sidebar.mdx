@@ -1,0 +1,1371 @@
+---
+title: Sidebar
+description: 一个可组合、可主题化且可自定义的侧边栏组件。
+component: true
+---
+
+<figure className="flex flex-col gap-4">
+  <ComponentPreview
+    name="sidebar-07"
+    title="侧边栏"
+    type="block"
+    description="基于 shadcn/ui 构建、具备高度可组合与主题化能力的侧边栏组件"
+    className="w-full"
+  />
+  <figcaption className="text-center text-sm text-gray-500">
+    可折叠为图标模式的侧边栏。
+  </figcaption>
+</figure>
+
+侧边栏是最难构建的组件之一。它通常是应用的中枢，内部包含大量互动模块。
+
+我并不喜欢从零造侧边栏，于是写了 30 多种不同配置的实现，并将核心代码提炼进 `sidebar.tsx`。
+
+现在我们拥有了一个稳固的基础：易组合、可主题化、可自定义。
+
+[浏览 Blocks 库](/blocks)。
+
+## 安装
+
+<CodeTabs>
+
+<TabsList>
+  <TabsTrigger value="cli">CLI</TabsTrigger>
+  <TabsTrigger value="manual">手动</TabsTrigger>
+</TabsList>
+<TabsContent value="cli">
+
+<Steps>
+
+<Step>执行以下命令安装 `sidebar.tsx`</Step>
+
+```bash
+npx shadcn@latest add sidebar
+```
+
+<Step>将下列配色添加到你的 CSS 文件中</Step>
+
+上述命令会自动为你添加这些配色。若未成功，请手动复制下方代码到 CSS 文件中。
+
+稍后会在[主题自定义章节](/docs/components/sidebar#theming)详细说明这些配色。
+
+```css showLineNumbers title="app/globals.css"
+@layer base {
+  :root {
+    --sidebar: oklch(0.985 0 0);
+    --sidebar-foreground: oklch(0.145 0 0);
+    --sidebar-primary: oklch(0.205 0 0);
+    --sidebar-primary-foreground: oklch(0.985 0 0);
+    --sidebar-accent: oklch(0.97 0 0);
+    --sidebar-accent-foreground: oklch(0.205 0 0);
+    --sidebar-border: oklch(0.922 0 0);
+    --sidebar-ring: oklch(0.708 0 0);
+  }
+
+  .dark {
+    --sidebar: oklch(0.205 0 0);
+    --sidebar-foreground: oklch(0.985 0 0);
+    --sidebar-primary: oklch(0.488 0.243 264.376);
+    --sidebar-primary-foreground: oklch(0.985 0 0);
+    --sidebar-accent: oklch(0.269 0 0);
+    --sidebar-accent-foreground: oklch(0.985 0 0);
+    --sidebar-border: oklch(1 0 0 / 10%);
+    --sidebar-ring: oklch(0.439 0 0);
+  }
+}
+```
+
+</Steps>
+
+</TabsContent>
+
+<TabsContent value="manual">
+
+<Steps>
+
+<Step>将下面的代码复制到你的项目中。</Step>
+
+<ComponentSource name="sidebar" title="components/ui/sidebar.tsx" />
+
+<Step>根据项目结构调整导入路径。</Step>
+
+<Step>将下列配色添加到你的 CSS 文件中</Step>
+
+稍后会在[主题自定义章节](/docs/components/sidebar#theming)详细说明这些配色。
+
+```css showLineNumbers title="app/globals.css"
+@layer base {
+  :root {
+    --sidebar: oklch(0.985 0 0);
+    --sidebar-foreground: oklch(0.145 0 0);
+    --sidebar-primary: oklch(0.205 0 0);
+    --sidebar-primary-foreground: oklch(0.985 0 0);
+    --sidebar-accent: oklch(0.97 0 0);
+    --sidebar-accent-foreground: oklch(0.205 0 0);
+    --sidebar-border: oklch(0.922 0 0);
+    --sidebar-ring: oklch(0.708 0 0);
+  }
+
+  .dark {
+    --sidebar: oklch(0.205 0 0);
+    --sidebar-foreground: oklch(0.985 0 0);
+    --sidebar-primary: oklch(0.488 0.243 264.376);
+    --sidebar-primary-foreground: oklch(0.985 0 0);
+    --sidebar-accent: oklch(0.269 0 0);
+    --sidebar-accent-foreground: oklch(0.985 0 0);
+    --sidebar-border: oklch(1 0 0 / 10%);
+    --sidebar-ring: oklch(0.439 0 0);
+  }
+}
+```
+
+</Steps>
+
+</TabsContent>
+
+</CodeTabs>
+
+## 结构
+
+一个 `Sidebar` 组件由以下部分组成：
+
+- `SidebarProvider`：负责折叠状态。
+- `Sidebar`：侧边栏容器。
+- `SidebarHeader` 与 `SidebarFooter`：固定在侧边栏顶部与底部。
+- `SidebarContent`：可滚动的内容区域。
+- `SidebarGroup`：`SidebarContent` 内的分组Blocks。
+- `SidebarTrigger`：用于触发侧边栏的按钮。
+
+<Image
+  src="/images/sidebar-structure.png"
+  width="716"
+  height="420"
+  alt="侧边栏结构（浅色）"
+  className="mt-6 w-full overflow-hidden rounded-lg border dark:hidden"
+/>
+<Image
+  src="/images/sidebar-structure-dark.png"
+  width="716"
+  height="420"
+  alt="侧边栏结构（深色）"
+  className="mt-6 hidden w-full overflow-hidden rounded-lg border dark:block"
+/>
+
+## 用法
+
+```tsx showLineNumbers title="app/layout.tsx"
+import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar"
+import { AppSidebar } from "@/components/app-sidebar"
+
+export default function Layout({ children }: { children: React.ReactNode }) {
+  return (
+    <SidebarProvider>
+      <AppSidebar />
+      <main>
+        <SidebarTrigger />
+        {children}
+      </main>
+    </SidebarProvider>
+  )
+}
+```
+
+```tsx showLineNumbers title="components/app-sidebar.tsx"
+import {
+  Sidebar,
+  SidebarContent,
+  SidebarFooter,
+  SidebarGroup,
+  SidebarHeader,
+} from "@/components/ui/sidebar"
+
+export function AppSidebar() {
+  return (
+    <Sidebar>
+      <SidebarHeader />
+      <SidebarContent>
+        <SidebarGroup />
+        <SidebarGroup />
+      </SidebarContent>
+      <SidebarFooter />
+    </Sidebar>
+  )
+}
+```
+
+## 你的第一个侧边栏
+
+我们先从最基础的侧边栏开始：一个带菜单的可折叠布局。
+
+<Steps>
+
+<Step>
+  在应用根节点中加入 `SidebarProvider` 与 `SidebarTrigger`。
+</Step>
+
+```tsx showLineNumbers title="app/layout.tsx"
+import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar"
+import { AppSidebar } from "@/components/app-sidebar"
+
+export default function Layout({ children }: { children: React.ReactNode }) {
+  return (
+    <SidebarProvider>
+      <AppSidebar />
+      <main>
+        <SidebarTrigger />
+        {children}
+      </main>
+    </SidebarProvider>
+  )
+}
+```
+
+<Step>在 `components/app-sidebar.tsx` 中创建一个新的侧边栏组件。</Step>
+
+```tsx showLineNumbers title="components/app-sidebar.tsx"
+import { Sidebar, SidebarContent } from "@/components/ui/sidebar"
+
+export function AppSidebar() {
+  return (
+    <Sidebar>
+      <SidebarContent />
+    </Sidebar>
+  )
+}
+```
+
+<Step>接下来为侧边栏加入 `SidebarMenu`。</Step>
+
+我们会在 `SidebarGroup` 内使用 `SidebarMenu` 组件。
+
+```tsx showLineNumbers title="components/app-sidebar.tsx"
+import { Calendar, Home, Inbox, Search, Settings } from "lucide-react"
+
+import {
+  Sidebar,
+  SidebarContent,
+  SidebarGroup,
+  SidebarGroupContent,
+  SidebarGroupLabel,
+  SidebarMenu,
+  SidebarMenuButton,
+  SidebarMenuItem,
+} from "@/components/ui/sidebar"
+
+// 菜单项。
+const items = [
+  {
+    title: "Home",
+    url: "#",
+    icon: Home,
+  },
+  {
+    title: "Inbox",
+    url: "#",
+    icon: Inbox,
+  },
+  {
+    title: "Calendar",
+    url: "#",
+    icon: Calendar,
+  },
+  {
+    title: "Search",
+    url: "#",
+    icon: Search,
+  },
+  {
+    title: "Settings",
+    url: "#",
+    icon: Settings,
+  },
+]
+
+export function AppSidebar() {
+  return (
+    <Sidebar>
+      <SidebarContent>
+        <SidebarGroup>
+          <SidebarGroupLabel>Application</SidebarGroupLabel>
+          <SidebarGroupContent>
+            <SidebarMenu>
+              {items.map((item) => (
+                <SidebarMenuItem key={item.title}>
+                  <SidebarMenuButton asChild>
+                    <a href={item.url}>
+                      <item.icon />
+                      <span>{item.title}</span>
+                    </a>
+                  </SidebarMenuButton>
+                </SidebarMenuItem>
+              ))}
+            </SidebarMenu>
+          </SidebarGroupContent>
+        </SidebarGroup>
+      </SidebarContent>
+    </Sidebar>
+  )
+}
+```
+
+<Step>至此，你已经完成了第一个侧边栏。</Step>
+
+界面应类似如下所示：
+
+<figure className="flex flex-col gap-4">
+  <ComponentPreview
+    name="sidebar-demo"
+    title="侧边栏"
+    type="block"
+    description="你的第一个侧边栏。"
+    className="w-full"
+  />
+  <figcaption className="text-center text-sm text-gray-500">
+    你的第一个侧边栏。
+  </figcaption>
+</figure>
+
+</Steps>
+
+## 组件
+
+`sidebar.tsx` 中的组件都围绕「可组合」设计，你可以像拼积木一样组装出自己的侧边栏，同时也能与 `DropdownMenu`、`Collapsible`、`Dialog` 等 shadcn/ui 组件良好配合。
+
+**如果需要改动 `sidebar.tsx`，尽管动手。代码属于你，可以将它作为基础按需扩展。**
+
+接下来我们逐一介绍各个组件及其使用方式。
+
+## SidebarProvider
+
+`SidebarProvider` 为 `Sidebar` 提供上下文，因此在应用中使用侧边栏时，应始终将页面包裹在该组件中。
+
+### Props
+
+| 名称            | 类型                      | 说明                         |
+| --------------- | ------------------------- | ---------------------------- |
+| `defaultOpen`  | `boolean`                 | 侧边栏的默认展开状态。       |
+| `open`         | `boolean`                 | 受控的展开状态。             |
+| `onOpenChange` | `(open: boolean) => void` | 设置受控展开状态的回调函数。 |
+
+### 宽度
+
+如果应用中只有一个侧边栏，可以在 `sidebar.tsx` 中通过 `SIDEBAR_WIDTH` 与 `SIDEBAR_WIDTH_MOBILE` 变量设置宽度。
+
+```tsx showLineNumbers title="components/ui/sidebar.tsx"
+const SIDEBAR_WIDTH = "16rem"
+const SIDEBAR_WIDTH_MOBILE = "18rem"
+```
+
+若存在多个侧边栏，可通过 `style` 属性分别传递不同宽度。
+
+`style` 属性中可设置 `--sidebar-width` 与 `--sidebar-width-mobile` 这两个 CSS 变量来控制宽度。
+
+```tsx showLineNumbers title="components/ui/sidebar.tsx"
+<SidebarProvider
+  style={{
+    "--sidebar-width": "20rem",
+    "--sidebar-width-mobile": "20rem",
+  }}
+>
+  <Sidebar />
+</SidebarProvider>
+```
+
+这样既能统一控制宽度，也会同步处理整体布局间距。
+
+### 键盘快捷键
+
+`SIDEBAR_KEYBOARD_SHORTCUT` 变量用于定义打开或关闭侧边栏的快捷键。
+
+默认在 macOS 使用 `cmd+b`，Windows 上使用 `ctrl+b`。
+
+如需调整快捷键，只要修改 `SIDEBAR_KEYBOARD_SHORTCUT` 即可。
+
+```tsx showLineNumbers title="components/ui/sidebar.tsx"
+const SIDEBAR_KEYBOARD_SHORTCUT = "b"
+```
+
+### 持久化状态
+
+`SidebarProvider` 支持在刷新页面或服务端渲染时持久化状态。它通过 Cookie 存储当前的展开/折叠信息，每当状态变化时都会写入名为 `sidebar_state` 的 Cookie，并在后续页面加载时读取恢复。
+
+在 Next.js 中，可按如下方式在 `app/layout.tsx` 中持久化侧边栏状态：
+
+```tsx showLineNumbers title="app/layout.tsx"
+import { cookies } from "next/headers"
+
+import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar"
+import { AppSidebar } from "@/components/app-sidebar"
+
+export async function Layout({ children }: { children: React.ReactNode }) {
+  const cookieStore = await cookies()
+  const defaultOpen = cookieStore.get("sidebar_state")?.value === "true"
+
+  return (
+    <SidebarProvider defaultOpen={defaultOpen}>
+      <AppSidebar />
+      <main>
+        <SidebarTrigger />
+        {children}
+      </main>
+    </SidebarProvider>
+  )
+}
+```
+
+如需更改 Cookie 名称，可在 `sidebar.tsx` 中修改 `SIDEBAR_COOKIE_NAME`。
+
+```tsx showLineNumbers title="components/ui/sidebar.tsx"
+const SIDEBAR_COOKIE_NAME = "sidebar_state"
+```
+
+## Sidebar
+
+`Sidebar` 是用于渲染可折叠侧边栏的核心组件。
+
+```tsx showLineNumbers
+import { Sidebar } from "@/components/ui/sidebar"
+
+export function AppSidebar() {
+  return <Sidebar />
+}
+```
+
+### Props
+
+| 属性           | 类型                              | 说明               |
+| -------------- | --------------------------------- | ------------------ |
+| `side`        | `left` 或 `right`                 | 控制出现的位置。   |
+| `variant`     | `sidebar`、`floating` 或 `inset`  | 控制侧边栏样式。   |
+| `collapsible` | `offcanvas`、`icon` 或 `none`     | 控制折叠行为模式。 |
+
+### side
+
+通过 `side` 属性切换侧边栏显示在左侧或右侧。
+
+可选值包括 `left` 与 `right`。
+
+```tsx showLineNumbers
+import { Sidebar } from "@/components/ui/sidebar"
+
+export function AppSidebar() {
+  return <Sidebar side="left | right" />
+}
+```
+
+### variant
+
+使用 `variant` 属性调整侧边栏的样式。
+
+可选值包括 `sidebar`、`floating` 与 `inset`。
+
+```tsx showLineNumbers
+import { Sidebar } from "@/components/ui/sidebar"
+
+export function AppSidebar() {
+  return <Sidebar variant="sidebar | floating | inset" />
+}
+```
+
+<Callout>
+  **提示：** 使用 `inset` 变体时，记得用 `SidebarInset` 包裹主内容区域。
+</Callout>
+
+```tsx showLineNumbers
+<SidebarProvider>
+  <Sidebar variant="inset" />
+  <SidebarInset>
+    <main>{children}</main>
+  </SidebarInset>
+</SidebarProvider>
+```
+
+### collapsible
+
+`collapsible` 属性用于配置侧边栏的折叠方式。
+
+可选值为 `offcanvas`、`icon` 与 `none`。
+
+```tsx showLineNumbers
+import { Sidebar } from "@/components/ui/sidebar"
+
+export function AppSidebar() {
+  return <Sidebar collapsible="offcanvas | icon | none" />
+}
+```
+
+| 模式         | 说明                                 |
+| ------------ | ------------------------------------ |
+| `offcanvas` | 侧边栏从两侧滑入/滑出。               |
+| `icon`      | 折叠后仅显示图标。                   |
+| `none`      | 不可折叠。                           |
+
+## useSidebar
+
+`useSidebar` 钩子可用于在组件中控制侧边栏行为。
+
+```tsx showLineNumbers
+import { useSidebar } from "@/components/ui/sidebar"
+
+export function AppSidebar() {
+  const {
+    state,
+    open,
+    setOpen,
+    openMobile,
+    setOpenMobile,
+    isMobile,
+    toggleSidebar,
+  } = useSidebar()
+}
+```
+
+| 属性              | 类型                      | 说明                         |
+| ----------------- | ------------------------- | ---------------------------- |
+| `state`          | `expanded` 或 `collapsed` | 当前侧边栏状态。             |
+| `open`           | `boolean`                 | 是否处于展开状态。           |
+| `setOpen`        | `(open: boolean) => void` | 设置展开状态。               |
+| `openMobile`     | `boolean`                 | 移动端是否展开。             |
+| `setOpenMobile`  | `(open: boolean) => void` | 设置移动端展开状态。         |
+| `isMobile`       | `boolean`                 | 是否处于移动端视图。         |
+| `toggleSidebar`  | `() => void`              | 切换侧边栏展开/折叠（通用）。 |
+
+## SidebarHeader
+
+使用 `SidebarHeader` 为侧边栏添加一个固定在顶部的 Header。
+
+下面示例演示如何在 `SidebarHeader` 中加入 `<DropdownMenu>`。
+
+<figure className="mt-6 flex flex-col gap-4">
+  <ComponentPreview
+    name="sidebar-header"
+    title="侧边栏"
+    type="block"
+    description="带下拉菜单的侧边栏头部。"
+    className="w-full"
+  />
+  <figcaption className="text-center text-sm text-gray-500">
+    带下拉菜单的侧边栏头部。
+  </figcaption>
+</figure>
+
+```tsx showLineNumbers title="components/app-sidebar.tsx"
+<Sidebar>
+  <SidebarHeader>
+    <SidebarMenu>
+      <SidebarMenuItem>
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <SidebarMenuButton>
+              Select Workspace
+              <ChevronDown className="ml-auto" />
+            </SidebarMenuButton>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent className="w-[--radix-popper-anchor-width]">
+            <DropdownMenuItem>
+              <span>Acme Inc</span>
+            </DropdownMenuItem>
+            <DropdownMenuItem>
+              <span>Acme Corp.</span>
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
+      </SidebarMenuItem>
+    </SidebarMenu>
+  </SidebarHeader>
+</Sidebar>
+```
+
+## SidebarFooter
+
+使用 `SidebarFooter` 可以为侧边栏添加一个固定在底部的 Footer。
+
+下面示例同样展示了在 `SidebarFooter` 中嵌入 `<DropdownMenu>`。
+
+<figure className="mt-6 flex flex-col gap-4">
+  <ComponentPreview
+    name="sidebar-footer"
+    title="侧边栏"
+    type="block"
+    description="带下拉菜单的侧边栏底部。"
+    className="w-full"
+  />
+  <figcaption className="text-center text-sm text-gray-500">
+    带下拉菜单的侧边栏底部。
+  </figcaption>
+</figure>
+
+```tsx showLineNumbers title="components/app-sidebar.tsx"
+export function AppSidebar() {
+  return (
+    <SidebarProvider>
+      <Sidebar>
+        <SidebarHeader />
+        <SidebarContent />
+        <SidebarFooter>
+          <SidebarMenu>
+            <SidebarMenuItem>
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <SidebarMenuButton>
+                    <User2 /> Username
+                    <ChevronUp className="ml-auto" />
+                  </SidebarMenuButton>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent
+                  side="top"
+                  className="w-[--radix-popper-anchor-width]"
+                >
+                  <DropdownMenuItem>
+                    <span>Account</span>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem>
+                    <span>Billing</span>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem>
+                    <span>Sign out</span>
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            </SidebarMenuItem>
+          </SidebarMenu>
+        </SidebarFooter>
+      </Sidebar>
+    </SidebarProvider>
+  )
+}
+```
+
+## SidebarContent
+
+`SidebarContent` 用于包裹侧边栏主体内容，也是放置各个 `SidebarGroup` 的位置，区域可滚动。
+
+```tsx showLineNumbers
+import { Sidebar, SidebarContent } from "@/components/ui/sidebar"
+
+export function AppSidebar() {
+  return (
+    <Sidebar>
+      <SidebarContent>
+        <SidebarGroup />
+        <SidebarGroup />
+      </SidebarContent>
+    </Sidebar>
+  )
+}
+```
+
+## SidebarGroup
+
+`SidebarGroup` 用来在侧边栏中建立分区。
+
+每个组包含 `SidebarGroupLabel`、`SidebarGroupContent`，以及可选的 `SidebarGroupAction`。
+
+<figure className="mt-6 flex flex-col gap-4">
+  <ComponentPreview
+    name="sidebar-group"
+    title="侧边栏分组"
+    type="block"
+    description="一个侧边栏分组示例。"
+    className="w-full"
+  />
+  <figcaption className="text-center text-sm text-gray-500">
+    侧边栏分组示例。
+  </figcaption>
+</figure>
+
+```tsx showLineNumbers
+import { Sidebar, SidebarContent, SidebarGroup } from "@/components/ui/sidebar"
+
+export function AppSidebar() {
+  return (
+    <Sidebar>
+      <SidebarContent>
+        <SidebarGroup>
+          <SidebarGroupLabel>Application</SidebarGroupLabel>
+          <SidebarGroupAction>
+            <Plus /> <span className="sr-only">Add Project</span>
+          </SidebarGroupAction>
+          <SidebarGroupContent></SidebarGroupContent>
+        </SidebarGroup>
+      </SidebarContent>
+    </Sidebar>
+  )
+}
+```
+
+## 可折叠 SidebarGroup
+
+若要让 `SidebarGroup` 可折叠，可将其包裹在 `Collapsible` 中。
+
+<figure className="mt-6 flex flex-col gap-4">
+  <ComponentPreview
+    name="sidebar-group-collapsible"
+    title="侧边栏分组"
+    type="block"
+    description="可折叠的侧边栏分组。"
+    className="w-full"
+  />
+  <figcaption className="text-center text-sm text-gray-500">
+    可折叠的侧边栏分组。
+  </figcaption>
+</figure>
+
+```tsx showLineNumbers
+export function AppSidebar() {
+  return (
+    <Collapsible defaultOpen className="group/collapsible">
+      <SidebarGroup>
+        <SidebarGroupLabel asChild>
+          <CollapsibleTrigger>
+            Help
+            <ChevronDown className="ml-auto transition-transform group-data-[state=open]/collapsible:rotate-180" />
+          </CollapsibleTrigger>
+        </SidebarGroupLabel>
+        <CollapsibleContent>
+          <SidebarGroupContent />
+        </CollapsibleContent>
+      </SidebarGroup>
+    </Collapsible>
+  )
+}
+```
+
+<Callout>
+  **提示：** 这里将 `CollapsibleTrigger` 包裹在 `SidebarGroupLabel` 内，以渲染出按钮。
+</Callout>
+
+## SidebarGroupAction
+
+`SidebarGroupAction` 用于在 `SidebarGroup` 中添加操作按钮。
+
+<figure className="flex flex-col gap-4">
+  <ComponentPreview
+    name="sidebar-group-action"
+    title="侧边栏分组"
+    type="block"
+    description="带操作按钮的侧边栏分组。"
+    className="w-full"
+  />
+  <figcaption className="text-center text-sm text-gray-500">
+    带操作按钮的侧边栏分组。
+  </figcaption>
+</figure>
+
+```tsx showLineNumbers {5-7}
+export function AppSidebar() {
+  return (
+    <SidebarGroup>
+      <SidebarGroupLabel asChild>Projects</SidebarGroupLabel>
+      <SidebarGroupAction title="Add Project">
+        <Plus /> <span className="sr-only">Add Project</span>
+      </SidebarGroupAction>
+      <SidebarGroupContent />
+    </SidebarGroup>
+  )
+}
+```
+
+## SidebarMenu
+
+`SidebarMenu` 负责在 `SidebarGroup` 内构建菜单。
+
+它由 `SidebarMenuItem`、`SidebarMenuButton`、`<SidebarMenuAction />` 与 `<SidebarMenuSub />` 等组件组合而成。
+
+<Image
+  src="/images/sidebar-menu.png"
+  width="716"
+  height="420"
+  alt="侧边栏菜单（浅色）"
+  className="mt-6 w-full overflow-hidden rounded-lg border dark:hidden"
+/>
+<Image
+  src="/images/sidebar-menu-dark.png"
+  width="716"
+  height="420"
+  alt="侧边栏菜单（深色）"
+  className="mt-6 hidden w-full overflow-hidden rounded-lg border dark:block"
+/>
+
+下面示例展示了 `SidebarMenu` 如何渲染项目列表。
+
+<figure className="mt-6 flex flex-col gap-4">
+  <ComponentPreview
+    name="sidebar-menu"
+    title="侧边栏菜单"
+    type="block"
+    description="包含项目列表的侧边栏菜单。"
+    className="w-full"
+  />
+  <figcaption className="text-center text-sm text-gray-500">
+    含项目列表的侧边栏菜单。
+  </figcaption>
+</figure>
+
+```tsx showLineNumbers
+<Sidebar>
+  <SidebarContent>
+    <SidebarGroup>
+      <SidebarGroupLabel>Projects</SidebarGroupLabel>
+      <SidebarGroupContent>
+        <SidebarMenu>
+          {projects.map((project) => (
+            <SidebarMenuItem key={project.name}>
+              <SidebarMenuButton asChild>
+                <a href={project.url}>
+                  <project.icon />
+                  <span>{project.name}</span>
+                </a>
+              </SidebarMenuButton>
+            </SidebarMenuItem>
+          ))}
+        </SidebarMenu>
+      </SidebarGroupContent>
+    </SidebarGroup>
+  </SidebarContent>
+</Sidebar>
+```
+
+## SidebarMenuButton
+
+`SidebarMenuButton` 用于在 `SidebarMenuItem` 内渲染菜单按钮。
+
+### Link 或 Anchor
+
+默认情况下会渲染 `<button>`，但可以通过 `asChild` 将其替换为 `Link`、`a` 等组件。
+
+```tsx showLineNumbers
+<SidebarMenuButton asChild>
+  <a href="#">Home</a>
+</SidebarMenuButton>
+```
+
+### 图标与标签
+
+按钮内部可同时显示图标与文本，记得使用 `<span>` 包裹文本以便截断。
+
+```tsx showLineNumbers
+<SidebarMenuButton asChild>
+  <a href="#">
+    <Home />
+    <span>Home</span>
+  </a>
+</SidebarMenuButton>
+```
+
+### isActive
+
+通过 `isActive` 属性标记当前激活的菜单项。
+
+```tsx showLineNumbers
+<SidebarMenuButton asChild isActive>
+  <a href="#">Home</a>
+</SidebarMenuButton>
+```
+
+## SidebarMenuAction
+
+`SidebarMenuAction` 用于在 `SidebarMenuItem` 内渲染操作按钮。
+
+它与 `SidebarMenuButton` 独立工作，因此可以同时拥有一个可点击的链接和一个额外操作按钮。
+
+```tsx showLineNumbers
+<SidebarMenuItem>
+  <SidebarMenuButton asChild>
+    <a href="#">
+      <Home />
+      <span>Home</span>
+    </a>
+  </SidebarMenuButton>
+  <SidebarMenuAction>
+    <Plus /> <span className="sr-only">Add Project</span>
+  </SidebarMenuAction>
+</SidebarMenuItem>
+```
+
+### DropdownMenu
+
+下面示例展示了如何在 `SidebarMenuAction` 中渲染 `DropdownMenu`。
+
+<figure className="mt-6 flex flex-col gap-4">
+  <ComponentPreview
+    name="sidebar-menu-action"
+    title="侧边栏菜单操作"
+    type="block"
+    description="带下拉菜单的侧边栏菜单动作。"
+    className="w-full"
+  />
+  <figcaption className="text-center text-sm text-gray-500">
+    带下拉菜单的侧边栏菜单动作。
+  </figcaption>
+</figure>
+
+```tsx showLineNumbers
+<SidebarMenuItem>
+  <SidebarMenuButton asChild>
+    <a href="#">
+      <Home />
+      <span>Home</span>
+    </a>
+  </SidebarMenuButton>
+  <DropdownMenu>
+    <DropdownMenuTrigger asChild>
+      <SidebarMenuAction>
+        <MoreHorizontal />
+      </SidebarMenuAction>
+    </DropdownMenuTrigger>
+    <DropdownMenuContent side="right" align="start">
+      <DropdownMenuItem>
+        <span>Edit Project</span>
+      </DropdownMenuItem>
+      <DropdownMenuItem>
+        <span>Delete Project</span>
+      </DropdownMenuItem>
+    </DropdownMenuContent>
+  </DropdownMenu>
+</SidebarMenuItem>
+```
+
+## SidebarMenuSub
+
+`SidebarMenuSub` 用于在 `SidebarMenu` 中渲染子菜单。
+
+使用 `<SidebarMenuSubItem />` 与 `<SidebarMenuSubButton />` 可以定义每个子菜单项。
+
+<figure className="mt-6 flex flex-col gap-4">
+  <ComponentPreview
+    name="sidebar-menu-sub"
+    title="侧边栏子菜单"
+    type="block"
+    description="侧边栏菜单子项示例。"
+    className="w-full"
+  />
+  <figcaption className="text-center text-sm text-gray-500">
+    带子菜单的侧边栏菜单。
+  </figcaption>
+</figure>
+
+```tsx showLineNumbers
+<SidebarMenuItem>
+  <SidebarMenuButton />
+  <SidebarMenuSub>
+    <SidebarMenuSubItem>
+      <SidebarMenuSubButton />
+    </SidebarMenuSubItem>
+    <SidebarMenuSubItem>
+      <SidebarMenuSubButton />
+    </SidebarMenuSubItem>
+  </SidebarMenuSub>
+</SidebarMenuItem>
+```
+
+## 可折叠菜单
+
+若要让 `SidebarMenu` 可折叠，可将其与 `SidebarMenuSub` 一同置于 `Collapsible` 中。
+
+<figure className="mt-6 flex flex-col gap-4">
+  <ComponentPreview
+    name="sidebar-menu-collapsible"
+    title="侧边栏菜单"
+    type="block"
+    description="可折叠的侧边栏菜单。"
+    className="w-full"
+  />
+  <figcaption className="text-center text-sm text-gray-500">
+    可折叠的侧边栏菜单。
+  </figcaption>
+</figure>
+
+```tsx showLineNumbers
+<SidebarMenu>
+  <Collapsible defaultOpen className="group/collapsible">
+    <SidebarMenuItem>
+      <CollapsibleTrigger asChild>
+        <SidebarMenuButton />
+      </CollapsibleTrigger>
+      <CollapsibleContent>
+        <SidebarMenuSub>
+          <SidebarMenuSubItem />
+        </SidebarMenuSub>
+      </CollapsibleContent>
+    </SidebarMenuItem>
+  </Collapsible>
+</SidebarMenu>
+```
+
+## SidebarMenuBadge
+
+`SidebarMenuBadge` 用于在 `SidebarMenuItem` 中展示角标。
+
+<figure className="mt-6 flex flex-col gap-4">
+  <ComponentPreview
+    name="sidebar-menu-badge"
+    title="侧边栏菜单角标"
+    type="block"
+    description="包含角标的侧边栏菜单。"
+    className="w-full"
+  />
+  <figcaption className="text-center text-sm text-gray-500">
+    带角标的侧边栏菜单。
+  </figcaption>
+</figure>
+
+```tsx showLineNumbers
+<SidebarMenuItem>
+  <SidebarMenuButton />
+  <SidebarMenuBadge>24</SidebarMenuBadge>
+</SidebarMenuItem>
+```
+
+## SidebarMenuSkeleton
+
+`SidebarMenuSkeleton` 用于为 `SidebarMenu` 渲染骨架屏，可在使用 React Server Components、SWR 或 react-query 等场景展示加载状态。
+
+```tsx showLineNumbers
+function NavProjectsSkeleton() {
+  return (
+    <SidebarMenu>
+      {Array.from({ length: 5 }).map((_, index) => (
+        <SidebarMenuItem key={index}>
+          <SidebarMenuSkeleton />
+        </SidebarMenuItem>
+      ))}
+    </SidebarMenu>
+  )
+}
+```
+
+## SidebarSeparator
+
+`SidebarSeparator` 用于在侧边栏中插入分隔线。
+
+```tsx showLineNumbers
+<Sidebar>
+  <SidebarHeader />
+  <SidebarSeparator />
+  <SidebarContent>
+    <SidebarGroup />
+    <SidebarSeparator />
+    <SidebarGroup />
+  </SidebarContent>
+</Sidebar>
+```
+
+## SidebarTrigger
+
+`SidebarTrigger` 用于渲染切换侧边栏的按钮。
+
+它必须在 `SidebarProvider` 内使用。
+
+```tsx showLineNumbers
+<SidebarProvider>
+  <Sidebar />
+  <main>
+    <SidebarTrigger />
+  </main>
+</SidebarProvider>
+```
+
+### 自定义触发器
+
+如需自定义触发按钮，可结合 `useSidebar` 钩子。
+
+```tsx showLineNumbers
+import { useSidebar } from "@/components/ui/sidebar"
+
+export function CustomTrigger() {
+  const { toggleSidebar } = useSidebar()
+
+  return <button onClick={toggleSidebar}>Toggle Sidebar</button>
+}
+```
+
+## SidebarRail
+
+`SidebarRail` 会在侧边栏外侧渲染一条轨道，可用于切换侧边栏。
+
+```tsx showLineNumbers
+<Sidebar>
+  <SidebarHeader />
+  <SidebarContent>
+    <SidebarGroup />
+  </SidebarContent>
+  <SidebarFooter />
+  <SidebarRail />
+</Sidebar>
+```
+
+## 数据获取
+
+### React Server Components
+
+下面示例展示了如何在 React Server Components 中渲染项目列表。
+
+<figure className="mt-6 flex flex-col gap-4">
+  <ComponentPreview
+    name="sidebar-rsc"
+    title="侧边栏菜单 · RSC"
+    type="block"
+    description="使用 React Server Components 的侧边栏菜单。"
+    className="w-full"
+  />
+  <figcaption className="text-center text-sm text-gray-500">
+    使用 React Server Components 的侧边栏菜单。
+  </figcaption>
+</figure>
+
+```tsx showLineNumbers {6} title="用于展示加载状态的骨架屏"
+function NavProjectsSkeleton() {
+  return (
+    <SidebarMenu>
+      {Array.from({ length: 5 }).map((_, index) => (
+        <SidebarMenuItem key={index}>
+          <SidebarMenuSkeleton showIcon />
+        </SidebarMenuItem>
+      ))}
+    </SidebarMenu>
+  )
+}
+```
+
+```tsx showLineNumbers {2} title="在服务端组件中获取数据"
+async function NavProjects() {
+  const projects = await fetchProjects()
+
+  return (
+    <SidebarMenu>
+      {projects.map((project) => (
+        <SidebarMenuItem key={project.name}>
+          <SidebarMenuButton asChild>
+            <a href={project.url}>
+              <project.icon />
+              <span>{project.name}</span>
+            </a>
+          </SidebarMenuButton>
+        </SidebarMenuItem>
+      ))}
+    </SidebarMenu>
+  )
+}
+```
+
+```tsx showLineNumbers {8-10} title="结合 React Suspense 使用"
+function AppSidebar() {
+  return (
+    <Sidebar>
+      <SidebarContent>
+        <SidebarGroup>
+          <SidebarGroupLabel>Projects</SidebarGroupLabel>
+          <SidebarGroupContent>
+            <React.Suspense fallback={<NavProjectsSkeleton />}>
+              <NavProjects />
+            </React.Suspense>
+          </SidebarGroupContent>
+        </SidebarGroup>
+      </SidebarContent>
+    </Sidebar>
+  )
+}
+```
+
+### SWR 与 React Query
+
+使用 [SWR](https://swr.vercel.app/) 或 [react-query](https://tanstack.com/query/latest/docs/framework/react/overview) 时也可以采用相同思路。
+
+```tsx showLineNumbers title="SWR 示例"
+function NavProjects() {
+  const { data, isLoading } = useSWR("/api/projects", fetcher)
+
+  if (isLoading) {
+    return (
+      <SidebarMenu>
+        {Array.from({ length: 5 }).map((_, index) => (
+          <SidebarMenuItem key={index}>
+            <SidebarMenuSkeleton showIcon />
+          </SidebarMenuItem>
+        ))}
+      </SidebarMenu>
+    )
+  }
+
+  if (!data) {
+    return ...
+  }
+
+  return (
+    <SidebarMenu>
+      {data.map((project) => (
+        <SidebarMenuItem key={project.name}>
+          <SidebarMenuButton asChild>
+            <a href={project.url}>
+              <project.icon />
+              <span>{project.name}</span>
+            </a>
+          </SidebarMenuButton>
+        </SidebarMenuItem>
+      ))}
+    </SidebarMenu>
+  )
+}
+```
+
+```tsx showLineNumbers title="React Query 示例"
+function NavProjects() {
+  const { data, isLoading } = useQuery()
+
+  if (isLoading) {
+    return (
+      <SidebarMenu>
+        {Array.from({ length: 5 }).map((_, index) => (
+          <SidebarMenuItem key={index}>
+            <SidebarMenuSkeleton showIcon />
+          </SidebarMenuItem>
+        ))}
+      </SidebarMenu>
+    )
+  }
+
+  if (!data) {
+    return ...
+  }
+
+  return (
+    <SidebarMenu>
+      {data.map((project) => (
+        <SidebarMenuItem key={project.name}>
+          <SidebarMenuButton asChild>
+            <a href={project.url}>
+              <project.icon />
+              <span>{project.name}</span>
+            </a>
+          </SidebarMenuButton>
+        </SidebarMenuItem>
+      ))}
+    </SidebarMenu>
+  )
+}
+```
+
+## 受控侧边栏
+
+通过 `open` 与 `onOpenChange` Props 可将侧边栏切换为受控模式。
+
+<figure className="mt-6 flex flex-col gap-4">
+  <ComponentPreview
+    name="sidebar-controlled"
+    title="受控侧边栏"
+    type="block"
+    description="受控侧边栏示例。"
+    className="w-full"
+  />
+  <figcaption className="text-center text-sm text-gray-500">
+    受控侧边栏示例。
+  </figcaption>
+</figure>
+
+```tsx showLineNumbers
+export function AppSidebar() {
+  const [open, setOpen] = React.useState(false)
+
+  return (
+    <SidebarProvider open={open} onOpenChange={setOpen}>
+      <Sidebar />
+    </SidebarProvider>
+  )
+}
+```
+
+## 主题
+
+侧边栏使用以下 CSS 变量来控制配色。
+
+```css
+@layer base {
+  :root {
+    --sidebar-background: 0 0% 98%;
+    --sidebar-foreground: 240 5.3% 26.1%;
+    --sidebar-primary: 240 5.9% 10%;
+    --sidebar-primary-foreground: 0 0% 98%;
+    --sidebar-accent: 240 4.8% 95.9%;
+    --sidebar-accent-foreground: 240 5.9% 10%;
+    --sidebar-border: 220 13% 91%;
+    --sidebar-ring: 217.2 91.2% 59.8%;
+  }
+
+  .dark {
+    --sidebar-background: 240 5.9% 10%;
+    --sidebar-foreground: 240 4.8% 95.9%;
+    --sidebar-primary: 0 0% 98%;
+    --sidebar-primary-foreground: 240 5.9% 10%;
+    --sidebar-accent: 240 3.7% 15.9%;
+    --sidebar-accent-foreground: 240 4.8% 95.9%;
+    --sidebar-border: 240 3.7% 15.9%;
+    --sidebar-ring: 217.2 91.2% 59.8%;
+  }
+}
+```
+
+**我们刻意将侧边栏与应用其余部分使用不同的变量**，这样可以轻松定制出与主界面风格不同的侧边栏，例如让侧边栏比主区域更暗。
+
+## 样式技巧
+
+以下提供一些基于状态的样式小贴士。
+
+- **根据折叠模式调整元素。** 下面示例会在侧边栏处于 `icon` 模式时隐藏 `SidebarGroup`。
+
+```tsx
+<Sidebar collapsible="icon">
+  <SidebarContent>
+    <SidebarGroup className="group-data-[collapsible=icon]:hidden" />
+  </SidebarContent>
+</Sidebar>
+```
+
+- **根据菜单按钮的激活状态调整操作按钮显示。** 下面代码会在菜单按钮激活时强制显示菜单动作。
+
+```tsx
+<SidebarMenuItem>
+  <SidebarMenuButton />
+  <SidebarMenuAction className="peer-data-[active=true]/menu-button:opacity-100" />
+</SidebarMenuItem>
+```
+
+更多关于状态驱动样式的示例可参考这条 [Twitter 线程](https://x.com/shadcn/status/1842329158879420864)。
+
+## 更新日志
+
+### 2024-10-30 setOpen 中的 Cookie 处理
+
+- [#5593](https://github.com/shadcn-ui/ui/pull/5593) - 优化了 `<SidebarProvider>` 内 `setOpen` 回调的逻辑。
+
+请按以下方式更新 `<SidebarProvider>` 中的 `setOpen`：
+
+```tsx showLineNumbers
+const setOpen = React.useCallback(
+  (value: boolean | ((value: boolean) => boolean)) => {
+    const openState = typeof value === "function" ? value(open) : value
+    if (setOpenProp) {
+      setOpenProp(openState)
+    } else {
+      _setOpen(openState)
+    }
+
+    // 将当前侧边栏状态写入 Cookie。
+    document.cookie = `${SIDEBAR_COOKIE_NAME}=${openState}; path=/; max-age=${SIDEBAR_COOKIE_MAX_AGE}`
+  },
+  [setOpenProp, open]
+)
+```
+
+### 2024-10-21 修复 `text-sidebar-foreground`
+
+- [#5491](https://github.com/shadcn-ui/ui/pull/5491) - 将 `text-sidebar-foreground` 从 `<SidebarProvider>` 挪至 `<Sidebar>` 组件。
+
+### 2024-10-20 修正 `useSidebar` 钩子中的拼写
+
+修复了 `useSidebar` 钩子中的错误提示文案。
+
+```diff showLineNumbers title="sidebar.tsx"
+-  throw new Error("useSidebar must be used within a Sidebar.")
++  throw new Error("useSidebar must be used within a SidebarProvider.")
+```

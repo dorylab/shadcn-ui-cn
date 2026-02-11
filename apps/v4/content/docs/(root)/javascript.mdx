@@ -1,0 +1,44 @@
+---
+title: JavaScript
+description: 如何在 JavaScript 项目中使用 shadcn/ui
+---
+
+当前项目及其组件均使用 TypeScript 编写，我们同样推荐你在项目中使用 TypeScript。
+
+不过，我们也通过 [CLI](/docs/cli) 提供了 JavaScript 版本的组件。
+
+如果想停用 TypeScript，可以在 `components.json` 中将 `tsx` 标记设为 `false`：
+
+```json {4} title="components.json" showLineNumbers
+{
+  "style": "new-york",
+  "rsc": false,
+  "tsx": false,
+  "tailwind": {
+    "config": "",
+    "css": "src/app/globals.css",
+    "baseColor": "zinc",
+    "cssVariables": true
+  },
+  "iconLibrary": "lucide",
+  "aliases": {
+    "components": "@/components",
+    "utils": "@/lib/utils",
+    "ui": "@/components/ui",
+    "lib": "@/lib",
+    "hooks": "@/hooks"
+  }
+}
+```
+
+想要配置导入别名，可以使用如下 `jsconfig.json`：
+
+```json {4} title="jsconfig.json" showLineNumbers
+{
+  "compilerOptions": {
+    "paths": {
+      "@/*": ["./*"]
+    }
+  }
+}
+```

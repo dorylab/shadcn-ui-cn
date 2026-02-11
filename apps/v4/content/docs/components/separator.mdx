@@ -1,0 +1,57 @@
+---
+title: Separator
+description: 从视觉或语义上分隔内容的组件。
+component: true
+links:
+  doc: https://www.radix-ui.com/docs/primitives/components/separator
+  api: https://www.radix-ui.com/docs/primitives/components/separator#api-reference
+---
+
+<ComponentPreview name="separator-demo" description="分隔线组件示例。" />
+
+## 安装
+
+<CodeTabs>
+
+<TabsList>
+  <TabsTrigger value="cli">CLI</TabsTrigger>
+  <TabsTrigger value="manual">手动</TabsTrigger>
+</TabsList>
+<TabsContent value="cli">
+
+```bash
+npx shadcn@latest add separator
+```
+
+</TabsContent>
+
+<TabsContent value="manual">
+
+<Steps>
+<Step>安装下列依赖：</Step>
+
+```bash
+npm install @radix-ui/react-separator
+```
+
+<Step>将下面的代码复制到你的项目中。</Step>
+
+<ComponentSource name="separator" title="components/ui/separator.tsx" />
+
+<Step>根据项目结构调整导入路径。</Step>
+
+</Steps>
+
+</TabsContent>
+
+</CodeTabs>
+
+## 用法
+
+```tsx showLineNumbers
+import { Separator } from "@/components/ui/separator"
+```
+
+```tsx showLineNumbers
+<Separator />
+```

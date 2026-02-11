@@ -1,0 +1,65 @@
+---
+title: Avatar
+description: 用于展示用户头像的图像组件，并具备回退内容。
+component: true
+links:
+  doc: https://www.radix-ui.com/docs/primitives/components/avatar
+  api: https://www.radix-ui.com/docs/primitives/components/avatar#api-reference
+---
+
+<ComponentPreview
+  name="avatar-demo"
+  title="头像"
+  description="带有回退内容的头像组件。"
+/>
+
+## 安装
+
+<CodeTabs>
+
+<TabsList>
+  <TabsTrigger value="cli">CLI</TabsTrigger>
+  <TabsTrigger value="manual">手动</TabsTrigger>
+</TabsList>
+<TabsContent value="cli">
+
+```bash
+npx shadcn@latest add avatar
+```
+
+</TabsContent>
+
+<TabsContent value="manual">
+
+<Steps>
+
+<Step>安装下列依赖：</Step>
+
+```bash
+npm install @radix-ui/react-avatar
+```
+
+<Step>将下面的代码复制到你的项目中。</Step>
+
+<ComponentSource name="avatar" title="components/ui/avatar.tsx" />
+
+<Step>根据项目结构调整导入路径。</Step>
+
+</Steps>
+
+</TabsContent>
+
+</CodeTabs>
+
+## 用法
+
+```tsx showLineNumbers
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
+```
+
+```tsx showLineNumbers
+<Avatar>
+  <AvatarImage src="https://github.com/shadcn.png" />
+  <AvatarFallback>CN</AvatarFallback>
+</Avatar>
+```

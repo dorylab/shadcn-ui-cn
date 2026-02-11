@@ -1,0 +1,663 @@
+---
+title: 更新日志
+description: 最新更新与公告。
+toc: false
+---
+
+## 2025 年 10 月：全新组件
+
+这次的组件更新，我回顾了我们日常反复构建的那些“无聊”部分，把它们提炼成真正可复用的抽象。
+
+**这些组件可与任意组件库一起使用——Radix、Base UI、React Aria 等等。直接复制粘贴到你的项目即可。**
+
+- [Spinner](#spinner)：用于展示加载状态的指示器。
+- [Kbd](#kbd)：展示单个或组合快捷键。
+- [Button Group](#button-group)：用于操作组或分裂按钮的按钮组容器。
+- [Input Group](#input-group)：带图标、按钮、标签等的输入容器。
+- [Field](#field)：一个组件搞定所有表单。
+- [Item](#item)：用于展示条目、卡片等列表内容。
+- [Empty](#empty)：用于展示空状态的组件。
+
+### Spinner
+
+先从最简单的组件开始：**Spinner** 和 **Kbd**。很基础，你一定知道它们的用途。
+
+渲染一个 spinner：
+
+```tsx
+import { Spinner } from "@/components/ui/spinner"
+```
+
+```tsx
+<Spinner />
+```
+
+显示效果如下：
+
+<ComponentPreview
+  name="spinner-basic"
+  className="[&_.preview]:h-[250px] [&_pre]:!h-[250px]"
+/>
+
+在按钮中使用：
+
+<ComponentPreview
+  name="spinner-button"
+  className="[&_.preview]:h-[250px] [&_pre]:!h-[250px]"
+/>
+
+你也可以编辑代码，替换成自己的自定义 spinner。
+
+<ComponentPreview
+  name="spinner-custom"
+  className="[&_.preview]:h-[250px] [&_pre]:!h-[250px]"
+/>
+
+### Kbd
+
+Kbd 组件用于渲染键盘按键。
+
+```tsx
+import { Kbd, KbdGroup } from "@/components/ui/kbd"
+```
+
+```tsx
+<Kbd>Ctrl</Kbd>
+```
+
+使用 `KbdGroup` 可以组合多个按键：
+
+```tsx showLineNumbers
+<KbdGroup>
+  <Kbd>Ctrl</Kbd>
+  <Kbd>B</Kbd>
+</KbdGroup>
+```
+
+<ComponentPreview
+  name="kbd-demo"
+  className="[&_.preview]:h-[250px] [&_pre]:!h-[250px]"
+/>
+
+你可以把它放进按钮、提示、输入组等各类组件中。
+
+### Button Group
+
+常收到的需求之一：按钮组。它是一个容器，用来把相关按钮组合在一起，样式统一，适合操作组、分裂按钮等场景。
+
+<ComponentPreview
+  name="button-group-demo"
+  className="[&_.preview]:h-[250px] [&_pre]:!h-[250px]"
+/>
+
+使用方式：
+
+```tsx
+import { ButtonGroup } from "@/components/ui/button-group"
+```
+
+```tsx showLineNumbers
+<ButtonGroup>
+  <Button>Button 1</Button>
+  <Button>Button 2</Button>
+</ButtonGroup>
+```
+
+可以嵌套按钮组构建更复杂的布局：
+
+```tsx showLineNumbers
+<ButtonGroup>
+  <ButtonGroup>
+    <Button>Button 1</Button>
+    <Button>Button 2</Button>
+  </ButtonGroup>
+  <ButtonGroup>
+    <Button>Button 3</Button>
+    <Button>Button 4</Button>
+  </ButtonGroup>
+</ButtonGroup>
+```
+
+使用 `ButtonGroupSeparator` 可实现分裂按钮（经典下拉模式）。
+
+<ComponentPreview
+  name="button-group-dropdown"
+  className="[&_.preview]:h-[250px] [&_pre]:!h-[250px]"
+/>
+
+也可以给输入框添加前后缀按钮或文本：
+
+<ComponentPreview
+  name="button-group-select"
+  className="[&_.preview]:h-[250px] [&_pre]:!h-[250px]"
+/>
+
+```tsx showLineNumbers
+<ButtonGroup>
+  <ButtonGroupText>Prefix</ButtonGroupText>
+  <Input placeholder="Type something here..." />
+  <Button>Button</Button>
+</ButtonGroup>
+```
+
+### Input Group
+
+Input Group 用于给输入框增加图标、按钮等。那些你总是想要放在输入框周围的小功能都可以塞进来。
+
+```tsx
+import {
+  InputGroup,
+  InputGroupAddon,
+  InputGroupInput,
+} from "@/components/ui/input-group"
+```
+
+```tsx showLineNumbers
+<InputGroup>
+  <InputGroupInput placeholder="Search..." />
+  <InputGroupAddon>
+    <SearchIcon />
+  </InputGroupAddon>
+</InputGroup>
+```
+
+图标示例：
+
+<ComponentPreview
+  name="input-group-icon"
+  className="[&_.preview]:h-[300px] [&_pre]:!h-[300px]"
+/>
+
+可以加入按钮：
+
+<ComponentPreview
+  name="input-group-button"
+  className="[&_.preview]:h-[300px] [&_pre]:!h-[300px]"
+/>
+
+或加入文本、标签、提示等内容：
+
+<ComponentPreview
+  name="input-group-text"
+  className="[&_.preview]:h-[350px] [&_pre]:!h-[350px]"
+/>
+
+支持 textarea，让你快速构建各种带旋钮、参数的表单或提示输入。
+
+<ComponentPreview
+  name="input-group-textarea"
+  className="[&_.preview]:h-[450px] [&_pre]:!h-[450px]"
+/>
+
+当然也能与 spinner 等元素组合：
+
+<ComponentPreview
+  name="input-group-spinner"
+  className="[&_.preview]:h-[350px] [&_pre]:!h-[350px]"
+/>
+
+### Field
+
+压轴登场的 **Field**：用于构建复杂表单的核心组件。这个抽象花了我很长时间，但最终实现了对所有表单库的支持：Server Actions、React Hook Form、TanStack Form，甚至你自己的表单方案。
+
+```tsx
+import {
+  Field,
+  FieldDescription,
+  FieldError,
+  FieldLabel,
+} from "@/components/ui/field"
+```
+
+基础用法：
+
+```tsx showLineNumbers
+<Field>
+  <FieldLabel htmlFor="username">Username</FieldLabel>
+  <Input id="username" placeholder="Max Leiter" />
+  <FieldDescription>
+    Choose a unique username for your account.
+  </FieldDescription>
+</Field>
+```
+
+<ComponentPreview
+  name="field-input"
+  className="[&_.preview]:h-[350px] [&_pre]:!h-[350px]"
+/>
+
+它支持所有表单控件：输入框、文本域、选择器、复选框、单选框、开关、滑块……下面是一个完整示例：
+
+<ComponentPreview
+  name="field-demo"
+  className="[&_.preview]:h-[850px] [&_pre]:!h-[850px]"
+/>
+
+一些复选框示例：
+
+<ComponentPreview
+  name="field-checkbox"
+  className="[&_.preview]:h-[500px] [&_pre]:!h-[500px]"
+/>
+
+通过 `FieldGroup` 与 `FieldSet` 把字段组合起来，做多段式表单再合适不过。
+
+```tsx showLineNumbers
+<FieldSet>
+  <FieldLegend />
+  <FieldGroup>
+    <Field />
+    <Field />
+  </FieldGroup>
+</FieldSet>
+```
+
+<ComponentPreview
+  name="field-fieldset"
+  className="[&_.preview]:h-[500px] [&_pre]:!h-[500px]"
+/>
+
+响应式也非常简单。使用 `orientation="responsive"`，组件会根据容器宽度在纵向与横向间自动切换。
+
+<ComponentPreview
+  name="field-responsive"
+  className="[&_.preview]:h-[600px] [&_pre]:!h-[600px]"
+/>
+
+还有一个小技巧：用 `FieldLabel` 包裹字段即可做出可选中区域的组合项，颜值与交互都很好。
+
+<ComponentPreview
+  name="field-choice-card"
+  className="[&_.preview]:h-[600px] [&_pre]:!h-[600px]"
+/>
+
+### Item
+
+这是一个通用的 flex 容器，几乎可以容纳任何类型的内容。
+
+我之前已经写过无数次类似结构，于是索性做成组件，现在几乎到处都用它：展示条目列表、卡片等等。
+
+```tsx
+import {
+  Item,
+  ItemContent,
+  ItemDescription,
+  ItemMedia,
+  ItemTitle,
+} from "@/components/ui/item"
+```
+
+基础示例：
+
+```tsx showLineNumbers
+<Item>
+  <ItemMedia variant="icon">
+    <HomeIcon />
+  </ItemMedia>
+  <ItemContent>
+    <ItemTitle>Dashboard</ItemTitle>
+    <ItemDescription>Overview of your account and activity.</ItemDescription>
+  </ItemContent>
+</Item>
+```
+
+<ComponentPreview
+  name="item-demo"
+  className="[&_.preview]:h-[300px] [&_.preview]:p-4 [&_pre]:!h-[300px]"
+/>
+
+可以添加图标、头像或图片：
+
+<ComponentPreview
+  name="item-icon"
+  className="[&_.preview]:h-[300px] [&_.preview]:p-4 [&_pre]:!h-[300px]"
+/>
+
+<ComponentPreview
+  name="item-avatar"
+  className="[&_.preview]:h-[300px] [&_.preview]:p-4 [&_pre]:!h-[300px]"
+/>
+
+使用 `ItemGroup` 可以轻松渲染条目列表：
+
+<ComponentPreview
+  name="item-group"
+  className="[&_.preview]:h-[500px] [&_.preview]:p-4 [&_pre]:!h-[500px]"
+/>
+
+需要链接？使用 `asChild` 即可：
+
+```tsx showLineNumbers
+<Item asChild>
+  <a href="/dashboard">
+    <ItemMedia variant="icon">
+      <HomeIcon />
+    </ItemMedia>
+    <ItemContent>
+      <ItemTitle>Dashboard</ItemTitle>
+      <ItemDescription>Overview of your account and activity.</ItemDescription>
+    </ItemContent>
+  </a>
+</Item>
+```
+
+<ComponentPreview
+  name="item-link"
+  className="[&_.preview]:h-[400px] [&_.preview]:p-4 [&_pre]:!h-[400px]"
+/>
+
+### Empty
+
+最后一个：**Empty**。用于在应用中展示空状态。
+
+```tsx
+import {
+  Empty,
+  EmptyContent,
+  EmptyDescription,
+  EmptyMedia,
+  EmptyTitle,
+} from "@/components/ui/empty"
+```
+
+使用示例：
+
+```tsx showLineNumbers
+<Empty>
+  <EmptyMedia variant="icon">
+    <InboxIcon />
+  </EmptyMedia>
+  <EmptyTitle>No messages</EmptyTitle>
+  <EmptyDescription>You don't have any messages yet.</EmptyDescription>
+  <EmptyContent>
+    <Button>Send a message</Button>
+  </EmptyContent>
+</Empty>
+```
+
+<ComponentPreview
+  name="empty-demo"
+  className="[&_.preview]:h-[400px] [&_.preview]:p-4 [&_pre]:!h-[400px]"
+/>
+
+也可以配合头像使用：
+
+<ComponentPreview
+  name="empty-avatar"
+  className="[&_.preview]:h-[400px] [&_pre]:!h-[400px]"
+/>
+
+或与输入组结合，用于搜索结果、邮件订阅等场景：
+
+<ComponentPreview
+  name="empty-input-group"
+  className="[&_.preview]:h-[450px] [&_pre]:!h-[450px]"
+/>
+
+以上，七个全新组件，兼容所有库，随时可用于你的项目。
+
+---
+
+## 2025 年 9 月：注册表索引
+
+我们创建了一个开源注册表索引，方便直接安装条目。
+
+无需额外配置就能通过 CLI 搜索、查看并添加索引中的组件。所需配置会自动写入你的 `components.json`。
+
+```bash
+npx shadcn add @ai-elements/prompt-input
+```
+
+完整列表见 [https://ui.shadcn.com/r/registries.json](https://ui.shadcn.com/r/registries.json)。
+
+若要为索引新增注册表，请向 `shadcn/ui` 仓库提交 PR，详情参见 [Registry Index 文档](/docs/registry/registry-index)。
+
+---
+
+## 2025 年 8 月：shadcn CLI 3.0 与 MCP Server
+
+我们刚发布了 shadcn CLI 3.0，加入命名空间注册表、高级鉴权、新命令以及重写后的注册表引擎。
+
+### 新增内容
+
+- [命名空间注册表](#namespaced-registries)：通过 `@registry/name` 安装组件。
+- [私有注册表](#private-registries)：使用高级鉴权保护你的注册表。
+- [搜索与发现](#search--discovery)：新命令支持安装前查看代码。
+- [MCP Server](#mcp-server)：为所有注册表提供 MCP 服务。
+- [全面提速](#faster-everything)：彻底重写的解析引擎。
+- [更好的错误处理](#improved-error-handling)：同时照顾用户与 LLM。
+- [升级指南](#upgrade-guide)：现有用户的迁移说明。
+
+### Namespaced Registries
+
+3.0 最大的改动是命名空间注册表。你可以使用 `@registry/name` 格式，从社区、公司私有或内部注册表安装组件，更方便地跨团队分发代码。
+
+在 `components.json` 中配置注册表：
+
+```json title="components.json"
+{
+  "registries": {
+    "@acme": "https://acme.com/r/{name}.json",
+    "@internal": {
+      "url": "https://registry.company.com/{name}",
+      "headers": {
+        "Authorization": "Bearer ${REGISTRY_TOKEN}"
+      }
+    }
+  }
+}
+```
+
+然后使用 `@registry/name` 安装组件：
+
+```bash
+npx shadcn add @acme/button @internal/auth-system
+```
+
+这是完全去中心化的：没有中心注册机构，你可以自定义命名空间并按团队需要组织组件。
+
+```json title="components.json" showLineNumbers
+{
+  "registries": {
+    "@design": "https://registry.company.com/design/{name}.json",
+    "@engineering": "https://registry.company.com/eng/{name}.json",
+    "@marketing": "https://registry.company.com/marketing/{name}.json"
+  }
+}
+```
+
+组件之间甚至可以互相依赖来自不同注册表的资源，解析与安装都会自动完成。
+
+```json title="registry-item.json" showLineNumbers
+{
+  "name": "dashboard",
+  "type": "registry:block",
+  "registryDependencies": [
+    "@shadcn/card",
+    "@v0/chart",
+    "@acme/data-table",
+    "@lib/data-fetcher",
+    "@ai/analytics-prompt"
+  ]
+}
+```
+
+### Private Registries
+
+需要保密的组件？没问题。可通过令牌、API Key 或自定义请求头配置鉴权：
+
+```json title="components.json"
+{
+  "registries": {
+    "@private": {
+      "url": "https://registry.company.com/{name}.json",
+      "headers": {
+        "Authorization": "Bearer ${REGISTRY_TOKEN}"
+      }
+    }
+  }
+}
+```
+
+你的私有组件将只对内部可见，非常适合企业团队。
+
+我们支持常见鉴权方式：Basic Auth、Bearer Token、API Key 查询参数、自定义 Header 等。详情见 [鉴权文档](/docs/registry/authentication)。
+
+### Search & Discovery
+
+新增三条命令，方便发现所需资源：
+
+1. 安装前查看注册表中的条目
+
+```bash
+npx shadcn view @acme/auth-system
+```
+
+2. 跨注册表搜索条目
+
+```bash
+npx shadcn search @acme -q auth
+```
+
+3. 列出注册表中所有条目
+
+```bash
+npx shadcn list @acme
+```
+
+### MCP Server
+
+我们还发布了 shadcn MCP server，支持 MCP 客户端浏览注册表、搜索并安装组件。详情见 [MCP 文档](/docs/mcp)。
+
+### Faster Everything
+
+注册表解析完全重写，性能更快，依赖解析更稳定。
+
+### Improved Error Handling
+
+错误信息更清晰，方便用户与 LLM 理解。
+
+### Upgrade Guide
+
+升级提示已整理，请查看 CLI 中的迁移指南。
+
+---
+
+## 2025 年 6 月：Calendar 组件
+
+我们将 `Calendar` 升级至最新版本的 [React DayPicker](https://daypicker.dev)，新增大量特性与优化，并提供 30+ 个日历Blocks可直接使用。详见 [Blocks 库](/blocks/calendar)。
+
+升级步骤请参阅 [Calendar 升级指南](/docs/components/calendar#upgrade-guide)。
+
+<Image src="/images/calendar-2.png" alt="Calendar" width={676} height={895} />
+
+---
+
+## 2025 年 5 月：新站点
+
+我们将 [ui.shadcn.com](https://ui.shadcn.com) 升级至 Next.js 15.3 与 Tailwind v4，并使用新的 `new-york` 组件。并进行了一些设计调整，让站点更快、更易用。
+
+这次升级解锁了许多正在开发的新功能，敬请期待。
+
+---
+
+## 2025 年 4 月：MCP
+
+我们正在为 shadcn/ui 注册表打造零配置的 MCP 支持。只需一条命令 `npx shadcn registry:mcp`，即可让任意注册表兼容 MCP。
+
+<Image
+  src="/images/mcp.jpeg"
+  width="1432"
+  height="1050"
+  alt="Lift Mode"
+  className="mt-6 w-full overflow-hidden rounded-lg border"
+/>
+
+更多信息见 [这条推文](https://x.com/shadcn/status/1917597228513853603)。
+
+---
+
+## 2025 年 3 月：shadcn 2.5.0
+
+我们本周发布了 shadcn 2.5.0，其中一个很酷的能力：**任意位置解析**。
+
+注册表现在可以把文件放在应用内的任意位置，我们会正确解析导入。不再受限于固定结构，甚至可以把文件加到注册表之外。安装时我们会跟踪所有文件，进行多轮解析，处理导入与别名——非常快。
+
+---
+
+## 2025 年 3 月：跨框架路由支持
+
+shadcn CLI 现在能自动识别你的框架并调整路由，兼容 Laravel、Vite、React Router 等所有框架。
+
+---
+
+## 2025 年 2 月：Tailwind v4
+
+我们发布了 Tailwind v4 与 React 19 的首个预览版。你可以立即试用。
+
+新增内容：
+
+- CLI 可初始化 Tailwind v4 项目。
+- 完整支持新 `@theme` 指令与 `@theme inline` 选项。
+- 所有组件已适配 Tailwind v4 与 React 19。
+- 移除了 forwardRefs，并调整类型。
+- 每个原子组件都有 `data-slot` 属性，方便样式定制。
+- 修复并清理了组件样式。
+- 弃用 `toast` 组件，推荐使用 `sonner`。
+- 按钮改用默认光标。
+- 弃用 `default` 风格，新项目默认使用 `new-york`。
+- HSL 颜色转换为 OKLCH。
+
+详情见 [相关文档](/docs/tailwind-v4)。
+
+---
+
+## 2025 年 2 月：注册表 Schema 更新
+
+我们正在更新注册表 schema，以支持更多能力。
+
+通过扁平 JSON 文件定义代码，并借助 CLI 分发：
+
+- 自定义样式：引入自己的设计系统、组件与设计令牌
+- 扩展、覆盖或混用第三方注册表与 LLM 组件
+- 安装主题、CSS 变量、hooks、动画、Tailwind 图层与工具类
+
+---
+
+## 2025 年 1 月：Blocks
+
+我们邀请社区为 Blocks 库贡献组件与Blocks，共同打造高质量、可复用的集合，欢迎应用、营销、产品等各类场景。
+
+开始之前请先查看 [Blocks 文档](/docs/blocks)。
+
+---
+
+## 2024 年 12 月：Monorepo 支持
+
+过去在 monorepo 中使用 shadcn/ui 相当麻烦，虽然可以用 CLI 添加组件，但要自己处理安装位置和导入路径。
+
+现在 CLI 已经理解 monorepo 结构，会自动把组件、依赖与注册表依赖安装到正确位置并处理导入。详情见 [Monorepo 文档](/docs/monorepo)。
+
+---
+
+## 2024 年 11 月：图标
+
+关于图标的更新：`new-york` 主题现在默认使用 Lucide。
+
+- 新项目默认启用 Lucide
+- 现有项目不受影响
+- 可通过 CLI（可选）迁移原子组件到 Lucide
+
+更多背景见 [相关推文](https://x.com/shadcn/status/1853902179041702169)。
+
+---
+
+## 2024 年 10 月：React 19
+
+shadcn/ui 现已兼容 React 19 与 Next.js 15，我们也提供了升级指南，帮助你迁移项目。查看 [React 19 文档](/docs/react-19)。
+
+---
+
+## 2024 年 10 月：Sidebar
+
+发布 sidebar.tsx：包含 25 个侧边栏组件的合集。我不喜欢重复造侧边栏，于是干脆做了 30 多个，再把核心精简成 sidebar.tsx，给你一个可靠的起点。更多内容请关注后续更新。

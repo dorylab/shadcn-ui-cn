@@ -1,0 +1,87 @@
+---
+title: Alert Dialog
+description: 以模态对话框形式向用户展示重要信息并要求作出响应。
+featured: true
+component: true
+links:
+  doc: https://www.radix-ui.com/docs/primitives/components/alert-dialog
+  api: https://www.radix-ui.com/docs/primitives/components/alert-dialog#api-reference
+---
+
+<ComponentPreview
+  name="alert-dialog-demo"
+  title="包含取消与继续按钮的警示对话框。"
+  description="包含取消与继续按钮的警示对话框。"
+/>
+
+## 安装
+
+<CodeTabs>
+
+<TabsList>
+  <TabsTrigger value="cli">CLI</TabsTrigger>
+  <TabsTrigger value="manual">手动</TabsTrigger>
+</TabsList>
+<TabsContent value="cli">
+
+```bash
+npx shadcn@latest add alert-dialog
+```
+
+</TabsContent>
+
+<TabsContent value="manual">
+
+<Steps>
+
+<Step>安装下列依赖：</Step>
+
+```bash
+npm install @radix-ui/react-alert-dialog
+```
+
+<Step>将下面的代码复制到你的项目中。</Step>
+
+<ComponentSource name="alert-dialog" title="components/ui/alert-dialog.tsx" />
+
+<Step>依据项目结构调整导入路径。</Step>
+
+</Steps>
+
+</TabsContent>
+
+</CodeTabs>
+
+## 用法
+
+```tsx showLineNumbers
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog"
+```
+
+```tsx showLineNumbers
+<AlertDialog>
+  <AlertDialogTrigger>打开</AlertDialogTrigger>
+  <AlertDialogContent>
+    <AlertDialogHeader>
+      <AlertDialogTitle>你确定要继续吗？</AlertDialogTitle>
+      <AlertDialogDescription>
+        该操作无法撤销，将永久删除你的账户并移除服务器上的全部数据。
+      </AlertDialogDescription>
+    </AlertDialogHeader>
+    <AlertDialogFooter>
+      <AlertDialogCancel>取消</AlertDialogCancel>
+      <AlertDialogAction>继续</AlertDialogAction>
+    </AlertDialogFooter>
+  </AlertDialogContent>
+</AlertDialog>
+```

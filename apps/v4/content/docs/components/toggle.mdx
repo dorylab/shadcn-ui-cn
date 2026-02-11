@@ -1,0 +1,93 @@
+---
+title: Toggle
+description: 一个具有开启/关闭两种状态的按钮。
+component: true
+links:
+  doc: https://www.radix-ui.com/docs/primitives/components/toggle
+  api: https://www.radix-ui.com/docs/primitives/components/toggle#api-reference
+---
+
+<ComponentPreview name="toggle-demo" description="切换按钮组件示例。" />
+
+## 安装
+
+<CodeTabs>
+
+<TabsList>
+  <TabsTrigger value="cli">CLI</TabsTrigger>
+  <TabsTrigger value="manual">手动</TabsTrigger>
+</TabsList>
+<TabsContent value="cli">
+
+```bash
+npx shadcn@latest add toggle
+```
+
+</TabsContent>
+
+<TabsContent value="manual">
+
+<Steps>
+
+<Step>安装下列依赖：</Step>
+
+```bash
+npm install @radix-ui/react-toggle
+```
+
+<Step>将下面的代码复制到你的项目中。</Step>
+
+<ComponentSource name="toggle" title="components/ui/toggle.tsx" />
+
+<Step>根据项目结构调整导入路径。</Step>
+
+</Steps>
+
+</TabsContent>
+
+</CodeTabs>
+
+## 用法
+
+```tsx
+import { Toggle } from "@/components/ui/toggle"
+```
+
+```tsx
+<Toggle>Toggle</Toggle>
+```
+
+## 示例
+
+### 默认
+
+<ComponentPreview name="toggle-demo" description="切换按钮组件示例。" />
+
+### 描边
+
+<ComponentPreview
+  name="toggle-outline"
+  description="使用描边外观的切换按钮。"
+/>
+
+### 带文本
+
+<ComponentPreview
+  name="toggle-with-text"
+  description="带文本的切换按钮。"
+/>
+
+### 小号
+
+<ComponentPreview name="toggle-sm" description="小号切换按钮。" />
+
+### 大号
+
+<ComponentPreview name="toggle-lg" description="大号切换按钮。" />
+
+### 禁用
+
+<ComponentPreview
+  name="toggle-disabled"
+  description="禁用状态的切换按钮。"
+/>

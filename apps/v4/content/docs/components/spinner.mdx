@@ -1,0 +1,130 @@
+---
+title: Spinner
+description: 用于展示加载状态的指示器。
+component: true
+---
+
+<ComponentPreview name="spinner-demo" className="[&_.preview]:p-6" />
+
+## 安装
+
+<CodeTabs>
+
+<TabsList>
+  <TabsTrigger value="cli">CLI</TabsTrigger>
+  <TabsTrigger value="manual">手动</TabsTrigger>
+</TabsList>
+<TabsContent value="cli">
+
+```bash
+npx shadcn@latest add spinner
+```
+
+</TabsContent>
+
+<TabsContent value="manual">
+
+<Steps>
+
+<Step>将下面的代码复制到你的项目中。</Step>
+
+<ComponentSource name="spinner" title="components/ui/spinner.tsx" />
+
+<Step>根据项目结构调整导入路径。</Step>
+
+</Steps>
+
+</TabsContent>
+
+</CodeTabs>
+
+## 用法
+
+```tsx
+import { Spinner } from "@/components/ui/spinner"
+```
+
+```tsx
+<Spinner />
+```
+
+## 自定义
+
+你可以通过修改 `Spinner` 组件，将默认的加载图标替换为任意其他图标。
+
+<ComponentPreview name="spinner-custom" />
+
+```tsx showLineNumbers title="components/ui/spinner.tsx"
+import { LoaderIcon } from "lucide-react"
+
+import { cn } from "@/lib/utils"
+
+function Spinner({ className, ...props }: React.ComponentProps<"svg">) {
+  return (
+    <LoaderIcon
+      role="status"
+      aria-label="加载中"
+      className={cn("size-4 animate-spin", className)}
+      {...props}
+    />
+  )
+}
+
+export { Spinner }
+```
+
+## 示例
+
+### 尺寸
+
+使用 `size-*` 工具类调整加载图标的尺寸。
+
+<ComponentPreview name="spinner-size" />
+
+### 颜色
+
+使用 `text-` 工具类调整加载图标的颜色。
+
+<ComponentPreview name="spinner-color" />
+
+### 按钮
+
+在按钮中添加加载图标以表示正在处理。`<Button />` 会自动处理图标与文本之间的间距。
+
+<ComponentPreview name="spinner-button" />
+
+### 徽章
+
+你也可以在徽章组件中使用加载图标。
+
+<ComponentPreview name="spinner-badge" />
+
+### 输入组合
+
+在 `<InputGroupAddon>` 中放入加载图标，输入组合即可展示加载状态。
+
+<ComponentPreview name="spinner-input-group" />
+
+### 空状态
+
+<ComponentPreview name="spinner-empty" />
+
+### 列表项
+
+在 `<ItemMedia>` 内使用加载图标以展示加载状态。
+
+<ComponentPreview name="spinner-item" />
+
+## API 参考
+
+### Spinner
+
+使用 `Spinner` 组件展示加载图标。
+
+| 属性         | 类型      | 默认值 |
+| ------------ | -------- | ------ |
+| `className` | `string` | ``     |
+
+```tsx
+<Spinner />
+```

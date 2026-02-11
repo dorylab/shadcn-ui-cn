@@ -1,0 +1,355 @@
+---
+title: registry-item.json
+description: 注册表条目规范。
+---
+
+`registry-item.json` Schema 用于定义自定义注册表条目。
+
+```json title="registry-item.json" showLineNumbers
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "hello-world",
+  "type": "registry:block",
+  "title": "Hello World",
+  "description": "A simple hello world component.",
+  "registryDependencies": [
+    "button",
+    "@acme/input-form",
+    "https://example.com/r/foo"
+  ],
+  "dependencies": ["is-even@3.0.0", "motion"],
+  "files": [
+    {
+      "path": "registry/new-york/hello-world/hello-world.tsx",
+      "type": "registry:component"
+    },
+    {
+      "path": "registry/new-york/hello-world/use-hello-world.ts",
+      "type": "registry:hook"
+    }
+  ],
+  "cssVars": {
+    "theme": {
+      "font-heading": "Poppins, sans-serif"
+    },
+    "light": {
+      "brand": "20 14.3% 4.1%"
+    },
+    "dark": {
+      "brand": "20 14.3% 4.1%"
+    }
+  }
+}
+```
+
+<div className="mt-6 flex items-center gap-2">
+  <Link href="/docs/registry/examples">查看更多示例</Link>
+</div>
+
+## 字段说明
+
+`registry-item.json` 的完整 JSON Schema 可在[此处](https://ui.shadcn.com/schema/registry-item.json)查看。
+
+### $schema
+
+`$schema` 字段用于声明 `registry-item.json` 使用的 Schema。
+
+```json title="registry-item.json" showLineNumbers
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json"
+}
+```
+
+### name
+
+条目名称，用于注册表中的唯一标识。
+
+```json title="registry-item.json" showLineNumbers
+{
+  "name": "hello-world"
+}
+```
+
+### title
+
+显示给用户的标题，建议简洁明了。
+
+```json title="registry-item.json" showLineNumbers
+{
+  "title": "Hello World"
+}
+```
+
+### description
+
+条目描述，可比标题更详细。
+
+```json title="registry-item.json" showLineNumbers
+{
+  "description": "A simple hello world component."
+}
+```
+
+### type
+
+`type` 用于指定条目类型，解析到项目时会据此确定目标路径。
+
+```json title="registry-item.json" showLineNumbers
+{
+  "type": "registry:block"
+}
+```
+
+支持以下类型：
+
+| Type                 | 说明                                           |
+| -------------------- | ---------------------------------------------- |
+| `registry:block`     | 适用于包含多文件的复杂组件。                  |
+| `registry:component` | 适用于简单组件。                               |
+| `registry:lib`       | 适用于库和工具函数。                           |
+| `registry:hook`      | 适用于 Hooks。                                  |
+| `registry:ui`        | 适用于 UI 组件或单文件原子组件。               |
+| `registry:page`      | 适用于页面或基于文件的路由。                   |
+| `registry:file`      | 适用于其他类型的文件。                         |
+| `registry:style`     | 适用于样式条目，例如 `new-york`。              |
+| `registry:theme`     | 适用于主题。                                   |
+| `registry:item`      | 适用于通用注册表条目。                         |
+
+### author
+
+`author` 字段用于标注条目的作者信息。
+
+可以是条目作者，也可以与注册表作者一致。
+
+```json title="registry-item.json" showLineNumbers
+{
+  "author": "John Doe <john@doe.com>"
+}
+```
+
+### dependencies
+
+`dependencies` 用于声明条目所需的 `npm` 包依赖。
+
+可通过 `@version` 指定依赖版本。
+
+```json title="registry-item.json" showLineNumbers
+{
+  "dependencies": [
+    "@radix-ui/react-accordion",
+    "zod",
+    "lucide-react",
+    "name@1.0.2"
+  ]
+}
+```
+
+### registryDependencies
+
+用于声明注册表依赖，可以是名称、命名空间或 URL。
+
+- 对于 `shadcn/ui` 的条目（如 `button`、`input`、`select`），直接写名称：`['button', 'input', 'select']`
+- 对于命名空间条目（如 `@acme`），写完整名称：`['@acme/input-form']`
+- 自定义注册表条目使用完整 URL：`['https://example.com/r/hello-world.json']`
+
+```json title="registry-item.json" showLineNumbers
+{
+  "registryDependencies": [
+    "button",
+    "@acme/input-form",
+    "https://example.com/r/editor.json"
+  ]
+}
+```
+
+提示：CLI 会自动解析远程注册表依赖。
+
+### files
+
+`files` 描述条目包含的文件。每个文件需指定 `path`、`type`，可选的 `target` 表示目标路径。
+
+**`registry:page` 与 `registry:file` 类型必须提供 `target`。**
+
+```json title="registry-item.json" showLineNumbers
+{
+  "files": [
+    {
+      "path": "registry/new-york/hello-world/page.tsx",
+      "type": "registry:page",
+      "target": "app/hello/page.tsx"
+    },
+    {
+      "path": "registry/new-york/hello-world/hello-world.tsx",
+      "type": "registry:component"
+    },
+    {
+      "path": "registry/new-york/hello-world/use-hello-world.ts",
+      "type": "registry:hook"
+    },
+    {
+      "path": "registry/new-york/hello-world/.env",
+      "type": "registry:file",
+      "target": "~/.env"
+    }
+  ]
+}
+```
+
+#### path
+
+文件在注册表中的路径。构建脚本会根据该路径解析并生成 JSON。
+
+#### type
+
+文件类型，详见 [type](#type) 段落。
+
+#### target
+
+`target` 指明文件在项目中的放置位置，仅 `registry:page` 与 `registry:file` 必填。
+
+默认情况下，`shadcn` CLI 会读取项目根目录的 `components.json` 来推断目标路径。对于路由、配置等文件，可以手动指定。
+
+使用 `~` 表示项目根目录，例如 `~/foo.config.js`。
+
+### tailwind
+
+**已废弃：** 在 Tailwind v4 项目中请改用 `cssVars.theme`。
+
+`tailwind` 字段用于配置 Tailwind，例如 `theme`、`plugins`、`content` 等。
+
+可通过 `tailwind.config` 添加颜色、动画、插件等内容。
+
+```json title="registry-item.json" showLineNumbers
+{
+  "tailwind": {
+    "config": {
+      "theme": {
+        "extend": {
+          "colors": {
+            "brand": "hsl(var(--brand))"
+          },
+          "keyframes": {
+            "wiggle": {
+              "0%, 100%": { "transform": "rotate(-3deg)" },
+              "50%": { "transform": "rotate(3deg)" }
+            }
+          },
+          "animation": {
+            "wiggle": "wiggle 1s ease-in-out infinite"
+          }
+        }
+      }
+    }
+  }
+}
+```
+
+### cssVars
+
+用于定义条目的 CSS 变量。
+
+```json title="registry-item.json" showLineNumbers
+{
+  "cssVars": {
+    "theme": {
+      "font-heading": "Poppins, sans-serif"
+    },
+    "light": {
+      "brand": "20 14.3% 4.1%",
+      "radius": "0.5rem"
+    },
+    "dark": {
+      "brand": "20 14.3% 4.1%"
+    }
+  }
+}
+```
+
+### css
+
+通过 `css` 可向项目 CSS 文件新增规则，例如 `@layer base`、`@layer components`、`@utility`、`@keyframes`、`@plugin` 等。
+
+```json title="registry-item.json" showLineNumbers
+{
+  "css": {
+    "@plugin @tailwindcss/typography": {},
+    "@plugin foo": {},
+    "@layer base": {
+      "body": {
+        "font-size": "var(--text-base)",
+        "line-height": "1.5"
+      }
+    },
+    "@layer components": {
+      "button": {
+        "background-color": "var(--color-primary)",
+        "color": "var(--color-white)"
+      }
+    },
+    "@utility text-magic": {
+      "font-size": "var(--text-base)",
+      "line-height": "1.5"
+    },
+    "@keyframes wiggle": {
+      "0%, 100%": {
+        "transform": "rotate(-3deg)"
+      },
+      "50%": {
+        "transform": "rotate(3deg)"
+      }
+    }
+  }
+}
+```
+
+### envVars
+
+通过 `envVars` 向条目添加环境变量。
+
+```json title="registry-item.json" showLineNumbers
+{
+  "envVars": {
+    "NEXT_PUBLIC_APP_URL": "http://localhost:4000",
+    "DATABASE_URL": "postgresql://postgres:postgres@localhost:5432/postgres",
+    "OPENAI_API_KEY": ""
+  }
+}
+```
+
+环境变量会写入 `.env.local` 或 `.env` 文件，已有变量不会被覆盖。
+
+<Callout>
+
+**重要：** `envVars` 适用于开发或示例变量，请勿写入生产机密。
+
+</Callout>
+
+### docs
+
+通过 `docs` 在 CLI 安装过程中展示自定义文档或提示信息。
+
+```json title="registry-item.json" showLineNumbers
+{
+  "docs": "To get an OPENAI_API_KEY, sign up for an account at https://platform.openai.com."
+}
+```
+
+### categories
+
+使用 `categories` 为条目归类。
+
+```json title="registry-item.json" showLineNumbers
+{
+  "categories": ["sidebar", "dashboard"]
+}
+```
+
+### meta
+
+`meta` 可添加额外元数据，自由携带任意键值对。
+
+```json title="registry-item.json" showLineNumbers
+{
+  "meta": { "foo": "bar" }
+}
+```

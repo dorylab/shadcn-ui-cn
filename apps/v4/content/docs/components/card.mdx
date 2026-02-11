@@ -1,0 +1,69 @@
+---
+title: Card
+description: 展示包含页眉、内容与页脚的卡片。
+component: true
+---
+
+<ComponentPreview name="card-demo" description="带表单的卡片" />
+
+## 安装
+
+<CodeTabs>
+
+<TabsList>
+  <TabsTrigger value="cli">CLI</TabsTrigger>
+  <TabsTrigger value="manual">手动</TabsTrigger>
+</TabsList>
+<TabsContent value="cli">
+
+```bash
+npx shadcn@latest add card
+```
+
+</TabsContent>
+
+<TabsContent value="manual">
+
+<Steps>
+
+<Step>将如下代码复制到你的项目中。</Step>
+
+<ComponentSource name="card" title="components/ui/card.tsx" />
+
+<Step>依据项目结构调整导入路径。</Step>
+
+</Steps>
+
+</TabsContent>
+
+</CodeTabs>
+
+## 用法
+
+```tsx showLineNumbers
+import {
+  Card,
+  CardAction,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card"
+```
+
+```tsx showLineNumbers
+<Card>
+  <CardHeader>
+    <CardTitle>卡片标题</CardTitle>
+    <CardDescription>卡片描述</CardDescription>
+    <CardAction>卡片操作</CardAction>
+  </CardHeader>
+  <CardContent>
+    <p>卡片内容</p>
+  </CardContent>
+  <CardFooter>
+    <p>卡片页脚</p>
+  </CardFooter>
+</Card>
+```
