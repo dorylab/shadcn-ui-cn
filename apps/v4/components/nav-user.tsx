@@ -83,28 +83,28 @@ export function NavUser({
             <DropdownMenuGroup>
               <DropdownMenuItem>
                 <Sparkles />
-                升级到专业版
+                Upgrade to Pro
               </DropdownMenuItem>
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
             <DropdownMenuGroup>
               <DropdownMenuItem>
                 <BadgeCheck />
-                账户
+                Account
               </DropdownMenuItem>
               <DropdownMenuItem>
                 <CreditCard />
-                账单
+                Billing
               </DropdownMenuItem>
               <DropdownMenuItem>
                 <Bell />
-                通知
+                Notifications
               </DropdownMenuItem>
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
             <DropdownMenuItem>
               <LogOut />
-              退出登录
+              Log out
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>

@@ -15,13 +15,13 @@ export function ItemDemo() {
     <div className="flex w-full max-w-md flex-col gap-6">
       <Item variant="outline">
         <ItemContent>
-          <ItemTitle>Two-factor authentication</ItemTitle>
+          <ItemTitle>双因素认证</ItemTitle>
           <ItemDescription className="text-pretty xl:hidden 2xl:block">
-            Verify via email or phone number.
+            通过邮箱或手机号验证。
           </ItemDescription>
         </ItemContent>
         <ItemActions>
-          <Button size="sm">Enable</Button>
+          <Button size="sm">启用</Button>
         </ItemActions>
       </Item>
       <Item variant="outline" size="sm" asChild>
@@ -30,7 +30,7 @@ export function ItemDemo() {
             <BadgeCheckIcon className="size-5" />
           </ItemMedia>
           <ItemContent>
-            <ItemTitle>Your profile has been verified.</ItemTitle>
+            <ItemTitle>你的个人资料已验证。</ItemTitle>
           </ItemContent>
           <ItemActions>
             <ChevronRightIcon className="size-4" />

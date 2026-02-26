@@ -14,7 +14,7 @@ export function BlocksNav() {
       <ScrollArea className="max-w-none">
         <div className="flex items-center">
           <BlocksNavLink
-            category={{ name: "精选", slug: "", hidden: false }}
+            category={{ name: "Featured", slug: "", hidden: false }}
             isActive={pathname === "/blocks"}
           />
           {registryCategories.map((category) => (

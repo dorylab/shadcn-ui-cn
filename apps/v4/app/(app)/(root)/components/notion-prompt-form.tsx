@@ -63,83 +63,83 @@ const SAMPLE_DATA = {
   mentionable: [
     {
       type: "page",
-      title: "Meeting Notes",
+      title: "会议记录",
       image: "📝",
     },
     {
       type: "page",
-      title: "Project Dashboard",
+      title: "项目仪表盘",
       image: "📊",
     },
     {
       type: "page",
-      title: "Ideas & Brainstorming",
+      title: "想法与头脑风暴",
       image: "💡",
     },
     {
       type: "page",
-      title: "Calendar & Events",
+      title: "日历与事件",
       image: "📅",
     },
     {
       type: "page",
-      title: "Documentation",
+      title: "文档",
       image: "📚",
     },
     {
       type: "page",
-      title: "Goals & Objectives",
+      title: "目标与指标",
       image: "🎯",
     },
     {
       type: "page",
-      title: "Budget Planning",
+      title: "预算规划",
       image: "💰",
     },
     {
       type: "page",
-      title: "Team Directory",
+      title: "团队通讯录",
       image: "👥",
     },
     {
       type: "page",
-      title: "Technical Specs",
+      title: "技术规格",
       image: "🔧",
     },
     {
       type: "page",
-      title: "Analytics Report",
+      title: "分析报告",
       image: "📈",
     },
     {
       type: "user",
       title: "shadcn",
       image: "https://github.com/shadcn.png",
-      workspace: "Workspace",
+      workspace: "工作区",
     },
     {
       type: "user",
       title: "maxleiter",
       image: "https://github.com/maxleiter.png",
-      workspace: "Workspace",
+      workspace: "工作区",
     },
     {
       type: "user",
       title: "evilrabbit",
       image: "https://github.com/evilrabbit.png",
-      workspace: "Workspace",
+      workspace: "工作区",
     },
   ],
   models: [
     {
-      name: "Auto",
+      name: "自动",
     },
     {
-      name: "Agent Mode",
-      badge: "Beta",
+      name: "代理模式",
+      badge: "测试版",
     },
     {
-      name: "Plan Mode",
+      name: "规划模式",
     },
   ],
 }
@@ -193,12 +193,12 @@ export function NotionPromptForm() {
     <form className="[--radius:1.2rem]">
       <Field>
         <FieldLabel htmlFor="notion-prompt" className="sr-only">
-          Prompt
+          提示
         </FieldLabel>
         <InputGroup>
           <InputGroupTextarea
             id="notion-prompt"
-            placeholder="Ask, search, or make anything..."
+            placeholder="提问、搜索，或创建任何内容..."
           />
           <InputGroupAddon align="block-start">
             <Popover
@@ -216,21 +216,21 @@ export function NotionPromptForm() {
                       size={!hasMentions ? "sm" : "icon-sm"}
                       className="rounded-full transition-transform"
                     >
-                      <IconAt /> {!hasMentions && "Add context"}
+                      <IconAt /> {!hasMentions && "添加上下文"}
                     </InputGroupButton>
                   </PopoverTrigger>
                 </TooltipTrigger>
-                <TooltipContent>Mention a person, page, or date</TooltipContent>
+                <TooltipContent>提及人员、页面或日期</TooltipContent>
               </Tooltip>
               <PopoverContent className="p-0 [--radius:1.2rem]" align="start">
                 <Command>
-                  <CommandInput placeholder="Search pages..." />
+                  <CommandInput placeholder="搜索页面..." />
                   <CommandList>
-                    <CommandEmpty>No pages found</CommandEmpty>
+                    <CommandEmpty>未找到页面</CommandEmpty>
                     {Object.entries(grouped).map(([type, items]) => (
                       <CommandGroup
                         key={type}
-                        heading={type === "page" ? "Pages" : "Users"}
+                        heading={type === "page" ? "页面" : "用户"}
                       >
                         {items.map((item) => (
                           <CommandItem
@@ -285,12 +285,12 @@ export function NotionPromptForm() {
                 <InputGroupButton
                   size="icon-sm"
                   className="rounded-full"
-                  aria-label="Attach file"
+                  aria-label="添加附件"
                 >
                   <IconPaperclip />
                 </InputGroupButton>
               </TooltipTrigger>
-              <TooltipContent>Attach file</TooltipContent>
+              <TooltipContent>添加附件</TooltipContent>
             </Tooltip>
             <DropdownMenu
               open={modelPopoverOpen}
@@ -304,7 +304,7 @@ export function NotionPromptForm() {
                     </InputGroupButton>
                   </DropdownMenuTrigger>
                 </TooltipTrigger>
-                <TooltipContent>Select AI model</TooltipContent>
+                <TooltipContent>选择 AI 模型</TooltipContent>
               </Tooltip>
               <DropdownMenuContent
                 side="top"
@@ -313,7 +313,7 @@ export function NotionPromptForm() {
               >
                 <DropdownMenuGroup className="w-42">
                   <DropdownMenuLabel className="text-muted-foreground text-xs">
-                    Select Agent Mode
+                    选择代理模式
                   </DropdownMenuLabel>
                   {SAMPLE_DATA.models.map((model) => (
                     <DropdownMenuCheckboxItem
@@ -343,7 +343,7 @@ export function NotionPromptForm() {
             <DropdownMenu open={scopeMenuOpen} onOpenChange={setScopeMenuOpen}>
               <DropdownMenuTrigger asChild>
                 <InputGroupButton size="sm" className="rounded-full">
-                  <IconWorld /> All Sources
+                  <IconWorld /> 所有来源
                 </InputGroupButton>
               </DropdownMenuTrigger>
               <DropdownMenuContent
@@ -357,7 +357,7 @@ export function NotionPromptForm() {
                     onSelect={(e) => e.preventDefault()}
                   >
                     <label htmlFor="web-search">
-                      <IconWorld /> Web Search{" "}
+                      <IconWorld /> 网页搜索{" "}
                       <Switch
                         id="web-search"
                         className="ml-auto"
@@ -373,12 +373,12 @@ export function NotionPromptForm() {
                     onSelect={(e) => e.preventDefault()}
                   >
                     <label htmlFor="apps">
-                      <IconApps /> Apps and Integrations
+                      <IconApps /> 应用与集成
                       <Switch id="apps" className="ml-auto" defaultChecked />
                     </label>
                   </DropdownMenuItem>
                   <DropdownMenuItem>
-                    <IconCircleDashedPlus /> All Sources I can access
+                    <IconCircleDashedPlus /> 我可以访问的所有来源
                   </DropdownMenuItem>
                   <DropdownMenuSub>
                     <DropdownMenuSubTrigger>
@@ -391,11 +391,11 @@ export function NotionPromptForm() {
                     <DropdownMenuSubContent className="w-72 p-0 [--radius:1rem]">
                       <Command>
                         <CommandInput
-                          placeholder="Find or use knowledge in..."
+                          placeholder="查找或使用知识库..."
                           autoFocus
                         />
                         <CommandList>
-                          <CommandEmpty>No knowledge found</CommandEmpty>
+                          <CommandEmpty>未找到知识</CommandEmpty>
                           <CommandGroup>
                             {SAMPLE_DATA.mentionable
                               .filter((item) => item.type === "user")
@@ -405,7 +405,7 @@ export function NotionPromptForm() {
                                   value={user.title}
                                   onSelect={() => {
                                     // Handle user selection here
-                                    console.log("Selected user:", user.title)
+                                    console.log("已选择用户：", user.title)
                                   }}
                                 >
                                   <Avatar className="size-4">
@@ -426,22 +426,22 @@ export function NotionPromptForm() {
                     </DropdownMenuSubContent>
                   </DropdownMenuSub>
                   <DropdownMenuItem>
-                    <IconBook /> Help Center
+                    <IconBook /> 帮助中心
                   </DropdownMenuItem>
                 </DropdownMenuGroup>
                 <DropdownMenuSeparator />
                 <DropdownMenuGroup>
                   <DropdownMenuItem>
-                    <IconPlus /> Connect Apps
+                    <IconPlus /> 连接应用
                   </DropdownMenuItem>
                   <DropdownMenuLabel className="text-muted-foreground text-xs">
-                    We&apos;ll only search in the sources selected here.
+                    只会在此处选定的来源中搜索。
                   </DropdownMenuLabel>
                 </DropdownMenuGroup>
               </DropdownMenuContent>
             </DropdownMenu>
             <InputGroupButton
-              aria-label="Send"
+              aria-label="发送"
               className="ml-auto rounded-full"
               variant="default"
               size="icon-sm"

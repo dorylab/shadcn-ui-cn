@@ -18,24 +18,23 @@ export function ButtonGroupPopover() {
       </Button>
       <Popover>
         <PopoverTrigger asChild>
-          <Button variant="outline" size="icon-sm" aria-label="Open Popover">
+          <Button variant="outline" size="icon-sm" aria-label="打开弹出层">
             <ChevronDownIcon />
           </Button>
         </PopoverTrigger>
         <PopoverContent align="end" className="rounded-xl p-0 text-sm">
           <div className="px-4 py-3">
-            <div className="text-sm font-medium">Agent Tasks</div>
+            <div className="text-sm font-medium">代理任务</div>
           </div>
           <Separator />
           <div className="p-4 text-sm *:[p:not(:last-child)]:mb-2">
             <Textarea
-              placeholder="Describe your task in natural language."
+              placeholder="用自然语言描述你的任务。"
               className="mb-4 resize-none"
             />
-            <p className="font-medium">Start a new task with Copilot</p>
+            <p className="font-medium">使用 Copilot 开始新任务</p>
             <p className="text-muted-foreground">
-              Describe your task in natural language. Copilot will work in the
-              background and open a pull request for your review.
+              用自然语言描述你的任务。Copilot 将在后台工作并为你创建拉取请求供你审查。
             </p>
           </div>
         </PopoverContent>

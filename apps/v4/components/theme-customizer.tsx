@@ -9,7 +9,11 @@ import { cn } from "@/lib/utils"
 import { useThemeConfig } from "@/components/active-theme"
 import { copyToClipboardWithMeta } from "@/components/copy-button"
 import { Icons } from "@/components/icons"
-import { BaseColor, baseColors, baseColorsOKLCH } from "@/registry/base-colors"
+import {
+  baseColors,
+  baseColorsOKLCH,
+  type BaseColor,
+} from "@/registry/_legacy-base-colors"
 import { Button } from "@/registry/new-york-v4/ui/button"
 import {
   Dialog,
@@ -119,14 +123,14 @@ export function CopyCodeButton({
       <Drawer>
         <DrawerTrigger asChild>
           <Button className={cn("sm:hidden", className)} {...props}>
-            复制代码
+            Copy Code
           </Button>
         </DrawerTrigger>
         <DrawerContent className="h-auto">
           <DrawerHeader>
             <DrawerTitle className="capitalize">{activeThemeName}</DrawerTitle>
             <DrawerDescription>
-              将以下代码复制粘贴到你的 CSS 文件中。
+              Copy and paste the following code into your CSS file.
             </DrawerDescription>
           </DrawerHeader>
           <CustomizerCode themeName={activeThemeName} />
@@ -141,7 +145,7 @@ export function CopyCodeButton({
           >
             <IconCopy />
             <span className="group-data-[size=icon-sm]/button:sr-only">
-              复制代码
+              Copy Code
             </span>
           </Button>
         </DialogTrigger>
@@ -149,7 +153,7 @@ export function CopyCodeButton({
           <DialogHeader>
             <DialogTitle className="capitalize">{activeThemeName}</DialogTitle>
             <DialogDescription>
-              将以下代码复制粘贴到你的 CSS 文件中。
+              Copy and paste the following code into your CSS file.
             </DialogDescription>
           </DialogHeader>
           <CustomizerCode themeName={activeThemeName} />
@@ -225,7 +229,7 @@ function CustomizerCode({ themeName }: { themeName: string }) {
                   setHasCopied(true)
                 }}
               >
-                <span className="sr-only">复制</span>
+                <span className="sr-only">Copy</span>
                 {hasCopied ? <IconCheck /> : <IconCopy />}
               </Button>
               <code data-line-numbers data-language="css">
@@ -305,7 +309,7 @@ function CustomizerCode({ themeName }: { themeName: string }) {
                   setHasCopied(true)
                 }}
               >
-                <span className="sr-only">复制</span>
+                <span className="sr-only">Copy</span>
                 {hasCopied ? <IconCheck /> : <IconCopy />}
               </Button>
               <code data-line-numbers data-language="css">
@@ -386,7 +390,7 @@ function CustomizerCode({ themeName }: { themeName: string }) {
                   setHasCopied(true)
                 }}
               >
-                <span className="sr-only">复制</span>
+                <span className="sr-only">Copy</span>
                 {hasCopied ? <IconCheck /> : <IconCopy />}
               </Button>
               <code data-line-numbers data-language="css">

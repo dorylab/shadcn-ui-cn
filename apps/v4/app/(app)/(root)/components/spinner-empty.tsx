@@ -16,14 +16,14 @@ export function SpinnerEmpty() {
         <EmptyMedia variant="icon">
           <Spinner />
         </EmptyMedia>
-        <EmptyTitle>Processing your request</EmptyTitle>
+        <EmptyTitle>正在处理你的请求</EmptyTitle>
         <EmptyDescription>
-          Please wait while we process your request. Do not refresh the page.
+          请稍候，我们正在处理你的请求。请勿刷新页面。
         </EmptyDescription>
       </EmptyHeader>
       <EmptyContent>
         <Button variant="outline" size="sm">
-          Cancel
+          取消
         </Button>
       </EmptyContent>
     </Empty>

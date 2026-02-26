@@ -3,7 +3,7 @@
 import * as React from "react"
 import { IconCheck, IconCopy } from "@tabler/icons-react"
 
-import { Event, trackEvent } from "@/lib/events"
+import { trackEvent, type Event } from "@/lib/events"
 import { cn } from "@/lib/utils"
 import { Button } from "@/registry/new-york-v4/ui/button"
 import {
@@ -24,7 +24,7 @@ export function CopyButton({
   className,
   variant = "ghost",
   event,
-  tooltip = "复制到剪贴板",
+  tooltip = "Copy to Clipboard",
   ...props
 }: React.ComponentProps<typeof Button> & {
   value: string
@@ -68,11 +68,11 @@ export function CopyButton({
           }}
           {...props}
         >
-          <span className="sr-only">复制</span>
+          <span className="sr-only">Copy</span>
           {hasCopied ? <IconCheck /> : <IconCopy />}
         </Button>
       </TooltipTrigger>
-      <TooltipContent>{hasCopied ? "已复制" : tooltip}</TooltipContent>
+      <TooltipContent>{hasCopied ? "Copied" : tooltip}</TooltipContent>
     </Tooltip>
   )
 }

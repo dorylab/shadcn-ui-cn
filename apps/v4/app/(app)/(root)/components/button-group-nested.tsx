@@ -20,10 +20,10 @@ export function ButtonGroupNested() {
         </Button>
       </ButtonGroup>
       <ButtonGroup>
-        <Button variant="outline" size="icon-sm" aria-label="Previous">
+        <Button variant="outline" size="icon-sm" aria-label="上一页">
           <ArrowLeftIcon />
         </Button>
-        <Button variant="outline" size="icon-sm" aria-label="Next">
+        <Button variant="outline" size="icon-sm" aria-label="下一页">
           <ArrowRightIcon />
         </Button>
       </ButtonGroup>

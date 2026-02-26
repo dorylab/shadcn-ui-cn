@@ -25,9 +25,9 @@ export function FieldDemo() {
       <form>
         <FieldGroup>
           <FieldSet>
-            <FieldLegend>支付方式</FieldLegend>
+            <FieldLegend>付款方式</FieldLegend>
             <FieldDescription>
-              所有交易都会安全加密处理
+              所有交易均安全加密
             </FieldDescription>
             <FieldGroup>
               <Field>
@@ -109,7 +109,7 @@ export function FieldDemo() {
           <FieldSet>
             <FieldLegend>账单地址</FieldLegend>
             <FieldDescription>
-              与支付方式关联的账单地址
+              与你的付款方式关联的账单地址
             </FieldDescription>
             <FieldGroup>
               <Field orientation="horizontal">
@@ -121,7 +121,7 @@ export function FieldDemo() {
                   htmlFor="checkout-7j9-same-as-shipping-wgm"
                   className="font-normal"
                 >
-                  与收货地址相同
+                  同收货地址
                 </FieldLabel>
               </Field>
             </FieldGroup>
@@ -135,7 +135,7 @@ export function FieldDemo() {
                 </FieldLabel>
                 <Textarea
                   id="checkout-7j9-optional-comments"
-                  placeholder="填写补充说明"
+                  placeholder="添加其他备注"
                 />
               </Field>
             </FieldGroup>

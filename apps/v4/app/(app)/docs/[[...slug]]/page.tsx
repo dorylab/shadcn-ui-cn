@@ -122,7 +122,7 @@ export default async function Page(props: {
                     >
                       <Link href={neighbours.previous.url}>
                         <IconArrowLeft />
-                        <span className="sr-only">上一页</span>
+                        <span className="sr-only">Previous</span>
                       </Link>
                     </Button>
                   )}
@@ -134,7 +134,7 @@ export default async function Page(props: {
                       asChild
                     >
                       <Link href={neighbours.next.url}>
-                        <span className="sr-only">下一页</span>
+                        <span className="sr-only">Next</span>
                         <IconArrowRight />
                       </Link>
                     </Button>
@@ -152,14 +152,14 @@ export default async function Page(props: {
                 {links?.doc && (
                   <Badge asChild variant="secondary" className="rounded-full">
                     <a href={links.doc} target="_blank" rel="noreferrer">
-                      文档 <IconArrowUpRight />
+                      Docs <IconArrowUpRight />
                     </a>
                   </Badge>
                 )}
                 {links?.api && (
                   <Badge asChild variant="secondary" className="rounded-full">
                     <a href={links.api} target="_blank" rel="noreferrer">
-                      API 参考 <IconArrowUpRight />
+                      API Reference <IconArrowUpRight />
                     </a>
                   </Badge>
                 )}

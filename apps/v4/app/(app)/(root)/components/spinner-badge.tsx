@@ -6,15 +6,15 @@ export function SpinnerBadge() {
     <div className="flex items-center gap-2">
       <Badge>
         <Spinner />
-        Syncing
+        同步中
       </Badge>
       <Badge variant="secondary">
         <Spinner />
-        Updating
+        更新中
       </Badge>
       <Badge variant="outline">
         <Spinner />
-        Loading
+        加载中
       </Badge>
     </div>
   )

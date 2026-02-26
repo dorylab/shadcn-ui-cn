@@ -1,6 +1,8 @@
-import { Metadata } from "next"
+import { type Metadata } from "next"
 import Image from "next/image"
 import Link from "next/link"
+import { PlusSignIcon } from "@hugeicons/core-free-icons"
+import { HugeiconsIcon } from "@hugeicons/react"
 
 import { Announcement } from "@/components/announcement"
 import { ExamplesNav } from "@/components/examples-nav"
@@ -18,7 +20,7 @@ import { RootComponents } from "./components"
 
 const title = "shadcn/ui - 为你的设计系统打好基础"
 const description =
-  "一组精心设计的组件，你可以自定义、扩展并在此基础上构建。从这里开始，让它成为你的作品。开源，开放代码。"
+  "一套精心设计的组件，你可以自定义、扩展并在其之上构建。先从这里开始，然后做成你自己的。开源。开放代码。"
 
 export const dynamic = "force-static"
 export const revalidate = false
@@ -55,10 +57,13 @@ export default function IndexPage() {
         <PageHeaderHeading className="max-w-4xl">{title}</PageHeaderHeading>
         <PageHeaderDescription>{description}</PageHeaderDescription>
         <PageActions>
-          <Button asChild size="sm">
-            <Link href="/docs/installation">开始使用</Link>
+          <Button asChild size="sm" className="h-[31px] rounded-lg">
+            <Link href="/create">
+              <HugeiconsIcon icon={PlusSignIcon} />
+              新建项目
+            </Link>
           </Button>
-          <Button asChild size="sm" variant="ghost">
+          <Button asChild size="sm" variant="ghost" className="rounded-lg">
             <Link href="/docs/components">查看组件</Link>
           </Button>
         </PageActions>

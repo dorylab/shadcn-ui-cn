@@ -48,7 +48,7 @@ export function InputGroupDemo() {
                 <IconInfoCircle />
               </InputGroupButton>
             </TooltipTrigger>
-            <TooltipContent>这里展示提示信息的内容。</TooltipContent>
+            <TooltipContent>这是提示中的内容。</TooltipContent>
           </Tooltip>
         </InputGroupAddon>
       </InputGroup>
@@ -59,7 +59,7 @@ export function InputGroupDemo() {
             variant="outline"
             className="rounded-full"
             size="icon-xs"
-            aria-label="Add"
+            aria-label="添加"
           >
             <IconPlus />
           </InputGroupButton>
@@ -73,7 +73,7 @@ export function InputGroupDemo() {
               className="[--radius:0.95rem]"
             >
               <DropdownMenuItem>自动</DropdownMenuItem>
-              <DropdownMenuItem>智能代理</DropdownMenuItem>
+              <DropdownMenuItem>代理</DropdownMenuItem>
               <DropdownMenuItem>手动</DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>

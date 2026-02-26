@@ -22,7 +22,7 @@ export function ButtonGroupInputGroup() {
   return (
     <ButtonGroup className="[--radius:9999rem]">
       <ButtonGroup>
-        <Button variant="outline" size="icon" aria-label="Add">
+        <Button variant="outline" size="icon" aria-label="添加">
           <PlusIcon />
         </Button>
       </ButtonGroup>
@@ -30,7 +30,7 @@ export function ButtonGroupInputGroup() {
         <InputGroup>
           <InputGroupInput
             placeholder={
-              voiceEnabled ? "Record and send audio..." : "Send a message..."
+              voiceEnabled ? "录制并发送语音..." : "发送消息..."
             }
             disabled={voiceEnabled}
           />
@@ -43,12 +43,12 @@ export function ButtonGroupInputGroup() {
                   className="data-[active=true]:bg-primary data-[active=true]:text-primary-foreground"
                   aria-pressed={voiceEnabled}
                   size="icon-xs"
-                  aria-label="Voice Mode"
+                  aria-label="语音模式"
                 >
                   <AudioLinesIcon />
                 </InputGroupButton>
               </TooltipTrigger>
-              <TooltipContent>Voice Mode</TooltipContent>
+              <TooltipContent>语音模式</TooltipContent>
             </Tooltip>
           </InputGroupAddon>
         </InputGroup>

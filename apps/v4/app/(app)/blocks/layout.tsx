@@ -1,4 +1,4 @@
-import { Metadata } from "next"
+import { type Metadata } from "next"
 import Link from "next/link"
 
 import { Announcement } from "@/components/announcement"
@@ -12,9 +12,9 @@ import {
 import { PageNav } from "@/components/page-nav"
 import { Button } from "@/registry/new-york-v4/ui/button"
 
-const title = "为 Web 而生的构建模块"
+const title = "面向 Web 的构建模块"
 const description =
-  "干净、现代的构建模块，直接复制粘贴到你的应用中。适用于所有 React 框架。开源，永久免费。"
+  "干净、现代的构建模块。复制并粘贴到你的应用中。适配所有 React 框架。开源，永久免费。"
 
 export const metadata: Metadata = {
   title,

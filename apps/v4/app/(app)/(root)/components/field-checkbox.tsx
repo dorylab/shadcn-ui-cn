@@ -7,7 +7,7 @@ export function FieldCheckbox() {
       <Field orientation="horizontal">
         <Checkbox id="checkbox-demo" defaultChecked />
         <FieldLabel htmlFor="checkbox-demo" className="line-clamp-1">
-          我同意条款与条件
+          我同意条款和条件
         </FieldLabel>
       </Field>
     </FieldLabel>

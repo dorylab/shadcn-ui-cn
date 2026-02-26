@@ -19,13 +19,13 @@ export function InputGroupTextareaExample() {
       <InputGroup>
         <InputGroupTextarea
           id="textarea-code-32"
-          placeholder="console.log('Hello, world!');"
+          placeholder="console.log('你好，世界！');"
           className="min-h-[180px]"
         />
         <InputGroupAddon align="block-end" className="border-t">
-          <InputGroupText>Line 1, Column 1</InputGroupText>
+          <InputGroupText>第 1 行，第 1 列</InputGroupText>
           <InputGroupButton size="sm" className="ml-auto" variant="default">
-            Run <IconCornerDownLeft />
+            运行 <IconCornerDownLeft />
           </InputGroupButton>
         </InputGroupAddon>
         <InputGroupAddon align="block-start" className="border-b">

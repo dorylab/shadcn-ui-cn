@@ -1,4 +1,4 @@
-import { Metadata } from "next"
+import { type Metadata } from "next"
 import Link from "next/link"
 
 import { Announcement } from "@/components/announcement"
@@ -18,7 +18,7 @@ export const revalidate = false
 
 const title = "shadcn/ui - 为你的设计系统打好基础"
 const description =
-  "一组精心设计的组件，你可以自定义、扩展并在此基础上构建。从这里开始，让它成为你的作品。开源，开放代码。"
+  "A set of beautifully designed components that you can customize, extend, and build on. Start here then make it your own. Open Source. Open Code."
 
 export const metadata: Metadata = {
   title,
@@ -57,10 +57,10 @@ export default function ExamplesLayout({
         <PageHeaderDescription>{description}</PageHeaderDescription>
         <PageActions>
           <Button asChild size="sm">
-            <Link href="/docs/installation">开始使用</Link>
+            <Link href="/docs/installation">Get Started</Link>
           </Button>
           <Button asChild size="sm" variant="ghost">
-            <Link href="/docs/components">查看组件</Link>
+            <Link href="/docs/components">View Components</Link>
           </Button>
         </PageActions>
       </PageHeader>

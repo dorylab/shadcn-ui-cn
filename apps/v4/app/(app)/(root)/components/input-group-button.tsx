@@ -22,7 +22,7 @@ export function InputGroupButtonExample() {
   return (
     <div className="grid w-full max-w-sm gap-6">
       <Label htmlFor="input-secure-19" className="sr-only">
-        Input Secure
+        安全输入
       </Label>
       <InputGroup className="[--radius:9999px]">
         <InputGroupInput id="input-secure-19" className="!pl-0.5" />
@@ -32,7 +32,7 @@ export function InputGroupButtonExample() {
               <InputGroupButton
                 variant="secondary"
                 size="icon-xs"
-                aria-label="Info"
+                aria-label="信息"
               >
                 <IconInfoCircle />
               </InputGroupButton>
@@ -43,8 +43,8 @@ export function InputGroupButtonExample() {
             alignOffset={10}
             className="flex flex-col gap-1 rounded-xl text-sm"
           >
-            <p className="font-medium">Your connection is not secure.</p>
-            <p>You should not enter any sensitive information on this site.</p>
+            <p className="font-medium">你的连接不安全。</p>
+            <p>请勿在此网站输入敏感信息。</p>
           </PopoverContent>
         </Popover>
         <InputGroupAddon className="text-muted-foreground !pl-1">
@@ -54,7 +54,7 @@ export function InputGroupButtonExample() {
           <InputGroupButton
             onClick={() => setIsFavorite(!isFavorite)}
             size="icon-xs"
-            aria-label="Favorite"
+            aria-label="收藏"
           >
             <IconStar
               data-favorite={isFavorite}

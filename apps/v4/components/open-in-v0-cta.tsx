@@ -10,16 +10,17 @@ export function OpenInV0Cta({ className }: React.ComponentProps<"div">) {
       )}
     >
       <div className="text-base leading-tight font-semibold text-balance group-hover:underline">
-        将你的 shadcn/ui 应用部署到 Vercel
+        Deploy your shadcn/ui app on Vercel
       </div>
       <div className="text-muted-foreground">
-        受到 OpenAI、Sonos、Adobe 等团队的信赖。
+        Trusted by OpenAI, Sonos, Adobe, and more.
       </div>
       <div className="text-muted-foreground">
-        Vercel 提供工具和基础设施，助你大规模部署应用与功能。
+        Vercel provides tools and infrastructure to deploy apps and features at
+        scale.
       </div>
       <Button size="sm" className="mt-2 w-fit">
-        立即部署
+        Deploy Now
       </Button>
       <a
         href="https://vercel.com/new?utm_source=shadcn_site&utm_medium=web&utm_campaign=docs_cta_deploy_now_callout"
@@ -27,7 +28,7 @@ export function OpenInV0Cta({ className }: React.ComponentProps<"div">) {
         rel="noreferrer"
         className="absolute inset-0"
       >
-        <span className="sr-only">部署到 Vercel</span>
+        <span className="sr-only">Deploy to Vercel</span>
       </a>
     </div>
   )

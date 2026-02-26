@@ -22,7 +22,7 @@ export function ThemeSelector({ className }: React.ComponentProps<"div">) {
   return (
     <div className={cn("flex items-center gap-2", className)}>
       <Label htmlFor="theme-selector" className="sr-only">
-        主题
+        Theme
       </Label>
       <Select value={value} onValueChange={setActiveTheme}>
         <SelectTrigger
@@ -30,8 +30,8 @@ export function ThemeSelector({ className }: React.ComponentProps<"div">) {
           size="sm"
           className="bg-secondary text-secondary-foreground border-secondary justify-start shadow-none *:data-[slot=select-value]:w-12"
         >
-          <span className="font-medium">主题：</span>
-          <SelectValue placeholder="选择主题" />
+          <span className="font-medium">Theme:</span>
+          <SelectValue placeholder="Select a theme" />
         </SelectTrigger>
         <SelectContent align="end">
           {THEMES.map((theme) => (

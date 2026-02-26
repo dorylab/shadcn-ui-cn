@@ -1,12 +1,12 @@
 "use client"
 
 import * as React from "react"
-import Link, { LinkProps } from "next/link"
+import Link, { type LinkProps } from "next/link"
 import { useRouter } from "next/navigation"
 
 import { PAGES_NEW } from "@/lib/docs"
 import { showMcpDocs } from "@/lib/flags"
-import { source } from "@/lib/source"
+import { type source } from "@/lib/source"
 import { cn } from "@/lib/utils"
 import { Button } from "@/registry/new-york-v4/ui/button"
 import {
@@ -16,25 +16,25 @@ import {
 } from "@/registry/new-york-v4/ui/popover"
 
 const TOP_LEVEL_SECTIONS = [
-  { name: "快速开始", href: "/docs" },
+  { name: "Get Started", href: "/docs" },
   {
-    name: "组件",
+    name: "Components",
     href: "/docs/components",
   },
   {
-    name: "目录",
+    name: "Directory",
     href: "/docs/directory",
   },
   {
-    name: "MCP 服务",
+    name: "MCP Server",
     href: "/docs/mcp",
   },
   {
-    name: "表单",
+    name: "Forms",
     href: "/docs/forms",
   },
   {
-    name: "更新日志",
+    name: "Changelog",
     href: "/docs/changelog",
   },
 ]
@@ -75,10 +75,10 @@ export function MobileNav({
                 )}
               />
             </div>
-            <span className="sr-only">切换菜单</span>
+            <span className="sr-only">Toggle Menu</span>
           </div>
           <span className="flex h-8 items-center text-lg leading-none font-medium">
-            菜单
+            Menu
           </span>
         </Button>
       </PopoverTrigger>
@@ -92,11 +92,11 @@ export function MobileNav({
         <div className="flex flex-col gap-12 overflow-auto px-6 py-6">
           <div className="flex flex-col gap-4">
             <div className="text-muted-foreground text-sm font-medium">
-              菜单
+              Menu
             </div>
             <div className="flex flex-col gap-3">
               <MobileLink href="/" onOpenChange={setOpen}>
-                首页
+                Home
               </MobileLink>
               {items.map((item, index) => (
                 <MobileLink key={index} href={item.href} onOpenChange={setOpen}>
@@ -107,7 +107,7 @@ export function MobileNav({
           </div>
           <div className="flex flex-col gap-4">
             <div className="text-muted-foreground text-sm font-medium">
-              分类
+              Sections
             </div>
             <div className="flex flex-col gap-3">
               {TOP_LEVEL_SECTIONS.map(({ name, href }) => {

@@ -14,9 +14,9 @@ export function FieldSlider() {
   return (
     <div className="w-full max-w-md">
       <Field>
-        <FieldTitle>价格范围</FieldTitle>
+        <FieldTitle>价格区间</FieldTitle>
         <FieldDescription>
-          设置你的预算范围（$
+          设置你的预算区间（$
           <span className="font-medium tabular-nums">{value[0]}</span> -{" "}
           <span className="font-medium tabular-nums">{value[1]}</span>）。
         </FieldDescription>
@@ -27,7 +27,7 @@ export function FieldSlider() {
           min={0}
           step={10}
           className="mt-2 w-full"
-          aria-label="价格范围"
+          aria-label="价格区间"
         />
       </Field>
     </div>

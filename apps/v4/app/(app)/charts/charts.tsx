@@ -1,4 +1,4 @@
-import * as React from "react"
+import type * as React from "react"
 
 import { ChartAreaAxes } from "@/registry/new-york-v4/charts/chart-area-axes"
 import { ChartAreaDefault } from "@/registry/new-york-v4/charts/chart-area-default"
@@ -200,7 +200,7 @@ export const charts: ChartGroups = {
   ],
 }
 
-// Export individual components for backward compatibility
+// 导出单个组件以保持向后兼容性
 export {
   ChartAreaDefault,
   ChartAreaLinear,

@@ -18,17 +18,17 @@ export function NavHeader() {
       <NavigationMenuList className="gap-2 *:data-[slot=navigation-menu-item]:h-7 **:data-[slot=navigation-menu-link]:py-1 **:data-[slot=navigation-menu-link]:font-medium">
         <NavigationMenuItem>
           <NavigationMenuLink asChild data-active={pathname === "/"}>
-            <Link href="/">首页</Link>
+            <Link href="/">Home</Link>
           </NavigationMenuLink>
         </NavigationMenuItem>
         <NavigationMenuItem>
           <NavigationMenuLink asChild data-active={pathname === "/charts"}>
-            <Link href="/charts">图表</Link>
+            <Link href="/charts">Charts</Link>
           </NavigationMenuLink>
         </NavigationMenuItem>
         <NavigationMenuItem>
           <NavigationMenuLink asChild data-active={pathname === "/forms"}>
-            <Link href="/forms">表单</Link>
+            <Link href="/forms">Forms</Link>
           </NavigationMenuLink>
         </NavigationMenuItem>
       </NavigationMenuList>

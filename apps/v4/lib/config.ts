@@ -3,10 +3,10 @@ export const siteConfig = {
   url: "https://www.shadcn.com.cn",
   ogImage: "https://www.shadcn.com.cn/og.jpg",
   description:
-    "一组精心设计的组件，你可以自定义、扩展并在此基础上构建。从这里开始，让它成为你的作品。开源，开放代码。",
+    "A set of beautifully designed components that you can customize, extend, and build on. Start here then make it your own. Open Source. Open Code.",
   links: {
-    twitter: "https://twitter.com/dorystudio",
-    github: "https://github.com/dorylab/shadcn-ui-cn",
+    twitter: "https://twitter.com/shadcn",
+    github: "https://github.com/shadcn-ui/ui",
   },
   navItems: [
     {
@@ -30,12 +30,8 @@ export const siteConfig = {
       label: "目录",
     },
     {
-      href: "/themes",
-      label: "主题",
-    },
-    {
-      href: "/colors",
-      label: "配色",
+      href: "/create",
+      label: "Create",
     },
     {
       href: "https://www.shadcn.com.cn/dashboard",

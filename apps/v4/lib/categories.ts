@@ -1,36 +1,36 @@
 export const registryCategories = [
   {
-    name: "侧边栏",
+    name: "Sidebar",
     slug: "sidebar",
     hidden: false,
   },
   {
-    name: "仪表盘",
+    name: "Dashboard",
     slug: "dashboard",
     hidden: true,
   },
   {
-    name: "认证",
+    name: "Authentication",
     slug: "authentication",
     hidden: true,
   },
   {
-    name: "登录",
+    name: "Login",
     slug: "login",
     hidden: false,
   },
   {
-    name: "注册",
+    name: "Signup",
     slug: "signup",
     hidden: false,
   },
   {
-    name: "一次性密码",
+    name: "OTP",
     slug: "otp",
     hidden: false,
   },
   {
-    name: "日历",
+    name: "Calendar",
     slug: "calendar",
     hidden: false,
   },

@@ -27,14 +27,14 @@ export function ItemAvatar() {
         </ItemMedia>
         <ItemContent>
           <ItemTitle>Max Leiter</ItemTitle>
-          <ItemDescription>Last seen 5 months ago</ItemDescription>
+          <ItemDescription>上次在线于 5 个月前</ItemDescription>
         </ItemContent>
         <ItemActions>
           <Button
             size="icon-sm"
             variant="outline"
             className="rounded-full"
-            aria-label="Invite"
+            aria-label="邀请"
           >
             <Plus />
           </Button>
@@ -64,12 +64,12 @@ export function ItemAvatar() {
           </div>
         </ItemMedia>
         <ItemContent>
-          <ItemTitle>No Team Members</ItemTitle>
-          <ItemDescription>Invite your team to collaborate.</ItemDescription>
+          <ItemTitle>暂无团队成员</ItemTitle>
+          <ItemDescription>邀请你的团队一起协作。</ItemDescription>
         </ItemContent>
         <ItemActions>
           <Button size="sm" variant="outline">
-            Invite
+            邀请
           </Button>
         </ItemActions>
       </Item>

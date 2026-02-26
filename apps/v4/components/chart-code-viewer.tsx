@@ -3,7 +3,7 @@ import * as React from "react"
 import { cn } from "@/lib/utils"
 import { useMediaQuery } from "@/hooks/use-media-query"
 import { ChartCopyButton } from "@/components/chart-copy-button"
-import { Chart } from "@/components/chart-display"
+import { type Chart } from "@/components/chart-display"
 import { getIconForLanguageExtension } from "@/components/icons"
 import { OpenInV0Button } from "@/components/open-in-v0-button"
 import { Button } from "@/registry/new-york-v4/ui/button"
@@ -39,7 +39,7 @@ export function ChartCodeViewer({
       variant="outline"
       className="text-foreground hover:bg-muted dark:text-foreground h-6 rounded-[6px] border bg-transparent px-2 text-xs shadow-none"
     >
-      查看代码
+      View Code
     </Button>
   )
 
@@ -90,8 +90,8 @@ export function ChartCodeViewer({
           )}
         >
           <DrawerHeader className="sr-only">
-            <DrawerTitle>代码</DrawerTitle>
-            <DrawerDescription>查看这张图表的代码。</DrawerDescription>
+            <DrawerTitle>Code</DrawerTitle>
+            <DrawerDescription>View the code for the chart.</DrawerDescription>
           </DrawerHeader>
           <div className="flex h-full flex-col overflow-auto">{content}</div>
         </DrawerContent>
@@ -110,8 +110,8 @@ export function ChartCodeViewer({
         )}
       >
         <SheetHeader className="sr-only">
-          <SheetTitle>代码</SheetTitle>
-          <SheetDescription>查看这张图表的代码。</SheetDescription>
+          <SheetTitle>Code</SheetTitle>
+          <SheetDescription>View the code for the chart.</SheetDescription>
         </SheetHeader>
         {content}
       </SheetContent>

@@ -21,7 +21,7 @@ export function FieldChoiceCard() {
             计算环境
           </FieldLabel>
           <FieldDescription>
-            为集群选择合适的计算环境。
+            选择集群的计算环境。
           </FieldDescription>
           <RadioGroup defaultValue="kubernetes">
             <FieldLabel htmlFor="kubernetes-r2h">
@@ -34,7 +34,7 @@ export function FieldChoiceCard() {
                 <FieldContent>
                   <FieldTitle>Kubernetes</FieldTitle>
                   <FieldDescription>
-                    在配置好的 Kubernetes 集群上运行 GPU 工作负载。
+                    在已配置 K8s 的集群上运行 GPU 工作负载。
                   </FieldDescription>
                 </FieldContent>
               </Field>
@@ -44,12 +44,12 @@ export function FieldChoiceCard() {
                 <RadioGroupItem
                   value="vm"
                   id="vm-z4k"
-                  aria-label="Virtual Machine"
+                  aria-label="虚拟机"
                 />
                 <FieldContent>
                   <FieldTitle>虚拟机</FieldTitle>
                   <FieldDescription>
-                    使用配置好的 VM 集群来运行工作负载。
+                    访问已配置的 VM 集群以运行工作负载。
                   </FieldDescription>
                 </FieldContent>
               </Field>

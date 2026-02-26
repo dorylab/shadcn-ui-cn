@@ -83,7 +83,7 @@ export function DirectoryAddButton({
         <CopyButton
           value={jsonValue}
           className="top-3 right-2"
-          tooltip="复制代码"
+          tooltip="Copy Code"
         />
         <div data-rehype-pretty-code-title>components.json</div>
         <pre className="no-scrollbar min-w-0 overflow-x-auto px-4 py-3.5 outline-none has-[[data-highlighted-line]]:px-0 has-[[data-line-numbers]]:px-0 has-[[data-slot=tabs]]:p-0">
@@ -108,18 +108,19 @@ export function DirectoryAddButton({
         <DrawerTrigger asChild>{Trigger}</DrawerTrigger>
         <DrawerContent>
           <DrawerHeader>
-            <DrawerTitle>配置 MCP</DrawerTitle>
+            <DrawerTitle>Configure MCP</DrawerTitle>
             <DrawerDescription>
-              将以下代码复制粘贴到项目的 components.json 中。
+              Copy and paste the following code into your project&apos;s
+              components.json.
             </DrawerDescription>
           </DrawerHeader>
           <div className="px-6">{Content}</div>
           <DrawerFooter>
             <DrawerClose asChild>
-              <Button size="sm">关闭</Button>
+              <Button size="sm">Close</Button>
             </DrawerClose>
             <Button size="sm" asChild variant="outline">
-              <Link href="/docs/mcp">查看文档</Link>
+              <Link href="/docs/mcp">Read the docs</Link>
             </Button>
           </DrawerFooter>
         </DrawerContent>
@@ -135,18 +136,19 @@ export function DirectoryAddButton({
         onOpenAutoFocus={(e) => e.preventDefault()}
       >
         <DialogHeader>
-          <DialogTitle>配置 MCP</DialogTitle>
+          <DialogTitle>Configure MCP</DialogTitle>
           <DialogDescription>
-            将以下代码复制粘贴到项目的 components.json 中。
+            Copy and paste the following code into your project&apos;s
+            components.json.
           </DialogDescription>
         </DialogHeader>
         {Content}
         <DialogFooter className="justify-between!">
           <Button size="sm" asChild variant="ghost">
-            <Link href="/docs/mcp">查看文档</Link>
+            <Link href="/docs/mcp">Read the docs</Link>
           </Button>
           <DialogClose asChild>
-            <Button size="sm">完成</Button>
+            <Button size="sm">Done</Button>
           </DialogClose>
         </DialogFooter>
       </DialogContent>

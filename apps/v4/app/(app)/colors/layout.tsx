@@ -1,4 +1,4 @@
-import { Metadata } from "next"
+import { type Metadata } from "next"
 import Link from "next/link"
 
 import { Announcement } from "@/components/announcement"
@@ -11,9 +11,9 @@ import {
 } from "@/components/page-header"
 import { Button } from "@/registry/new-york-v4/ui/button"
 
-const title = "全格式的 Tailwind 配色"
+const title = "Tailwind Colors in Every Format"
 const description =
-  "完整的 Tailwind 调色板，提供 HEX、RGB、HSL、CSS 变量与类名，随时复制粘贴到你的项目中。"
+  "The complete Tailwind color palette in HEX, RGB, HSL, CSS variables, and classes. Ready to copy and paste into your project."
 
 export const metadata: Metadata = {
   title,
@@ -52,10 +52,10 @@ export default function ColorsLayout({
         <PageHeaderDescription>{description}</PageHeaderDescription>
         <PageActions>
           <Button asChild size="sm">
-            <a href="#colors">浏览配色</a>
+            <a href="#colors">Browse Colors</a>
           </Button>
           <Button asChild variant="ghost" size="sm">
-            <Link href="/docs/theming">查看文档</Link>
+            <Link href="/docs/theming">Documentation</Link>
           </Button>
         </PageActions>
       </PageHeader>

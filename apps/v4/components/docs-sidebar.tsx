@@ -18,25 +18,25 @@ import {
 } from "@/registry/new-york-v4/ui/sidebar"
 
 const TOP_LEVEL_SECTIONS = [
-  { name: "快速开始", href: "/docs" },
+  { name: "Get Started", href: "/docs" },
   {
-    name: "组件",
+    name: "Components",
     href: "/docs/components",
   },
   {
-    name: "目录",
+    name: "Directory",
     href: "/docs/directory",
   },
   {
-    name: "MCP 服务",
+    name: "MCP Server",
     href: "/docs/mcp",
   },
   {
-    name: "表单",
+    name: "Forms",
     href: "/docs/forms",
   },
   {
-    name: "更新日志",
+    name: "Changelog",
     href: "/docs/changelog",
   },
 ]
@@ -59,7 +59,7 @@ export function DocsSidebar({
         <div className="from-background via-background/80 to-background/50 sticky -top-1 z-10 h-8 shrink-0 bg-gradient-to-b blur-xs" />
         <SidebarGroup>
           <SidebarGroupLabel className="text-muted-foreground font-medium">
-            分类
+            Sections
           </SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
@@ -126,7 +126,7 @@ export function DocsSidebar({
                                 {PAGES_NEW.includes(item.url) && (
                                   <span
                                     className="flex size-2 rounded-full bg-blue-500"
-                                    title="新内容"
+                                    title="New"
                                   />
                                 )}
                               </Link>

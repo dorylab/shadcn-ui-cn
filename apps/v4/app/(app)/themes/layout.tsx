@@ -1,4 +1,4 @@
-import { Metadata } from "next"
+import { type Metadata } from "next"
 import Link from "next/link"
 
 import { Announcement } from "@/components/announcement"
@@ -10,9 +10,9 @@ import {
 } from "@/components/page-header"
 import { Button } from "@/registry/new-york-v4/ui/button"
 
-const title = "挑选一套配色，让它属于你。"
+const title = "Pick a Color. Make it yours."
 const description =
-  "试试我们精选的主题，复制粘贴即可应用到你的项目。全新主题编辑器即将上线。"
+  "Try our hand-picked themes. Copy and paste them into your project. New theme editor coming soon."
 
 export const metadata: Metadata = {
   title,
@@ -51,10 +51,10 @@ export default function ThemesLayout({
         <PageHeaderDescription>{description}</PageHeaderDescription>
         <PageActions>
           <Button asChild size="sm">
-            <a href="#themes">浏览主题</a>
+            <a href="#themes">Browse Themes</a>
           </Button>
           <Button asChild variant="ghost" size="sm">
-            <Link href="/docs/theming">查看文档</Link>
+            <Link href="/docs/theming">Documentation</Link>
           </Button>
         </PageActions>
       </PageHeader>

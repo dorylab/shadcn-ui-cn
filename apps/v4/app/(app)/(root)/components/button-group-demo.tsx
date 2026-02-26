@@ -6,7 +6,7 @@ import {
   ArrowLeftIcon,
   CalendarPlusIcon,
   ClockIcon,
-  ListFilterPlusIcon,
+  ListFilterIcon,
   MailCheckIcon,
   MoreHorizontalIcon,
   TagIcon,
@@ -35,25 +35,25 @@ export function ButtonGroupDemo() {
   return (
     <ButtonGroup>
       <ButtonGroup className="hidden sm:flex">
-        <Button variant="outline" size="icon-sm" aria-label="Go Back">
+        <Button variant="outline" size="icon-sm" aria-label="返回">
           <ArrowLeftIcon />
         </Button>
       </ButtonGroup>
       <ButtonGroup>
         <Button variant="outline" size="sm">
-          Archive
+          归档
         </Button>
         <Button variant="outline" size="sm">
-          Report
+          报告
         </Button>
       </ButtonGroup>
       <ButtonGroup>
         <Button variant="outline" size="sm">
-          Snooze
+          稍后处理
         </Button>
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button variant="outline" size="icon-sm" aria-label="More Options">
+            <Button variant="outline" size="icon-sm" aria-label="更多选项">
               <MoreHorizontalIcon />
             </Button>
           </DropdownMenuTrigger>
@@ -61,31 +61,31 @@ export function ButtonGroupDemo() {
             <DropdownMenuGroup>
               <DropdownMenuItem>
                 <MailCheckIcon />
-                Mark as Read
+                标记为已读
               </DropdownMenuItem>
               <DropdownMenuItem>
                 <ArchiveIcon />
-                Archive
+                归档
               </DropdownMenuItem>
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
             <DropdownMenuGroup>
               <DropdownMenuItem>
                 <ClockIcon />
-                Snooze
+                稍后处理
               </DropdownMenuItem>
               <DropdownMenuItem>
                 <CalendarPlusIcon />
-                Add to Calendar
+                添加到日历
               </DropdownMenuItem>
               <DropdownMenuItem>
-                <ListFilterPlusIcon />
-                Add to List
+                <ListFilterIcon />
+                添加到列表
               </DropdownMenuItem>
               <DropdownMenuSub>
                 <DropdownMenuSubTrigger>
                   <TagIcon />
-                  Label As...
+                  标记为...
                 </DropdownMenuSubTrigger>
                 <DropdownMenuSubContent>
                   <DropdownMenuRadioGroup
@@ -93,13 +93,13 @@ export function ButtonGroupDemo() {
                     onValueChange={setLabel}
                   >
                     <DropdownMenuRadioItem value="personal">
-                      Personal
+                      个人
                     </DropdownMenuRadioItem>
                     <DropdownMenuRadioItem value="work">
-                      Work
+                      工作
                     </DropdownMenuRadioItem>
                     <DropdownMenuRadioItem value="other">
-                      Other
+                      其他
                     </DropdownMenuRadioItem>
                   </DropdownMenuRadioGroup>
                 </DropdownMenuSubContent>
@@ -109,7 +109,7 @@ export function ButtonGroupDemo() {
             <DropdownMenuGroup>
               <DropdownMenuItem variant="destructive">
                 <Trash2Icon />
-                Trash
+                删除
               </DropdownMenuItem>
             </DropdownMenuGroup>
           </DropdownMenuContent>

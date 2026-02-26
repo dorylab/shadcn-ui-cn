@@ -24,9 +24,9 @@ export function SiteConfig({ className }: React.ComponentProps<typeof Button>) {
         })
       }}
       className={cn("size-8", className)}
-      title="切换布局"
+      title="Toggle layout"
     >
-      <span className="sr-only">切换布局</span>
+      <span className="sr-only">Toggle layout</span>
       <GalleryHorizontalIcon />
     </Button>
   )

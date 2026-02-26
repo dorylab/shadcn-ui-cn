@@ -3,7 +3,7 @@
 import * as React from "react"
 import { IconCheck, IconCopy } from "@tabler/icons-react"
 
-import { Event, trackEvent } from "@/lib/events"
+import { trackEvent, type Event } from "@/lib/events"
 import { cn } from "@/lib/utils"
 import { Button } from "@/registry/new-york-v4/ui/button"
 import {
@@ -53,11 +53,11 @@ export function ChartCopyButton({
           }}
           {...props}
         >
-          <span className="sr-only">复制</span>
+          <span className="sr-only">Copy</span>
           {hasCopied ? <IconCheck /> : <IconCopy />}
         </Button>
       </TooltipTrigger>
-      <TooltipContent className="bg-black text-white">复制代码</TooltipContent>
+      <TooltipContent className="bg-black text-white">Copy code</TooltipContent>
     </Tooltip>
   )
 }

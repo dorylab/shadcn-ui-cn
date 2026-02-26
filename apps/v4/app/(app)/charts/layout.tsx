@@ -1,4 +1,4 @@
-import { Metadata } from "next"
+import { type Metadata } from "next"
 import Link from "next/link"
 
 import { Announcement } from "@/components/announcement"
@@ -13,9 +13,9 @@ import { PageNav } from "@/components/page-nav"
 import { ThemeSelector } from "@/components/theme-selector"
 import { Button } from "@/registry/new-york-v4/ui/button"
 
-const title = "精美的图表与图形"
+const title = "精美图表与图形"
 const description =
-  "一组基于 Recharts 构建的即用型图表组件，从基础图表到丰富的数据展示，复制粘贴即可嵌入应用。"
+  "一组基于 Recharts 的即用图表组件。从基础图表到丰富的数据展示，复制粘贴即可用于你的应用。"
 
 export const metadata: Metadata = {
   title,
@@ -57,7 +57,7 @@ export default function ChartsLayout({
             <a href="#charts">浏览图表</a>
           </Button>
           <Button asChild variant="ghost" size="sm">
-            <Link href="/docs/components/chart">查看文档</Link>
+            <Link href="/docs/components/chart">文档</Link>
           </Button>
         </PageActions>
       </PageHeader>

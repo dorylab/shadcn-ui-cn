@@ -18,15 +18,14 @@ export function EmptyInputGroup() {
   return (
     <Empty>
       <EmptyHeader>
-        <EmptyTitle>404 - Not Found</EmptyTitle>
+        <EmptyTitle>404 - 未找到</EmptyTitle>
         <EmptyDescription>
-          The page you&apos;re looking for doesn&apos;t exist. Try searching for
-          what you need below.
+          你要找的页面不存在。请在下方搜索你需要的内容。
         </EmptyDescription>
       </EmptyHeader>
       <EmptyContent>
         <InputGroup className="w-3/4">
-          <InputGroupInput placeholder="Try searching for pages..." />
+          <InputGroupInput placeholder="试试搜索页面..." />
           <InputGroupAddon>
             <SearchIcon />
           </InputGroupAddon>
@@ -35,7 +34,7 @@ export function EmptyInputGroup() {
           </InputGroupAddon>
         </InputGroup>
         <EmptyDescription>
-          Need help? <a href="#">Contact support</a>
+          需要帮助？<a href="#">联系支持</a>
         </EmptyDescription>
       </EmptyContent>
     </Empty>

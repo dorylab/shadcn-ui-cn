@@ -1,4 +1,5 @@
 import type { Metadata } from "next"
+import { NuqsAdapter } from "nuqs/adapters/next/app"
 
 import { META_THEME_COLORS, siteConfig } from "@/lib/config"
 import { fontVariables } from "@/lib/fonts"
@@ -8,9 +9,10 @@ import { ActiveThemeProvider } from "@/components/active-theme"
 import { Analytics } from "@/components/analytics"
 import { TailwindIndicator } from "@/components/tailwind-indicator"
 import { ThemeProvider } from "@/components/theme-provider"
-import { Toaster } from "@/registry/new-york-v4/ui/sonner"
+import { Toaster } from "@/registry/bases/radix/ui/sonner"
 
 import "@/styles/globals.css"
+import Script from "next/script"
 
 export const metadata: Metadata = {
   title: {
@@ -19,7 +21,7 @@ export const metadata: Metadata = {
   },
   metadataBase: new URL(process.env.NEXT_PUBLIC_APP_URL!),
   description: siteConfig.description,
-  keywords: ["Next.js", "React", "Tailwind CSS", "组件库", "shadcn"],
+  keywords: ["Next.js", "React", "Tailwind CSS", "Components", "shadcn"],
   authors: [
     {
       name: "shadcn",
@@ -29,7 +31,7 @@ export const metadata: Metadata = {
   creator: "shadcn",
   openGraph: {
     type: "website",
-    locale: "zh_CN",
+    locale: "en_US",
     url: process.env.NEXT_PUBLIC_APP_URL!,
     title: siteConfig.name,
     description: siteConfig.description,
@@ -64,7 +66,7 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang="zh-CN" suppressHydrationWarning>
+    <html lang="en" suppressHydrationWarning className={fontVariables}>
       <head>
         <script
           dangerouslySetInnerHTML={{
@@ -80,20 +82,28 @@ export default function RootLayout({
             `,
           }}
         />
+        <Script
+          id="adsbygoogle"
+          async
+          strategy="afterInteractive"
+          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1978660857070046"
+          crossOrigin="anonymous"
+        />
         <meta name="theme-color" content={META_THEME_COLORS.light} />
       </head>
       <body
         className={cn(
-          "group/body overscroll-none antialiased [--footer-height:calc(var(--spacing)*14)] [--header-height:calc(var(--spacing)*14)] xl:[--footer-height:calc(var(--spacing)*24)]",
-          fontVariables
+          "group/body overscroll-none antialiased [--footer-height:calc(var(--spacing)*14)] [--header-height:calc(var(--spacing)*14)] xl:[--footer-height:calc(var(--spacing)*24)]"
         )}
       >
         <ThemeProvider>
           <LayoutProvider>
             <ActiveThemeProvider>
-              {children}
+              <NuqsAdapter>
+                {children}
+                <Toaster position="top-center" />
+              </NuqsAdapter>
               <TailwindIndicator />
-              <Toaster position="top-center" />
               <Analytics />
             </ActiveThemeProvider>
           </LayoutProvider>

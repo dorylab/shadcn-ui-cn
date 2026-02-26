@@ -16,16 +16,23 @@ import {
   Tablet,
   Terminal,
 } from "lucide-react"
-import { ImperativePanelHandle } from "react-resizable-panels"
-import { registryItemFileSchema, registryItemSchema } from "shadcn/schema"
-import { z } from "zod"
+import { type ImperativePanelHandle } from "react-resizable-panels"
+import {
+  type registryItemFileSchema,
+  type registryItemSchema,
+} from "shadcn/schema"
+import { type z } from "zod"
 
 import { trackEvent } from "@/lib/events"
-import { createFileTreeForRegistryItemFiles, FileTree } from "@/lib/registry"
+import {
+  type createFileTreeForRegistryItemFiles,
+  type FileTree,
+} from "@/lib/registry"
 import { cn } from "@/lib/utils"
 import { useCopyToClipboard } from "@/hooks/use-copy-to-clipboard"
 import { getIconForLanguageExtension } from "@/components/icons"
 import { OpenInV0Button } from "@/components/open-in-v0-button"
+import { type Style } from "@/registry/_legacy-styles"
 import { Button } from "@/registry/new-york-v4/ui/button"
 import {
   Collapsible,
@@ -54,7 +61,6 @@ import {
   ToggleGroup,
   ToggleGroupItem,
 } from "@/registry/new-york-v4/ui/toggle-group"
-import { type Style } from "@/registry/styles"
 
 type BlockViewerContext = {
   item: z.infer<typeof registryItemSchema>
@@ -149,8 +155,8 @@ function BlockViewerToolbar({ styleName }: { styleName: Style["name"] }) {
         onValueChange={(value) => setView(value as "preview" | "code")}
       >
         <TabsList className="grid h-8 grid-cols-2 items-center rounded-md p-1 *:data-[slot=tabs-trigger]:h-6 *:data-[slot=tabs-trigger]:rounded-sm *:data-[slot=tabs-trigger]:px-2 *:data-[slot=tabs-trigger]:text-xs">
-          <TabsTrigger value="preview">预览</TabsTrigger>
-          <TabsTrigger value="code">代码</TabsTrigger>
+          <TabsTrigger value="preview">Preview</TabsTrigger>
+          <TabsTrigger value="code">Code</TabsTrigger>
         </TabsList>
       </Tabs>
       <Separator orientation="vertical" className="mx-2 !h-4" />
@@ -173,13 +179,13 @@ function BlockViewerToolbar({ styleName }: { styleName: Style["name"] }) {
             }}
             className="gap-1 *:data-[slot=toggle-group-item]:!size-6 *:data-[slot=toggle-group-item]:!rounded-sm"
           >
-            <ToggleGroupItem value="100" title="桌面">
+            <ToggleGroupItem value="100" title="Desktop">
               <Monitor />
             </ToggleGroupItem>
-            <ToggleGroupItem value="60" title="平板">
+            <ToggleGroupItem value="60" title="Tablet">
               <Tablet />
             </ToggleGroupItem>
-            <ToggleGroupItem value="30" title="手机">
+            <ToggleGroupItem value="30" title="Mobile">
               <Smartphone />
             </ToggleGroupItem>
             <Separator orientation="vertical" className="!h-4" />
@@ -188,10 +194,10 @@ function BlockViewerToolbar({ styleName }: { styleName: Style["name"] }) {
               variant="ghost"
               className="size-6 rounded-sm p-0"
               asChild
-              title="在新标签页打开"
+              title="Open in New Tab"
             >
               <Link href={`/view/${styleName}/${item.name}`} target="_blank">
-                <span className="sr-only">在新标签页打开</span>
+                <span className="sr-only">Open in New Tab</span>
                 <Fullscreen />
               </Link>
             </Button>
@@ -200,7 +206,7 @@ function BlockViewerToolbar({ styleName }: { styleName: Style["name"] }) {
               size="icon"
               variant="ghost"
               className="size-6 rounded-sm p-0"
-              title="刷新预览"
+              title="Refresh Preview"
               onClick={() => {
                 if (setIframeKey) {
                   setIframeKey((k) => k + 1)
@@ -208,7 +214,7 @@ function BlockViewerToolbar({ styleName }: { styleName: Style["name"] }) {
               }}
             >
               <RotateCw />
-              <span className="sr-only">刷新预览</span>
+              <span className="sr-only">Refresh Preview</span>
             </Button>
           </ToggleGroup>
         </div>

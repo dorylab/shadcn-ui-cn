@@ -48,7 +48,7 @@ export function AppearanceSettings() {
         <FieldSet>
           <FieldLegend>计算环境</FieldLegend>
           <FieldDescription>
-            为集群选择合适的计算环境。
+            选择集群的计算环境。
           </FieldDescription>
           <RadioGroup defaultValue="kubernetes">
             <FieldLabel htmlFor="kubernetes-r2h">
@@ -56,7 +56,7 @@ export function AppearanceSettings() {
                 <FieldContent>
                   <FieldTitle>Kubernetes</FieldTitle>
                   <FieldDescription>
-                    在配置好的 Kubernetes 集群上运行 GPU 工作负载。这是默认选项。
+                    在已配置 K8s 的集群上运行 GPU 工作负载。这是默认选项。
                   </FieldDescription>
                 </FieldContent>
                 <RadioGroupItem
@@ -71,13 +71,13 @@ export function AppearanceSettings() {
                 <FieldContent>
                   <FieldTitle>虚拟机</FieldTitle>
                   <FieldDescription>
-                    使用配置好的 VM 集群来运行工作负载。（即将推出）
+                    访问已配置的 VM 集群以运行工作负载。（即将推出）
                   </FieldDescription>
                 </FieldContent>
                 <RadioGroupItem
                   value="vm"
                   id="vm-z4k"
-                  aria-label="Virtual Machine"
+                  aria-label="虚拟机"
                 />
               </Field>
             </FieldLabel>
@@ -87,7 +87,7 @@ export function AppearanceSettings() {
         <Field orientation="horizontal">
           <FieldContent>
             <FieldLabel htmlFor="number-of-gpus-f6l">GPU 数量</FieldLabel>
-            <FieldDescription>稍后可以继续添加。</FieldDescription>
+            <FieldDescription>之后可以再增加。</FieldDescription>
           </FieldContent>
           <ButtonGroup>
             <Input
@@ -102,7 +102,7 @@ export function AppearanceSettings() {
               variant="outline"
               size="icon-sm"
               type="button"
-              aria-label="减一"
+              aria-label="减少"
               onClick={() => handleGpuAdjustment(-1)}
               disabled={gpuCount <= 1}
             >
@@ -112,7 +112,7 @@ export function AppearanceSettings() {
               variant="outline"
               size="icon-sm"
               type="button"
-              aria-label="加一"
+              aria-label="增加"
               onClick={() => handleGpuAdjustment(1)}
               disabled={gpuCount >= 99}
             >
@@ -125,7 +125,7 @@ export function AppearanceSettings() {
           <FieldContent>
             <FieldLabel htmlFor="tinting">壁纸着色</FieldLabel>
             <FieldDescription>
-              允许壁纸应用着色效果。
+              允许壁纸着色。
             </FieldDescription>
           </FieldContent>
           <Switch id="tinting" defaultChecked />

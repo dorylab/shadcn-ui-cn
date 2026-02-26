@@ -41,15 +41,15 @@ export function EmptyAvatarGroup() {
             </Avatar>
           </div>
         </EmptyMedia>
-        <EmptyTitle>No Team Members</EmptyTitle>
+        <EmptyTitle>暂无团队成员</EmptyTitle>
         <EmptyDescription>
-          Invite your team to collaborate on this project.
+          邀请你的团队一起协作这个项目。
         </EmptyDescription>
       </EmptyHeader>
       <EmptyContent>
         <Button size="sm">
           <PlusIcon />
-          Invite Members
+          邀请成员
         </Button>
       </EmptyContent>
     </Empty>
